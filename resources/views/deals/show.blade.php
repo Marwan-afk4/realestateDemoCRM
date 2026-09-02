@@ -62,6 +62,56 @@
                         <strong>{{ __('Status') }}:</strong> {!! $deal->status->badge() !!}
                     </li>
                     <li class="list-group-item">
+                        <strong>{{ __('Contact') }}:</strong>
+                        @if ($deal->contact)
+                            <a href="{{ route('contacts.show', $deal->contact) }}">{{ $deal->contact->name }}</a>
+                        @else
+                            —
+                        @endif
+                    </li>
+                    <li class="list-group-item">
+                        <strong>{{ __('Lead') }}:</strong>
+                        @if ($deal->lead)
+                            <a href="{{ route('leads.show', $deal->lead) }}">#{{ $deal->lead->id }} {{ $deal->lead->lead_name }}</a>
+                        @else
+                            —
+                        @endif
+                    </li>
+                    <li class="list-group-item">
+                        <strong>{{ __('Broker') }}:</strong> {{ $deal->brocker?->user?->full_name ?? '—' }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>{{ __('Listing card') }}:</strong>
+                        @if ($deal->uptown)
+                            <a href="{{ route('uptowns.show', $deal->uptown) }}">{{ $deal->uptown->name }}</a>
+                        @else
+                            —
+                        @endif
+                    </li>
+                    <li class="list-group-item">
+                        <strong>{{ __('Physical unit') }}:</strong>
+                        @if ($deal->inventoryUnit)
+                            <a href="{{ route('inventory-units.show', $deal->inventoryUnit) }}">{{ $deal->inventoryUnit->code }}</a>
+                            <span class="badge badge-phoenix {{ $deal->inventoryUnit->status->phoenixBadge() }}">{{ $deal->inventoryUnit->status->label() }}</span>
+                            <div class="fs-9 text-body-tertiary">{{ $deal->inventoryUnit->address() }}</div>
+                        @else
+                            —
+                        @endif
+                    </li>
+                    <li class="list-group-item">
+                        <strong>{{ __('Deal value') }}:</strong> {{ $deal->value ?? '—' }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>{{ __('Probability') }}:</strong> {{ $deal->probability }}%
+                    </li>
+                    <li class="list-group-item">
+                        <strong>{{ __('Close date') }}:</strong> {{ optional($deal->close_date)->toDateString() ?? '—' }}
+                    </li>
+                    <li class="list-group-item">
+                        <strong>{{ __('Commission') }}:</strong>
+                        {{ $deal->commission ? $deal->commission->amount.' ('.$deal->commission->percentage.'%)' : '—' }}
+                    </li>
+                    <li class="list-group-item">
                         <strong>{{ __('Created At') }}:</strong> {{ $deal->created_at?->diffForHumans() ?? '-' }}
                     </li>
                     <li class="list-group-item">
@@ -69,6 +119,9 @@
                     </li>
                 </ul>
             </div>
+        </div>
+        <div class="mt-4">
+            @include('deals._sale-desk')
         </div>
         <div class="mt-3">
             {{-- <form method='POST' action='{{ route('deals.destroy', $deal) }}' onsubmit='return confirm("Are you sure you want to delete this item?")'>

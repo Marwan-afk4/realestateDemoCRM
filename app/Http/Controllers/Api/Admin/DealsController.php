@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Admin;
 
+use App\Enums\DealStatuses;
 use App\Http\Controllers\Controller;
 use App\Models\Brocker;
 use App\Models\BrokerLead;
@@ -11,8 +12,10 @@ use App\Models\Lead;
 use App\Models\SalesDeveloper;
 use App\Models\Deal;
 use App\Models\Uptown;
+use App\Services\Crm\DealCloser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class DealsController extends Controller
 {
@@ -65,27 +68,39 @@ class DealsController extends Controller
 
     public function semidonedeal($id){
 
-        $deals = Deal::findOrFail($id);
-        $deals->status = 'semidone';
-        $deals->save();
+        $deal = Deal::findOrFail($id);
+        try {
+            app(DealCloser::class)->applyStatus($deal, DealStatuses::SemiDone);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
 
         return response()->json(['message' => 'Deal Updated Successfully']);
     }
 
 
-    public function approveDeal($dealid, $developerId, $compoundid){
+    public function approveDeal($dealid, $brokerId, $developerId, $unitId, $leadid, $compoundid){
 
         $deal = Deal::findOrFail($dealid);
         $developer = Developer::findOrFail($developerId);
-        $compound = Compound::findOrFail($compoundid);
+        Compound::findOrFail($compoundid);
 
-        // Update Developer's deals done
+        $deal->forceFill([
+            'brocker_id' => $brokerId ?: $deal->brocker_id,
+            'developer_id' => $developerId,
+            'uptown_id' => $unitId ?: $deal->uptown_id,
+            'lead_id' => $leadid ?: $deal->lead_id,
+            'compound_id' => $compoundid,
+        ])->saveQuietly();
+
         $developer->deals_done += 1;
         $developer->save();
 
-        // Update Deal's Status
-        $deal->status = 'approved';
-        $deal->save();
+        try {
+            app(DealCloser::class)->applyStatus($deal->fresh(), DealStatuses::Approved);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
 
         return response()->json(['message' => 'Deal Approved Successfully']);
 
@@ -106,16 +121,27 @@ class DealsController extends Controller
             return response()->json(['errors' => $validation->errors()], 422);
         }
 
-        $deal->status = $request->status;
-        $deal->save();
+        $status = DealStatuses::tryFrom($request->status);
+        if (! $status) {
+            return response()->json(['errors' => ['status' => ['Invalid status']]], 422);
+        }
+
+        try {
+            app(DealCloser::class)->applyStatus($deal, $status);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
         return response()->json(['message'=>'Deal Status Updated Successfully']);
 
     }
 
     public function rejectdeal($id){
         $deal = Deal::findOrFail($id);
-        $deal->status = 'rejected';
-        $deal->save();
+        try {
+            app(DealCloser::class)->applyStatus($deal, DealStatuses::Rejected);
+        } catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        }
         return response()->json(['message'=>'Deal Rejected Successfully']);
     }
 

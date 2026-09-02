@@ -34,6 +34,16 @@ class PermissionSeeder extends Seeder
             'view-roles',
             'view-policies',
             'view-push-notifications',
+            'view-contacts',
+            'view-pipeline',
+            'view-all-pipeline',
+            'view-team-pipeline',
+            'view-crm-tasks',
+            'view-crm-reports',
+            'view-message-templates',
+            'view-leads',
+            'view-inventory',
+            'view-collections',
         ];
 
         foreach ($permissions as $permission) {

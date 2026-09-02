@@ -20,6 +20,7 @@ class Lead extends Model
         'sales_man_name',
         'sales_man_phone',
         'status',
+        'contact_id',
     ];
 
     protected $casts = [
@@ -48,5 +49,15 @@ class Lead extends Model
     public function brokerLeads()
     {
         return $this->hasMany(BrokerLead::class);
+    }
+
+    public function contact()
+    {
+        return $this->belongsTo(Contact::class);
+    }
+
+    public function ticket()
+    {
+        return $this->morphOne(PipelineTicket::class, 'ticketable');
     }
 }

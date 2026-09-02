@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Lead;
 use App\Models\Brocker;
 use App\Models\BrokerLead;
+use App\Services\Crm\PipelineService;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Component;
 
@@ -112,6 +113,11 @@ class LeadAssignBroker extends Component
             'status' => 'in_progress',
         ]);
 
+        $ticket = $this->lead->ticket;
+        if ($ticket) {
+            app(PipelineService::class)->assign($ticket, Brocker::find($this->brocker_id), auth()->user());
+        }
+
         // Refresh the lead model to update reactive properties
         $this->lead->refresh();
         $this->currentBrokerId = $this->lead->brocker_id;
@@ -145,6 +151,10 @@ class LeadAssignBroker extends Component
                 $this->updateLeadBrokers();
 
                 if ($dateValue) {
+                    $ticket = $this->lead->ticket;
+                    if ($ticket) {
+                        app(PipelineService::class)->scheduleAssignmentExpiry($ticket, new \DateTimeImmutable($dateValue));
+                    }
                     session()->flash('success', 'End date updated successfully!');
                 } else {
                     session()->flash('success', 'End date removed successfully!');
@@ -182,6 +192,11 @@ class LeadAssignBroker extends Component
             }
 
             $brokerLead->delete();
+
+            $ticket = $this->lead->fresh()->ticket;
+            if ($ticket) {
+                app(PipelineService::class)->unlock($ticket, auth()->user());
+            }
 
             // Refresh the lead model to update reactive properties
             $this->lead->refresh();

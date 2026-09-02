@@ -21,9 +21,9 @@ class LeadController extends Controller
         $sortField = $request->get('sort', 'id');
         $sortOrder = $request->get('order', 'ASC');
         $keyword = $request->get('keyword');
-        $leads = Lead::with(['brocker', 'uptown', 'marketing_agency'])
+        $leads = Lead::with(['brocker', 'uptown', 'marketing_agency', 'contact', 'ticket'])
             ->when($keyword, function ($query, $keyword) {
-                $query->whereHas('brocker', function ($q) use ($keyword) {
+                $query->where(function ($q) use ($keyword) {
                     $q->where('lead_name', 'LIKE', "%{$keyword}%")
                         ->orWhere('lead_phone', 'LIKE', "%{$keyword}%")
                         ->orWhere('sales_man_name', 'LIKE', "%{$keyword}%")
@@ -53,12 +53,15 @@ class LeadController extends Controller
 
     public function store(StoreLeadRequest $request)
     {
-        Lead::create($request->validated());
+        $data = $request->validated();
+        $data['status'] = $data['status'] ?? 'empty';
+        Lead::create($data);
         return redirect()->route('leads.index')->with('success', 'Created successfully');
     }
 
     public function show(Lead $lead)
     {
+        $lead->load(['contact', 'ticket', 'brocker.user', 'uptown', 'marketing_agency']);
         return view('leads.show', compact('lead'));
     }
 

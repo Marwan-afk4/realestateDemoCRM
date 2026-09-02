@@ -25,6 +25,7 @@ class BuyAppartmentInstallment extends Model
         'years_of_installment',
         'deposit_percetage',
         'status',
+        'contact_id',
     ];
 
     public function getIdentityFrontImageAttribute($value) {
@@ -52,6 +53,16 @@ class BuyAppartmentInstallment extends Model
     public function apartment()
     {
         return $this->belongsTo(Uptown::class, 'apartment_id');
+    }
+
+    public function contact()
+    {
+        return $this->belongsTo(Contact::class);
+    }
+
+    public function ticket()
+    {
+        return $this->morphOne(PipelineTicket::class, 'ticketable');
     }
 
 }

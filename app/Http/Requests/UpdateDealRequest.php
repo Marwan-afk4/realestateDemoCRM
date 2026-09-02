@@ -23,7 +23,14 @@ class UpdateDealRequest extends FormRequest
             'compound_id' => 'nullable|exists:compounds,id',
             'uptown_type_id' => 'nullable|exists:uptown_types,id',
             'number_of_units' => 'nullable|numeric|min:1',
-            'status' => 'nullable'
+            'status' => 'nullable',
+            'lead_id' => 'nullable|exists:leads,id',
+            'brocker_id' => 'nullable|exists:brockers,id',
+            'uptown_id' => 'nullable|exists:uptowns,id',
+            'inventory_unit_id' => 'nullable|exists:inventory_units,id',
+            'value' => 'nullable|numeric|min:0',
+            'close_date' => 'nullable|date',
+            'probability' => 'nullable|integer|min:0|max:100',
         ];
     }
 

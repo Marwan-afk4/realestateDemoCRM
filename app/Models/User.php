@@ -112,4 +112,24 @@ class User extends Authenticatable
     {
         return $this->hasMany(DeviceToken::class);
     }
+
+    public function ownedContacts()
+    {
+        return $this->hasMany(Contact::class, 'owner_id');
+    }
+
+    public function pipelineTickets()
+    {
+        return $this->hasMany(PipelineTicket::class, 'owner_id');
+    }
+
+    public function crmTasks()
+    {
+        return $this->hasMany(CrmTask::class, 'owner_id');
+    }
+
+    public function broker()
+    {
+        return $this->hasOne(Brocker::class);
+    }
 }

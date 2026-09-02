@@ -38,4 +38,9 @@ class Compound extends Model
     public function developer(){
         return $this->belongsTo(Developer::class);
     }
+
+    public function inventoryUnits()
+    {
+        return $this->hasMany(InventoryUnit::class);
+    }
 }

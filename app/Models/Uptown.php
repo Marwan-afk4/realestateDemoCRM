@@ -40,7 +40,8 @@ class Uptown extends Model
         'type',
         'installment_plan',
         'installment_price',
-        'code'
+        'code',
+        'reserved_deal_id',
     ];
 
     public $appends = [
@@ -94,6 +95,16 @@ class Uptown extends Model
 
     public function uptownType(){
         return $this->belongsTo(UptownType::class, 'uptown_type_id');
+    }
+
+    public function reservedDeal()
+    {
+        return $this->belongsTo(Deal::class, 'reserved_deal_id');
+    }
+
+    public function inventoryUnits()
+    {
+        return $this->hasMany(InventoryUnit::class);
     }
 
 }

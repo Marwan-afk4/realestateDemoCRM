@@ -62,6 +62,48 @@
 					:selected="$deal->uptown_type_id ?? ''"
 					:options="$uptownTypes"
 				/>
+				<x-form-select
+					name="uptown_id"
+					label="{{ __('Listing card') }}"
+					:selected="$deal->uptown_id ?? ''"
+					:options="$units ?? []"
+				/>
+				<x-form-select
+					name="inventory_unit_id"
+					label="{{ __('Physical unit') }}"
+					:selected="$deal->inventory_unit_id ?? ''"
+					:options="$inventoryUnits ?? []"
+				/>
+				<x-form-select
+					name="lead_id"
+					label="{{ __('Lead') }}"
+					:selected="$deal->lead_id ?? ''"
+					:options="$leads ?? []"
+				/>
+				<x-form-select
+					name="brocker_id"
+					label="{{ __('Broker') }}"
+					:selected="$deal->brocker_id ?? ''"
+					:options="$brokers ?? []"
+				/>
+				<x-form-input
+					name="value"
+					type="number"
+					label="{{ __('Deal value') }}"
+					:value="$deal->value ?? ''"
+				/>
+				<x-form-input
+					name="close_date"
+					type="date"
+					label="{{ __('Close date') }}"
+					:value="optional($deal->close_date)->format('Y-m-d')"
+				/>
+				<x-form-input
+					name="probability"
+					type="number"
+					label="{{ __('Probability %') }}"
+					:value="$deal->probability ?? ''"
+				/>
 				<x-form-input
 					name="number_of_units"
 					type="text"

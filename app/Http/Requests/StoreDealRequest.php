@@ -23,7 +23,15 @@ class StoreDealRequest extends FormRequest
             'compound_id' => 'required|exists:compounds,id',
             'uptown_type_id' => 'required|exists:uptown_types,id',
             'number_of_units' => 'required|numeric|min:1',
-            'status' => 'nullable'
+            'status' => 'nullable',
+            'lead_id' => 'nullable|exists:leads,id',
+            'brocker_id' => 'nullable|exists:brockers,id',
+            'uptown_id' => 'nullable|exists:uptowns,id',
+            'inventory_unit_id' => 'nullable|exists:inventory_units,id',
+            'pipeline_ticket_id' => 'nullable|exists:pipeline_tickets,id',
+            'value' => 'nullable|numeric|min:0',
+            'close_date' => 'nullable|date',
+            'probability' => 'nullable|integer|min:0|max:100',
         ];
     }
 

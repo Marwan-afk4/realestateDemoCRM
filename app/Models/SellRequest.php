@@ -44,6 +44,7 @@ class SellRequest extends Model
         'status',
         'execution_date',
         'delivery_date',
+        'contact_id',
     ];
 
     protected $casts = [
@@ -151,5 +152,15 @@ class SellRequest extends Model
     public function images()
     {
         return $this->hasMany(SellRequestImage::class);
+    }
+
+    public function contact()
+    {
+        return $this->belongsTo(Contact::class);
+    }
+
+    public function ticket()
+    {
+        return $this->morphOne(PipelineTicket::class, 'ticketable');
     }
 }

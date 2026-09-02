@@ -15,7 +15,8 @@ class Brocker extends Model
         'profit',
         'number_of_deals',
         'deals_done',
-        'comission_percentage'
+        'comission_percentage',
+        'team_lead_id',
     ];
 
 
@@ -37,5 +38,15 @@ class Brocker extends Model
 
     public function subscribtions(){
         return $this->hasMany(Subscribtion::class);
+    }
+
+    public function teamLead()
+    {
+        return $this->belongsTo(User::class, 'team_lead_id');
+    }
+
+    public function pipelineTickets()
+    {
+        return $this->hasMany(PipelineTicket::class);
     }
 }

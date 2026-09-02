@@ -23,7 +23,7 @@ class StoreLeadRequest extends FormRequest
             'lead_phone' => 'required|string',
             'sales_man_name' => 'nullable|string',
             'sales_man_phone' => 'nullable|string',
-            'status' => 'required'
+            'status' => 'nullable'
         ];
     }
 

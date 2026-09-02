@@ -25,6 +25,17 @@
                         <li class="list-group-item">
                             <strong>{{ __("Lead Phone") }}:</strong> {{ $lead->lead_phone }}
                         </li>
+                        @if($lead->contact)
+                        <li class="list-group-item">
+                            <strong>{{ __('Contact') }}:</strong>
+                            <a href="{{ route('contacts.show', $lead->contact) }}">{{ $lead->contact->name }}</a>
+                        </li>
+                        @endif
+                        @if($lead->ticket)
+                        <li class="list-group-item">
+                            <strong>{{ __('Pipeline') }}:</strong> {!! $lead->ticket->stage->badge() !!}
+                        </li>
+                        @endif
                         <li class="list-group-item">
                             <strong>{{ __("Status") }}:</strong> {!! $lead->status->badge() !!}
                         </li>

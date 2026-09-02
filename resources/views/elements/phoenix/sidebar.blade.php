@@ -27,7 +27,7 @@
                     @endcan
 
                     {{-- Section: Users --}}
-                    @canany(['view-users','view-brockers'])
+                    @canany(['view-users','view-brockers','view-contacts','view-pipeline','view-crm-tasks','view-crm-reports','view-leads'])
                     <p class="navbar-vertical-label mt-3">{{ __('Users & CRM') }}</p>
                     <hr class="navbar-vertical-line" />
 
@@ -51,10 +51,60 @@
                         </a>
                     </div>
                     @endcan
+                    @can('view-contacts')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'contacts' ? 'active' : '' }}" href="{{ route('contacts.index') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="user"></span></span>
+                                <span class="nav-link-text">{{ __('Contacts') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    @endcan
+                    @can('view-pipeline')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'pipeline' ? 'active' : '' }}" href="{{ route('pipeline.index') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="columns"></span></span>
+                                <span class="nav-link-text">{{ __('Pipeline') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    @endcan
+                    @can('view-leads')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'leads' ? 'active' : '' }}" href="{{ route('leads.index') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="filter"></span></span>
+                                <span class="nav-link-text">{{ __('Leads') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    @endcan
+                    @can('view-crm-tasks')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'crm-tasks' ? 'active' : '' }}" href="{{ route('crm-tasks.index') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="check-circle"></span></span>
+                                <span class="nav-link-text">{{ __('Tasks') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    @endcan
+                    @can('view-crm-reports')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'sales-reports' ? 'active' : '' }}" href="{{ route('sales-reports.index') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="bar-chart-2"></span></span>
+                                <span class="nav-link-text">{{ __('Sales Reports') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    @endcan
                     @endcanany
 
                     {{-- Section: Real Estate --}}
-                    @canany(['view-uptowns','view-uptown-types','view-unit-sub-types','view-developers','view-deals'])
+                    @canany(['view-uptowns','view-uptown-types','view-unit-sub-types','view-developers','view-deals','view-inventory','view-collections'])
                     <p class="navbar-vertical-label mt-3">{{ __('Real Estate') }}</p>
                     <hr class="navbar-vertical-line" />
 
@@ -63,7 +113,17 @@
                         <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'uptowns' ? 'active' : '' }}" href="{{ route('uptowns.index') }}">
                             <div class="d-flex align-items-center">
                                 <span class="nav-link-icon"><span data-feather="map-pin"></span></span>
-                                <span class="nav-link-text">{{ __('Units') }}</span>
+                                <span class="nav-link-text">{{ __('Listings') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    @endcan
+                    @can('view-inventory')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'inventory-units' ? 'active' : '' }}" href="{{ route('inventory-units.index') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="grid"></span></span>
+                                <span class="nav-link-text">{{ __('Inventory') }}</span>
                             </div>
                         </a>
                     </div>
@@ -104,6 +164,16 @@
                             <div class="d-flex align-items-center">
                                 <span class="nav-link-icon"><span data-feather="tag"></span></span>
                                 <span class="nav-link-text">{{ __('Deals') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    @endcan
+                    @can('view-collections')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'collections' ? 'active' : '' }}" href="{{ route('collections.index') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="credit-card"></span></span>
+                                <span class="nav-link-text">{{ __('Collections') }}</span>
                             </div>
                         </a>
                     </div>
@@ -154,7 +224,7 @@
                     @endcanany
 
                     {{-- Section: Content --}}
-                    @canany(['view-ads','view-contracts','view-contract-agreements','view-bot-messages','view-push-notifications'])
+                    @canany(['view-ads','view-contracts','view-contract-agreements','view-bot-messages','view-push-notifications','view-message-templates'])
                     <p class="navbar-vertical-label mt-3">{{ __('Marketing & Content') }}</p>
                     <hr class="navbar-vertical-line" />
 
@@ -214,6 +284,24 @@
                             <div class="d-flex align-items-center">
                                 <span class="nav-link-icon"><span data-feather="bell"></span></span>
                                 <span class="nav-link-text">{{ __('Push Notifications') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    @endcan
+                    @can('view-message-templates')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'message-templates' ? 'active' : '' }}" href="{{ route('message-templates.index') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="mail"></span></span>
+                                <span class="nav-link-text">{{ __('Message Templates') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'crm-broadcasts' ? 'active' : '' }}" href="{{ route('crm-broadcasts.index') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="radio"></span></span>
+                                <span class="nav-link-text">{{ __('Broadcasts') }}</span>
                             </div>
                         </a>
                     </div>

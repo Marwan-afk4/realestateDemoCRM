@@ -36,7 +36,7 @@ class CompoundController extends Controller
     {
         $developerId = $request->get('developer_id');
         $developer = $developerId ? Developer::find($developerId) : null;
-        $developers = Developer::orderBy('name')->get();
+        $developers = $this->developersForSelect();
 
         return view('compounds.create', compact('developer', 'developerId', 'developers'));
     }
@@ -68,7 +68,7 @@ class CompoundController extends Controller
 
     public function edit(Compound $compound)
     {
-        $developers = Developer::orderBy('name')->get();
+        $developers = $this->developersForSelect();
         return view('compounds.edit', compact('compound', 'developers'));
     }
 
@@ -94,5 +94,12 @@ class CompoundController extends Controller
         }
 
         return redirect()->route('compounds.index')->with('success', 'Compound updated successfully');
+    }
+
+    private function developersForSelect()
+    {
+        $nameColumn = app()->getLocale() === 'ar' ? 'name_ar' : 'name_en';
+
+        return Developer::orderBy($nameColumn)->get();
     }
 }
