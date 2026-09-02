@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ensure LTR direction for the dashboard */
+html[dir="ltr"] {
+    direction: ltr;
+    text-align: left;
+}
+
+html[dir="ltr"] body {
+    direction: ltr;
+    text-align: left;
+}

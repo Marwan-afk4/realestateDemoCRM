@@ -1,0 +1,3428 @@
+{
+    "Create Role": {
+        "0": "resources\/views\/admin-roles\/create.blade.php",
+        "3": "resources\/views\/admin-roles\/index.blade.php"
+    },
+    "Back": [
+        "resources\/views\/admin-roles\/create.blade.php",
+        "resources\/views\/admin-roles\/edit.blade.php",
+        "resources\/views\/admin-users\/create.blade.php",
+        "resources\/views\/admin-users\/edit.blade.php",
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/bot-messages\/create.blade.php",
+        "resources\/views\/bot-messages\/edit.blade.php",
+        "resources\/views\/compounds\/show.blade.php",
+        "resources\/views\/developers\/show.blade.php",
+        "resources\/views\/policies\/create.blade.php",
+        "resources\/views\/policies\/edit.blade.php",
+        "resources\/views\/policies\/show.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Role Name": [
+        "resources\/views\/admin-roles\/create.blade.php",
+        "resources\/views\/admin-roles\/edit.blade.php"
+    ],
+    "e.g. sales-manager": [
+        "resources\/views\/admin-roles\/create.blade.php"
+    ],
+    "Permissions": [
+        "resources\/views\/admin-roles\/create.blade.php",
+        "resources\/views\/admin-roles\/edit.blade.php"
+    ],
+    "Select All": [
+        "resources\/views\/admin-roles\/create.blade.php",
+        "resources\/views\/admin-roles\/edit.blade.php"
+    ],
+    "Deselect All": [
+        "resources\/views\/admin-roles\/create.blade.php",
+        "resources\/views\/admin-roles\/edit.blade.php"
+    ],
+    "Cancel": [
+        "resources\/views\/admin-roles\/create.blade.php",
+        "resources\/views\/admin-roles\/edit.blade.php",
+        "resources\/views\/admin-users\/create.blade.php",
+        "resources\/views\/admin-users\/edit.blade.php",
+        "resources\/views\/administrative-data\/create.blade.php",
+        "resources\/views\/administrative-data\/edit.blade.php",
+        "resources\/views\/commercial-data\/create.blade.php",
+        "resources\/views\/commercial-data\/edit.blade.php",
+        "resources\/views\/compounds\/create.blade.php",
+        "resources\/views\/compounds\/edit.blade.php",
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php",
+        "resources\/views\/requests\/modals\/approve-training.blade.php",
+        "resources\/views\/residential-data\/create.blade.php",
+        "resources\/views\/residential-data\/edit.blade.php",
+        "resources\/views\/unit-sub-types\/create.blade.php",
+        "resources\/views\/unit-sub-types\/edit.blade.php"
+    ],
+    "Edit Role": [
+        "resources\/views\/admin-roles\/edit.blade.php"
+    ],
+    "The super-admin role name cannot be changed.": [
+        "resources\/views\/admin-roles\/edit.blade.php"
+    ],
+    "Save Changes": [
+        "resources\/views\/admin-roles\/edit.blade.php",
+        "resources\/views\/admin-users\/edit.blade.php",
+        "resources\/views\/brockers\/edit.blade.php",
+        "resources\/views\/plans\/edit.blade.php"
+    ],
+    "The super-admin role has all permissions and cannot be edited.": [
+        "resources\/views\/admin-roles\/edit.blade.php"
+    ],
+    "Roles": [
+        "resources\/views\/admin-roles\/index.blade.php",
+        "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    ],
+    "Roles & Permissions": [
+        "resources\/views\/admin-roles\/index.blade.php"
+    ],
+    "permissions": [
+        "resources\/views\/admin-roles\/index.blade.php",
+        "resources\/views\/admin-users\/create.blade.php",
+        "resources\/views\/admin-users\/edit.blade.php"
+    ],
+    "Delete this role?": [
+        "resources\/views\/admin-roles\/index.blade.php"
+    ],
+    "Protected": [
+        "resources\/views\/admin-roles\/index.blade.php"
+    ],
+    "No permissions assigned.": [
+        "resources\/views\/admin-roles\/index.blade.php"
+    ],
+    "Edit Permissions": [
+        "resources\/views\/admin-roles\/index.blade.php"
+    ],
+    "No roles found. Create your first role.": [
+        "resources\/views\/admin-roles\/index.blade.php"
+    ],
+    "Add Admin": {
+        "0": "resources\/views\/admin-users\/create.blade.php",
+        "2": "resources\/views\/admin-users\/index.blade.php"
+    },
+    "First Name": [
+        "resources\/views\/admin-users\/create.blade.php",
+        "resources\/views\/admin-users\/edit.blade.php",
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/brockers\/edit.blade.php",
+        "resources\/views\/brockers\/show.blade.php",
+        "resources\/views\/users\/create.blade.php",
+        "resources\/views\/users\/edit.blade.php"
+    ],
+    "Last Name": [
+        "resources\/views\/admin-users\/create.blade.php",
+        "resources\/views\/admin-users\/edit.blade.php",
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/brockers\/edit.blade.php",
+        "resources\/views\/brockers\/show.blade.php",
+        "resources\/views\/users\/create.blade.php",
+        "resources\/views\/users\/edit.blade.php"
+    ],
+    "Email": [
+        "resources\/views\/admin-users\/create.blade.php",
+        "resources\/views\/admin-users\/edit.blade.php",
+        "resources\/views\/admin-users\/index.blade.php",
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/brockers\/edit.blade.php",
+        "resources\/views\/brockers\/index.blade.php",
+        "resources\/views\/brockers\/show.blade.php",
+        "resources\/views\/contract-agreements\/show.blade.php",
+        "resources\/views\/deals\/create.blade.php",
+        "resources\/views\/deals\/edit.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/deals\/show.blade.php",
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php",
+        "resources\/views\/users\/create.blade.php",
+        "resources\/views\/users\/edit.blade.php",
+        "resources\/views\/users\/index.blade.php"
+    ],
+    "Phone": [
+        "resources\/views\/admin-users\/create.blade.php",
+        "resources\/views\/admin-users\/edit.blade.php",
+        "resources\/views\/admin-users\/index.blade.php",
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/auth\/login.blade.php",
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/brockers\/edit.blade.php",
+        "resources\/views\/brockers\/index.blade.php",
+        "resources\/views\/brockers\/show.blade.php",
+        "resources\/views\/contract-agreements\/show.blade.php",
+        "resources\/views\/deals\/create.blade.php",
+        "resources\/views\/deals\/edit.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/deals\/show.blade.php",
+        "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "resources\/views\/livewire\/lead-assign-broker.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/create.blade.php",
+        "resources\/views\/users\/edit.blade.php",
+        "resources\/views\/users\/index.blade.php"
+    ],
+    "Password": [
+        "resources\/views\/admin-users\/create.blade.php",
+        "resources\/views\/auth\/confirm-password.blade.php",
+        "resources\/views\/auth\/login.blade.php",
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/users\/create.blade.php",
+        "resources\/views\/users\/edit.blade.php"
+    ],
+    "Status": [
+        "resources\/views\/admin-users\/create.blade.php",
+        "resources\/views\/admin-users\/edit.blade.php",
+        "resources\/views\/admin-users\/index.blade.php",
+        "resources\/views\/administrative-data\/create.blade.php",
+        "resources\/views\/administrative-data\/edit.blade.php",
+        "resources\/views\/administrative-data\/index.blade.php",
+        "resources\/views\/apartment-installments\/index.blade.php",
+        "resources\/views\/commercial-data\/create.blade.php",
+        "resources\/views\/commercial-data\/edit.blade.php",
+        "resources\/views\/commercial-data\/index.blade.php",
+        "resources\/views\/compounds\/show.blade.php",
+        "resources\/views\/deals\/create.blade.php",
+        "resources\/views\/deals\/edit.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/deals\/show.blade.php",
+        "resources\/views\/leads\/create.blade.php",
+        "resources\/views\/leads\/edit.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/leads\/show.blade.php",
+        "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "resources\/views\/livewire\/lead-assign-broker.blade.php",
+        "resources\/views\/payment-methods\/create.blade.php",
+        "resources\/views\/payment-methods\/edit.blade.php",
+        "resources\/views\/payment-methods\/index.blade.php",
+        "resources\/views\/payment-methods\/show.blade.php",
+        "resources\/views\/payments\/create.blade.php",
+        "resources\/views\/payments\/edit.blade.php",
+        "resources\/views\/payments\/index.blade.php",
+        "resources\/views\/payments\/show.blade.php",
+        "resources\/views\/requests\/partials\/complaints.blade.php",
+        "resources\/views\/requests\/partials\/training-requests.blade.php",
+        "resources\/views\/residential-data\/create.blade.php",
+        "resources\/views\/residential-data\/edit.blade.php",
+        "resources\/views\/residential-data\/index.blade.php",
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/uptown-types\/create.blade.php",
+        "resources\/views\/uptown-types\/edit.blade.php",
+        "resources\/views\/uptown-types\/index.blade.php",
+        "resources\/views\/uptown-types\/show.blade.php",
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php",
+        "resources\/views\/uptowns\/index.blade.php",
+        "resources\/views\/uptowns\/show.blade.php",
+        "resources\/views\/users\/create.blade.php",
+        "resources\/views\/users\/edit.blade.php",
+        "resources\/views\/users\/index.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "-- Select Status --": [
+        "resources\/views\/admin-users\/create.blade.php",
+        "resources\/views\/admin-users\/edit.blade.php"
+    ],
+    "Assign Role": [
+        "resources\/views\/admin-users\/create.blade.php"
+    ],
+    "Create Admin": [
+        "resources\/views\/admin-users\/create.blade.php"
+    ],
+    "Edit Admin": [
+        "resources\/views\/admin-users\/edit.blade.php"
+    ],
+    "New Password": [
+        "resources\/views\/admin-users\/edit.blade.php"
+    ],
+    "leave blank to keep current": [
+        "resources\/views\/admin-users\/edit.blade.php"
+    ],
+    "Assigned Role": [
+        "resources\/views\/admin-users\/edit.blade.php"
+    ],
+    "Admins": {
+        "0": "resources\/views\/admin-users\/index.blade.php",
+        "2": "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    },
+    "Search...": [
+        "resources\/views\/admin-users\/index.blade.php",
+        "resources\/views\/contract-agreements\/index.blade.php"
+    ],
+    "Name": [
+        "resources\/views\/admin-users\/index.blade.php",
+        "resources\/views\/brockers\/index.blade.php",
+        "resources\/views\/compounds\/show.blade.php",
+        "resources\/views\/contract-agreements\/show.blade.php",
+        "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "resources\/views\/livewire\/lead-assign-broker.blade.php",
+        "resources\/views\/plans\/index.blade.php",
+        "resources\/views\/uptown-types\/index.blade.php",
+        "resources\/views\/uptown-types\/show.blade.php",
+        "resources\/views\/uptowns\/index.blade.php",
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Role": [
+        "resources\/views\/admin-users\/index.blade.php"
+    ],
+    "Created": [
+        "resources\/views\/admin-users\/index.blade.php",
+        "resources\/views\/compounds\/show.blade.php",
+        "resources\/views\/developers\/show.blade.php"
+    ],
+    "Actions": {
+        "0": "resources\/views\/admin-users\/index.blade.php",
+        "1": "resources\/views\/administrative-data\/index.blade.php",
+        "2": "resources\/views\/ads\/index.blade.php",
+        "3": "resources\/views\/apartment-installments\/index.blade.php",
+        "4": "resources\/views\/bot-messages\/index.blade.php",
+        "5": "resources\/views\/brockers\/index.blade.php",
+        "6": "resources\/views\/commercial-data\/index.blade.php",
+        "7": "resources\/views\/compounds\/index.blade.php",
+        "8": "resources\/views\/contract-agreements\/index.blade.php",
+        "9": "resources\/views\/contracts\/index.blade.php",
+        "10": "resources\/views\/deals\/index.blade.php",
+        "11": "resources\/views\/home-names\/index.blade.php",
+        "12": "resources\/views\/leads\/index.blade.php",
+        "13": "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "15": "resources\/views\/livewire\/lead-assign-broker.blade.php",
+        "17": "resources\/views\/livewire\/shopping.blade.php",
+        "18": "resources\/views\/payment-methods\/index.blade.php",
+        "19": "resources\/views\/payments\/index.blade.php",
+        "20": "resources\/views\/plans\/index.blade.php",
+        "21": "resources\/views\/policies\/index.blade.php",
+        "22": "resources\/views\/requests\/partials\/complaints.blade.php",
+        "23": "resources\/views\/requests\/partials\/training-requests.blade.php",
+        "24": "resources\/views\/residential-data\/index.blade.php",
+        "25": "resources\/views\/sell-requests\/index.blade.php",
+        "26": "resources\/views\/unit-sub-types\/index.blade.php",
+        "27": "resources\/views\/uptown-types\/index.blade.php",
+        "28": "resources\/views\/uptowns\/index.blade.php",
+        "29": "resources\/views\/users\/index.blade.php",
+        "30": "resources\/views\/users\/show.blade.php"
+    },
+    "No role": [
+        "resources\/views\/admin-users\/index.blade.php"
+    ],
+    "Delete this admin?": [
+        "resources\/views\/admin-users\/index.blade.php"
+    ],
+    "No admins found.": [
+        "resources\/views\/admin-users\/index.blade.php"
+    ],
+    "Create Administrative Data Field": [
+        "resources\/views\/administrative-data\/create.blade.php"
+    ],
+    "Field Name (internal)": [
+        "resources\/views\/administrative-data\/create.blade.php",
+        "resources\/views\/administrative-data\/edit.blade.php",
+        "resources\/views\/commercial-data\/create.blade.php",
+        "resources\/views\/commercial-data\/edit.blade.php",
+        "resources\/views\/residential-data\/create.blade.php",
+        "resources\/views\/residential-data\/edit.blade.php"
+    ],
+    "Label (English)": [
+        "resources\/views\/administrative-data\/create.blade.php",
+        "resources\/views\/administrative-data\/edit.blade.php",
+        "resources\/views\/commercial-data\/create.blade.php",
+        "resources\/views\/commercial-data\/edit.blade.php",
+        "resources\/views\/residential-data\/create.blade.php",
+        "resources\/views\/residential-data\/edit.blade.php"
+    ],
+    "Label (Arabic)": [
+        "resources\/views\/administrative-data\/create.blade.php",
+        "resources\/views\/administrative-data\/edit.blade.php",
+        "resources\/views\/commercial-data\/create.blade.php",
+        "resources\/views\/commercial-data\/edit.blade.php",
+        "resources\/views\/residential-data\/create.blade.php",
+        "resources\/views\/residential-data\/edit.blade.php"
+    ],
+    "Type": [
+        "resources\/views\/administrative-data\/create.blade.php",
+        "resources\/views\/administrative-data\/edit.blade.php",
+        "resources\/views\/administrative-data\/index.blade.php",
+        "resources\/views\/commercial-data\/create.blade.php",
+        "resources\/views\/commercial-data\/edit.blade.php",
+        "resources\/views\/commercial-data\/index.blade.php",
+        "resources\/views\/residential-data\/create.blade.php",
+        "resources\/views\/residential-data\/edit.blade.php",
+        "resources\/views\/residential-data\/index.blade.php",
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php",
+        "resources\/views\/uptowns\/index.blade.php",
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Is Required?": [
+        "resources\/views\/administrative-data\/create.blade.php",
+        "resources\/views\/administrative-data\/edit.blade.php",
+        "resources\/views\/commercial-data\/create.blade.php",
+        "resources\/views\/commercial-data\/edit.blade.php",
+        "resources\/views\/residential-data\/create.blade.php",
+        "resources\/views\/residential-data\/edit.blade.php"
+    ],
+    "Select Options (One per line)": [
+        "resources\/views\/administrative-data\/create.blade.php",
+        "resources\/views\/administrative-data\/edit.blade.php",
+        "resources\/views\/commercial-data\/create.blade.php",
+        "resources\/views\/commercial-data\/edit.blade.php",
+        "resources\/views\/residential-data\/create.blade.php",
+        "resources\/views\/residential-data\/edit.blade.php"
+    ],
+    "Only required if type is \"Select\". Enter each option on a new line.": [
+        "resources\/views\/administrative-data\/create.blade.php",
+        "resources\/views\/administrative-data\/edit.blade.php",
+        "resources\/views\/commercial-data\/create.blade.php",
+        "resources\/views\/commercial-data\/edit.blade.php",
+        "resources\/views\/residential-data\/create.blade.php",
+        "resources\/views\/residential-data\/edit.blade.php"
+    ],
+    "Save": [
+        "resources\/views\/administrative-data\/create.blade.php",
+        "resources\/views\/ads\/edit.blade.php",
+        "resources\/views\/bot-messages\/create.blade.php",
+        "resources\/views\/commercial-data\/create.blade.php",
+        "resources\/views\/deals\/edit.blade.php",
+        "resources\/views\/home-names\/edit.blade.php",
+        "resources\/views\/leads\/edit.blade.php",
+        "resources\/views\/payment-methods\/edit.blade.php",
+        "resources\/views\/payments\/edit.blade.php",
+        "resources\/views\/plans\/index.blade.php",
+        "resources\/views\/residential-data\/create.blade.php",
+        "resources\/views\/unit-sub-types\/create.blade.php",
+        "resources\/views\/uptown-types\/edit.blade.php",
+        "resources\/views\/users\/edit.blade.php"
+    ],
+    "Edit Administrative Data Field": [
+        "resources\/views\/administrative-data\/edit.blade.php"
+    ],
+    "Update": [
+        "resources\/views\/administrative-data\/edit.blade.php",
+        "resources\/views\/bot-messages\/edit.blade.php",
+        "resources\/views\/commercial-data\/edit.blade.php",
+        "resources\/views\/residential-data\/edit.blade.php",
+        "resources\/views\/unit-sub-types\/edit.blade.php"
+    ],
+    "Administrative Data Fields": [
+        "resources\/views\/administrative-data\/index.blade.php"
+    ],
+    "Create Field": [
+        "resources\/views\/administrative-data\/index.blade.php",
+        "resources\/views\/commercial-data\/index.blade.php",
+        "resources\/views\/residential-data\/index.blade.php"
+    ],
+    "Keyword...": [
+        "resources\/views\/administrative-data\/index.blade.php",
+        "resources\/views\/ads\/index.blade.php",
+        "resources\/views\/apartment-installments\/index.blade.php",
+        "resources\/views\/commercial-data\/index.blade.php",
+        "resources\/views\/compounds\/index.blade.php",
+        "resources\/views\/home-names\/index.blade.php",
+        "resources\/views\/payment-methods\/index.blade.php",
+        "resources\/views\/residential-data\/index.blade.php",
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/unit-sub-types\/index.blade.php",
+        "resources\/views\/uptown-types\/index.blade.php"
+    ],
+    "Id": [
+        "resources\/views\/administrative-data\/index.blade.php",
+        "resources\/views\/ads\/show.blade.php",
+        "resources\/views\/apartment-installments\/index.blade.php",
+        "resources\/views\/bot-messages\/index.blade.php",
+        "resources\/views\/brockers\/index.blade.php",
+        "resources\/views\/commercial-data\/index.blade.php",
+        "resources\/views\/compounds\/index.blade.php",
+        "resources\/views\/contract-agreements\/index.blade.php",
+        "resources\/views\/contracts\/index.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/deals\/show.blade.php",
+        "resources\/views\/home-names\/index.blade.php",
+        "resources\/views\/home-names\/show.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/leads\/show.blade.php",
+        "resources\/views\/payment-methods\/show.blade.php",
+        "resources\/views\/payments\/show.blade.php",
+        "resources\/views\/plans\/index.blade.php",
+        "resources\/views\/residential-data\/index.blade.php",
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/unit-sub-types\/index.blade.php",
+        "resources\/views\/uptown-types\/index.blade.php",
+        "resources\/views\/uptown-types\/show.blade.php",
+        "resources\/views\/uptowns\/index.blade.php",
+        "resources\/views\/users\/index.blade.php"
+    ],
+    "Field Name": [
+        "resources\/views\/administrative-data\/index.blade.php",
+        "resources\/views\/commercial-data\/index.blade.php",
+        "resources\/views\/residential-data\/index.blade.php"
+    ],
+    "Label (EN)": [
+        "resources\/views\/administrative-data\/index.blade.php",
+        "resources\/views\/commercial-data\/index.blade.php",
+        "resources\/views\/residential-data\/index.blade.php"
+    ],
+    "Required": [
+        "resources\/views\/administrative-data\/index.blade.php",
+        "resources\/views\/commercial-data\/index.blade.php",
+        "resources\/views\/residential-data\/index.blade.php"
+    ],
+    "Yes": [
+        "resources\/views\/administrative-data\/index.blade.php",
+        "resources\/views\/commercial-data\/index.blade.php",
+        "resources\/views\/residential-data\/index.blade.php",
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "No": [
+        "resources\/views\/administrative-data\/index.blade.php",
+        "resources\/views\/commercial-data\/index.blade.php",
+        "resources\/views\/residential-data\/index.blade.php",
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Edit": [
+        "resources\/views\/administrative-data\/index.blade.php",
+        "resources\/views\/ads\/show.blade.php",
+        "resources\/views\/bot-messages\/index.blade.php",
+        "resources\/views\/brockers\/show.blade.php",
+        "resources\/views\/commercial-data\/index.blade.php",
+        "resources\/views\/compounds\/index.blade.php",
+        "resources\/views\/compounds\/show.blade.php",
+        "resources\/views\/contracts\/index.blade.php",
+        "resources\/views\/contracts\/show.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/deals\/show.blade.php",
+        "resources\/views\/developers\/show.blade.php",
+        "resources\/views\/home-names\/index.blade.php",
+        "resources\/views\/home-names\/show.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/leads\/show.blade.php",
+        "resources\/views\/payment-methods\/show.blade.php",
+        "resources\/views\/payments\/show.blade.php",
+        "resources\/views\/plans\/show.blade.php",
+        "resources\/views\/policies\/index.blade.php",
+        "resources\/views\/policies\/show.blade.php",
+        "resources\/views\/residential-data\/index.blade.php",
+        "resources\/views\/unit-sub-types\/index.blade.php",
+        "resources\/views\/uptown-types\/show.blade.php",
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Delete": [
+        "resources\/views\/administrative-data\/index.blade.php",
+        "resources\/views\/ads\/index.blade.php",
+        "resources\/views\/ads\/show.blade.php",
+        "resources\/views\/apartment-installments\/index.blade.php",
+        "resources\/views\/bot-messages\/index.blade.php",
+        "resources\/views\/brockers\/index.blade.php",
+        "resources\/views\/commercial-data\/index.blade.php",
+        "resources\/views\/compounds\/index.blade.php",
+        "resources\/views\/contract-agreements\/index.blade.php",
+        "resources\/views\/contracts\/index.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/deals\/show.blade.php",
+        "resources\/views\/developers\/index.blade.php",
+        "resources\/views\/developers\/show.blade.php",
+        "resources\/views\/home-names\/index.blade.php",
+        "resources\/views\/home-names\/show.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/payment-methods\/index.blade.php",
+        "resources\/views\/payment-methods\/show.blade.php",
+        "resources\/views\/payments\/show.blade.php",
+        "resources\/views\/plans\/index.blade.php",
+        "resources\/views\/plans\/show.blade.php",
+        "resources\/views\/policies\/index.blade.php",
+        "resources\/views\/residential-data\/index.blade.php",
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/unit-sub-types\/index.blade.php",
+        "resources\/views\/uptown-types\/index.blade.php",
+        "resources\/views\/uptown-types\/show.blade.php",
+        "resources\/views\/uptowns\/index.blade.php",
+        "resources\/views\/users\/index.blade.php"
+    ],
+    "Create Ad": {
+        "0": "resources\/views\/ads\/create.blade.php",
+        "2": "resources\/views\/ads\/index.blade.php"
+    },
+    "Back to": [
+        "resources\/views\/ads\/create.blade.php",
+        "resources\/views\/ads\/edit.blade.php",
+        "resources\/views\/ads\/show.blade.php",
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/brockers\/edit.blade.php",
+        "resources\/views\/brockers\/show.blade.php",
+        "resources\/views\/compounds\/create.blade.php",
+        "resources\/views\/contract-agreements\/show.blade.php",
+        "resources\/views\/deals\/create.blade.php",
+        "resources\/views\/deals\/edit.blade.php",
+        "resources\/views\/deals\/show.blade.php",
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php",
+        "resources\/views\/home-names\/create.blade.php",
+        "resources\/views\/home-names\/edit.blade.php",
+        "resources\/views\/home-names\/show.blade.php",
+        "resources\/views\/leads\/create.blade.php",
+        "resources\/views\/leads\/edit.blade.php",
+        "resources\/views\/leads\/show.blade.php",
+        "resources\/views\/payment-methods\/create.blade.php",
+        "resources\/views\/payment-methods\/edit.blade.php",
+        "resources\/views\/payment-methods\/show.blade.php",
+        "resources\/views\/payments\/create.blade.php",
+        "resources\/views\/payments\/edit.blade.php",
+        "resources\/views\/payments\/show.blade.php",
+        "resources\/views\/plans\/create.blade.php",
+        "resources\/views\/plans\/edit.blade.php",
+        "resources\/views\/plans\/show.blade.php",
+        "resources\/views\/uptown-types\/create.blade.php",
+        "resources\/views\/uptown-types\/edit.blade.php",
+        "resources\/views\/uptown-types\/show.blade.php",
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php",
+        "resources\/views\/uptowns\/show.blade.php",
+        "resources\/views\/users\/create.blade.php",
+        "resources\/views\/users\/edit.blade.php"
+    ],
+    "Ads": {
+        "0": "resources\/views\/ads\/create.blade.php",
+        "1": "resources\/views\/ads\/edit.blade.php",
+        "2": "resources\/views\/ads\/index.blade.php",
+        "4": "resources\/views\/ads\/show.blade.php",
+        "5": "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    },
+    "Title (English)": [
+        "resources\/views\/ads\/create.blade.php",
+        "resources\/views\/ads\/edit.blade.php"
+    ],
+    "Title (Arabic)": [
+        "resources\/views\/ads\/create.blade.php",
+        "resources\/views\/ads\/edit.blade.php"
+    ],
+    "Icon": [
+        "resources\/views\/ads\/create.blade.php",
+        "resources\/views\/ads\/edit.blade.php",
+        "resources\/views\/payment-methods\/create.blade.php",
+        "resources\/views\/payment-methods\/edit.blade.php"
+    ],
+    "Add": [
+        "resources\/views\/ads\/create.blade.php",
+        "resources\/views\/deals\/create.blade.php",
+        "resources\/views\/home-names\/create.blade.php",
+        "resources\/views\/leads\/create.blade.php",
+        "resources\/views\/payment-methods\/create.blade.php",
+        "resources\/views\/payments\/create.blade.php",
+        "resources\/views\/uptown-types\/create.blade.php",
+        "resources\/views\/users\/create.blade.php"
+    ],
+    "Edit Ad": [
+        "resources\/views\/ads\/edit.blade.php"
+    ],
+    "Details": [
+        "resources\/views\/ads\/edit.blade.php",
+        "resources\/views\/ads\/index.blade.php",
+        "resources\/views\/apartment-installments\/index.blade.php",
+        "resources\/views\/brockers\/edit.blade.php",
+        "resources\/views\/brockers\/index.blade.php",
+        "resources\/views\/compounds\/index.blade.php",
+        "resources\/views\/contract-agreements\/index.blade.php",
+        "resources\/views\/contracts\/index.blade.php",
+        "resources\/views\/deals\/edit.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/developers\/edit.blade.php",
+        "resources\/views\/developers\/show.blade.php",
+        "resources\/views\/home-names\/edit.blade.php",
+        "resources\/views\/home-names\/index.blade.php",
+        "resources\/views\/leads\/edit.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/livewire\/shopping.blade.php",
+        "resources\/views\/payment-methods\/edit.blade.php",
+        "resources\/views\/payment-methods\/index.blade.php",
+        "resources\/views\/payments\/edit.blade.php",
+        "resources\/views\/payments\/index.blade.php",
+        "resources\/views\/plans\/edit.blade.php",
+        "resources\/views\/plans\/index.blade.php",
+        "resources\/views\/policies\/index.blade.php",
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/uptown-types\/edit.blade.php",
+        "resources\/views\/uptown-types\/index.blade.php",
+        "resources\/views\/uptowns\/index.blade.php",
+        "resources\/views\/users\/edit.blade.php",
+        "resources\/views\/users\/index.blade.php"
+    ],
+    "Ad": [
+        "resources\/views\/ads\/index.blade.php"
+    ],
+    "Title": [
+        "resources\/views\/ads\/index.blade.php",
+        "resources\/views\/ads\/show.blade.php",
+        "resources\/views\/contract-agreements\/show.blade.php",
+        "resources\/views\/contracts\/index.blade.php",
+        "resources\/views\/contracts\/show.blade.php",
+        "resources\/views\/policies\/index.blade.php"
+    ],
+    "Image": {
+        "0": "resources\/views\/ads\/index.blade.php",
+        "1": "resources\/views\/ads\/show.blade.php",
+        "2": "resources\/views\/compounds\/create.blade.php",
+        "3": "resources\/views\/compounds\/edit.blade.php",
+        "4": "resources\/views\/compounds\/index.blade.php",
+        "5": "resources\/views\/payment-methods\/index.blade.php",
+        "7": "resources\/views\/payment-methods\/show.blade.php"
+    },
+    "Created At": [
+        "resources\/views\/ads\/index.blade.php",
+        "resources\/views\/ads\/show.blade.php",
+        "resources\/views\/apartment-installments\/index.blade.php",
+        "resources\/views\/brockers\/index.blade.php",
+        "resources\/views\/brockers\/show.blade.php",
+        "resources\/views\/compounds\/index.blade.php",
+        "resources\/views\/contracts\/index.blade.php",
+        "resources\/views\/contracts\/show.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/deals\/show.blade.php",
+        "resources\/views\/home-names\/index.blade.php",
+        "resources\/views\/home-names\/show.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/leads\/show.blade.php",
+        "resources\/views\/payment-methods\/index.blade.php",
+        "resources\/views\/payment-methods\/show.blade.php",
+        "resources\/views\/payments\/index.blade.php",
+        "resources\/views\/payments\/show.blade.php",
+        "resources\/views\/plans\/index.blade.php",
+        "resources\/views\/plans\/show.blade.php",
+        "resources\/views\/policies\/index.blade.php",
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/unit-sub-types\/index.blade.php",
+        "resources\/views\/uptown-types\/index.blade.php",
+        "resources\/views\/uptown-types\/show.blade.php",
+        "resources\/views\/uptowns\/show.blade.php",
+        "resources\/views\/users\/index.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Are you sure you want to delete this ad?": [
+        "resources\/views\/ads\/index.blade.php"
+    ],
+    "Ad Image": [
+        "resources\/views\/ads\/index.blade.php"
+    ],
+    "Close": {
+        "0": "resources\/views\/ads\/index.blade.php",
+        "1": "resources\/views\/compounds\/index.blade.php",
+        "2": "resources\/views\/compounds\/show.blade.php",
+        "3": "resources\/views\/developers\/show.blade.php",
+        "4": "resources\/views\/payment-methods\/index.blade.php",
+        "5": "resources\/views\/payments\/index.blade.php",
+        "6": "resources\/views\/requests\/partials\/complaints.blade.php",
+        "8": "resources\/views\/uptowns\/show.blade.php",
+        "9": "resources\/views\/users\/show.blade.php"
+    },
+    "Download": [
+        "resources\/views\/ads\/index.blade.php",
+        "resources\/views\/compounds\/index.blade.php",
+        "resources\/views\/compounds\/show.blade.php",
+        "resources\/views\/developers\/show.blade.php",
+        "resources\/views\/payment-methods\/index.blade.php",
+        "resources\/views\/payments\/index.blade.php"
+    ],
+    "Image could not be loaded": [
+        "resources\/views\/ads\/show.blade.php",
+        "resources\/views\/payment-methods\/show.blade.php",
+        "resources\/views\/payments\/show.blade.php"
+    ],
+    "No image uploaded": [
+        "resources\/views\/ads\/show.blade.php",
+        "resources\/views\/payment-methods\/show.blade.php",
+        "resources\/views\/payments\/show.blade.php"
+    ],
+    "Updated At": [
+        "resources\/views\/ads\/show.blade.php",
+        "resources\/views\/brockers\/show.blade.php",
+        "resources\/views\/contracts\/show.blade.php",
+        "resources\/views\/deals\/show.blade.php",
+        "resources\/views\/home-names\/show.blade.php",
+        "resources\/views\/leads\/show.blade.php",
+        "resources\/views\/payment-methods\/show.blade.php",
+        "resources\/views\/payments\/show.blade.php",
+        "resources\/views\/plans\/show.blade.php",
+        "resources\/views\/uptown-types\/show.blade.php"
+    ],
+    "Mortgage Requests": {
+        "0": "resources\/views\/apartment-installments\/index.blade.php",
+        "2": "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    },
+    "User": [
+        "resources\/views\/apartment-installments\/index.blade.php",
+        "resources\/views\/contract-agreements\/index.blade.php",
+        "resources\/views\/payments\/edit.blade.php",
+        "resources\/views\/payments\/index.blade.php",
+        "resources\/views\/sell-requests\/index.blade.php"
+    ],
+    "Apartment": [
+        "resources\/views\/apartment-installments\/index.blade.php"
+    ],
+    "Monthly Income": [
+        "resources\/views\/apartment-installments\/index.blade.php",
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Monthly Installment": [
+        "resources\/views\/apartment-installments\/index.blade.php"
+    ],
+    "Years": [
+        "resources\/views\/apartment-installments\/index.blade.php",
+        "resources\/views\/uptowns\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Deposit": [
+        "resources\/views\/apartment-installments\/index.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Contacted": [
+        "resources\/views\/apartment-installments\/index.blade.php",
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Pending": {
+        "0": "resources\/views\/apartment-installments\/index.blade.php",
+        "1": "resources\/views\/apartment-installments\/show.blade.php",
+        "2": "resources\/views\/home\/welcome.blade.php",
+        "3": "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "4": "resources\/views\/livewire\/lead-assign-broker.blade.php",
+        "5": "resources\/views\/payments\/index.blade.php",
+        "6": "resources\/views\/requests\/partials\/training-requests.blade.php",
+        "7": "resources\/views\/sell-requests\/index.blade.php",
+        "8": "resources\/views\/sell-requests\/show.blade.php",
+        "9": "resources\/views\/users\/show.blade.php",
+        "13": "app\/Enums\/LeadStatuses.php",
+        "14": "app\/Enums\/PaymentStatus.php"
+    },
+    "Mortgage Request Details": [
+        "resources\/views\/apartment-installments\/show.blade.php"
+    ],
+    "Back to List": [
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Mortgage Preferences": [
+        "resources\/views\/apartment-installments\/show.blade.php"
+    ],
+    "Years of Mortgage": [
+        "resources\/views\/apartment-installments\/show.blade.php"
+    ],
+    "Deposit Percentage": [
+        "resources\/views\/apartment-installments\/show.blade.php"
+    ],
+    "Desired Installment": [
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "City": [
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Area": [
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Job Title": [
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Requested Apartment": [
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "View Apartment Details": [
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "User Information": [
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/brockers\/edit.blade.php",
+        "resources\/views\/brockers\/show.blade.php",
+        "resources\/views\/contract-agreements\/show.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Age": [
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/requests\/partials\/training-requests.blade.php",
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/create.blade.php",
+        "resources\/views\/users\/edit.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Identity Documents": [
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Front": [
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Mark as Contacted": [
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Are you sure?": [
+        "resources\/views\/apartment-installments\/show.blade.php"
+    ],
+    "Delete Request": [
+        "resources\/views\/apartment-installments\/show.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "You try to access a page that requires authentication": [
+        "resources\/views\/auth\/confirm-password.blade.php"
+    ],
+    "Welcome": [
+        "resources\/views\/auth\/confirm-password.blade.php"
+    ],
+    "Please confirm your password before continuing.": [
+        "resources\/views\/auth\/confirm-password.blade.php"
+    ],
+    "Confirm": [
+        "resources\/views\/auth\/confirm-password.blade.php"
+    ],
+    "Login": [
+        "resources\/views\/auth\/login.blade.php"
+    ],
+    "Create Bot Message": [
+        "resources\/views\/bot-messages\/create.blade.php"
+    ],
+    "Parent Option": [
+        "resources\/views\/bot-messages\/create.blade.php",
+        "resources\/views\/bot-messages\/edit.blade.php"
+    ],
+    "Root Level (No Parent)": [
+        "resources\/views\/bot-messages\/create.blade.php",
+        "resources\/views\/bot-messages\/edit.blade.php"
+    ],
+    "Select which option the user must click to see this new option.": [
+        "resources\/views\/bot-messages\/create.blade.php"
+    ],
+    "User Option Text": [
+        "resources\/views\/bot-messages\/create.blade.php",
+        "resources\/views\/bot-messages\/edit.blade.php",
+        "resources\/views\/bot-messages\/index.blade.php"
+    ],
+    "The text the user will see and click on (e.g., \"I need help with my account": [
+        "resources\/views\/bot-messages\/create.blade.php"
+    ],
+    "Bot Response (Optional)": [
+        "resources\/views\/bot-messages\/create.blade.php",
+        "resources\/views\/bot-messages\/edit.blade.php"
+    ],
+    "The text the bot replies with after the user clicks the option above. Leave blank if the bot should just show the next sub-options.": [
+        "resources\/views\/bot-messages\/create.blade.php"
+    ],
+    "Edit Bot Message": [
+        "resources\/views\/bot-messages\/edit.blade.php"
+    ],
+    "Select which option the user must click to see this option.": [
+        "resources\/views\/bot-messages\/edit.blade.php"
+    ],
+    "The text the user will see and click on.": [
+        "resources\/views\/bot-messages\/edit.blade.php"
+    ],
+    "The text the bot replies with after the user clicks the option above.": [
+        "resources\/views\/bot-messages\/edit.blade.php"
+    ],
+    "Bot Messages": {
+        "0": "resources\/views\/bot-messages\/index.blade.php",
+        "2": "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    },
+    "Root": [
+        "resources\/views\/bot-messages\/index.blade.php"
+    ],
+    "Root Level Options": [
+        "resources\/views\/bot-messages\/index.blade.php"
+    ],
+    "Create Option": [
+        "resources\/views\/bot-messages\/index.blade.php"
+    ],
+    "Go Up": [
+        "resources\/views\/bot-messages\/index.blade.php"
+    ],
+    "Bot Response": [
+        "resources\/views\/bot-messages\/index.blade.php"
+    ],
+    "Sub-Options": [
+        "resources\/views\/bot-messages\/index.blade.php"
+    ],
+    "Options": [
+        "resources\/views\/bot-messages\/index.blade.php"
+    ],
+    "Are you sure? This will also delete ALL sub-options below this one.": [
+        "resources\/views\/bot-messages\/index.blade.php"
+    ],
+    "No messages found at this level.": [
+        "resources\/views\/bot-messages\/index.blade.php"
+    ],
+    "Create Brocker": [
+        "resources\/views\/brockers\/create.blade.php"
+    ],
+    "Brockers": [
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/brockers\/edit.blade.php"
+    ],
+    "Broker Information": [
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/brockers\/edit.blade.php"
+    ],
+    "Plan": [
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/brockers\/edit.blade.php",
+        "resources\/views\/brockers\/index.blade.php",
+        "resources\/views\/brockers\/show.blade.php",
+        "resources\/views\/payments\/create.blade.php",
+        "resources\/views\/payments\/edit.blade.php",
+        "resources\/views\/payments\/index.blade.php",
+        "resources\/views\/payments\/show.blade.php",
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Profit": [
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/brockers\/edit.blade.php",
+        "resources\/views\/brockers\/index.blade.php",
+        "resources\/views\/brockers\/show.blade.php",
+        "resources\/views\/developers\/show.blade.php"
+    ],
+    "Commission Percentage": [
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/brockers\/edit.blade.php",
+        "resources\/views\/brockers\/show.blade.php",
+        "resources\/views\/compounds\/create.blade.php",
+        "resources\/views\/compounds\/edit.blade.php",
+        "resources\/views\/compounds\/index.blade.php"
+    ],
+    "Number Of Deals": [
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/brockers\/edit.blade.php",
+        "resources\/views\/brockers\/index.blade.php"
+    ],
+    "Deals Done": [
+        "resources\/views\/brockers\/create.blade.php",
+        "resources\/views\/brockers\/edit.blade.php",
+        "resources\/views\/brockers\/index.blade.php",
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "Add Broker": [
+        "resources\/views\/brockers\/create.blade.php"
+    ],
+    "Edit Brocker": [
+        "resources\/views\/brockers\/edit.blade.php"
+    ],
+    "Developer Sales": {
+        "0": "resources\/views\/brockers\/index.blade.php",
+        "2": "resources\/views\/brockers\/show.blade.php",
+        "3": "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    },
+    "Add Developer Sale": [
+        "resources\/views\/brockers\/index.blade.php"
+    ],
+    "Keyword": [
+        "resources\/views\/brockers\/index.blade.php",
+        "resources\/views\/contracts\/index.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/plans\/index.blade.php",
+        "resources\/views\/users\/index.blade.php"
+    ],
+    "Comission Percentage": [
+        "resources\/views\/brockers\/index.blade.php"
+    ],
+    "Are you sure you want to delete this brocker?": [
+        "resources\/views\/brockers\/index.blade.php"
+    ],
+    "Developer Sale Information": [
+        "resources\/views\/brockers\/show.blade.php"
+    ],
+    "Developer Sale ID": [
+        "resources\/views\/brockers\/show.blade.php"
+    ],
+    "Number Of Leads": [
+        "resources\/views\/brockers\/show.blade.php",
+        "resources\/views\/plans\/index.blade.php"
+    ],
+    "Units Sold": [
+        "resources\/views\/brockers\/show.blade.php"
+    ],
+    "Create Commercial Data Field": [
+        "resources\/views\/commercial-data\/create.blade.php"
+    ],
+    "Edit Commercial Data Field": [
+        "resources\/views\/commercial-data\/edit.blade.php"
+    ],
+    "Commercial Data Fields": [
+        "resources\/views\/commercial-data\/index.blade.php"
+    ],
+    "Create Compound": {
+        "0": "resources\/views\/compounds\/create.blade.php",
+        "3": "resources\/views\/compounds\/index.blade.php"
+    },
+    "Back to Compounds": [
+        "resources\/views\/compounds\/create.blade.php",
+        "resources\/views\/compounds\/edit.blade.php"
+    ],
+    "Create Compound for": [
+        "resources\/views\/compounds\/create.blade.php"
+    ],
+    "Adding a new compound to this developer": [
+        "resources\/views\/compounds\/create.blade.php"
+    ],
+    "Compounds": [
+        "resources\/views\/compounds\/create.blade.php",
+        "resources\/views\/compounds\/index.blade.php"
+    ],
+    "Developer": [
+        "resources\/views\/compounds\/create.blade.php",
+        "resources\/views\/compounds\/edit.blade.php",
+        "resources\/views\/compounds\/show.blade.php",
+        "resources\/views\/deals\/create.blade.php",
+        "resources\/views\/deals\/edit.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/deals\/show.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php",
+        "resources\/views\/uptowns\/index.blade.php",
+        "resources\/views\/uptowns\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Select Developer": [
+        "resources\/views\/compounds\/create.blade.php",
+        "resources\/views\/compounds\/edit.blade.php"
+    ],
+    "Compound Name": [
+        "resources\/views\/compounds\/create.blade.php",
+        "resources\/views\/compounds\/edit.blade.php",
+        "resources\/views\/compounds\/index.blade.php"
+    ],
+    "Units": {
+        "0": "resources\/views\/compounds\/create.blade.php",
+        "1": "resources\/views\/compounds\/edit.blade.php",
+        "2": "resources\/views\/compounds\/index.blade.php",
+        "3": "resources\/views\/compounds\/show.blade.php",
+        "5": "resources\/views\/developers\/create.blade.php",
+        "6": "resources\/views\/developers\/edit.blade.php",
+        "7": "resources\/views\/developers\/show.blade.php",
+        "8": "resources\/views\/elements\/phoenix\/sidebar.blade.php",
+        "9": "resources\/views\/uptowns\/create.blade.php",
+        "10": "resources\/views\/uptowns\/edit.blade.php",
+        "11": "resources\/views\/uptowns\/index.blade.php",
+        "13": "resources\/views\/uptowns\/show.blade.php"
+    },
+    "Mark as Favourite": [
+        "resources\/views\/compounds\/create.blade.php",
+        "resources\/views\/compounds\/edit.blade.php"
+    ],
+    "Edit Compound": [
+        "resources\/views\/compounds\/edit.blade.php"
+    ],
+    "View Details": [
+        "resources\/views\/compounds\/edit.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Current image": [
+        "resources\/views\/compounds\/edit.blade.php",
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "Leave empty to keep current image": [
+        "resources\/views\/compounds\/edit.blade.php",
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "Update Compound": [
+        "resources\/views\/compounds\/edit.blade.php"
+    ],
+    "Back to Developer": [
+        "resources\/views\/compounds\/index.blade.php"
+    ],
+    "Favourite": {
+        "0": "resources\/views\/compounds\/index.blade.php",
+        "2": "resources\/views\/compounds\/show.blade.php"
+    },
+    "No Image": [
+        "resources\/views\/compounds\/index.blade.php",
+        "resources\/views\/compounds\/show.blade.php",
+        "resources\/views\/developers\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Regular": [
+        "resources\/views\/compounds\/index.blade.php",
+        "resources\/views\/compounds\/show.blade.php"
+    ],
+    "Uptowns": [
+        "resources\/views\/compounds\/index.blade.php"
+    ],
+    "Favourite Compound": [
+        "resources\/views\/compounds\/show.blade.php"
+    ],
+    "Commission": [
+        "resources\/views\/compounds\/show.blade.php"
+    ],
+    "Compound Details": [
+        "resources\/views\/compounds\/show.blade.php"
+    ],
+    "ID": [
+        "resources\/views\/compounds\/show.blade.php",
+        "resources\/views\/developers\/show.blade.php",
+        "resources\/views\/policies\/index.blade.php",
+        "resources\/views\/requests\/partials\/complaints.blade.php",
+        "resources\/views\/requests\/partials\/training-requests.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Updated": [
+        "resources\/views\/compounds\/show.blade.php",
+        "resources\/views\/developers\/show.blade.php"
+    ],
+    "Developer Information": [
+        "resources\/views\/compounds\/show.blade.php"
+    ],
+    "Total Units": [
+        "resources\/views\/compounds\/show.blade.php",
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Deals": {
+        "0": "resources\/views\/compounds\/show.blade.php",
+        "1": "resources\/views\/deals\/create.blade.php",
+        "2": "resources\/views\/deals\/edit.blade.php",
+        "3": "resources\/views\/deals\/index.blade.php",
+        "5": "resources\/views\/deals\/show.blade.php",
+        "6": "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    },
+    "View Developer": [
+        "resources\/views\/compounds\/show.blade.php"
+    ],
+    "Contract Agreements": {
+        "0": "resources\/views\/contract-agreements\/index.blade.php",
+        "2": "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    },
+    "Contract": [
+        "resources\/views\/contract-agreements\/index.blade.php"
+    ],
+    "Agreement Date": [
+        "resources\/views\/contract-agreements\/index.blade.php",
+        "resources\/views\/contract-agreements\/show.blade.php"
+    ],
+    "Are you sure you want to delete this agreement?": [
+        "resources\/views\/contract-agreements\/index.blade.php"
+    ],
+    "Agreement Details": [
+        "resources\/views\/contract-agreements\/show.blade.php"
+    ],
+    "Agreements": [
+        "resources\/views\/contract-agreements\/show.blade.php"
+    ],
+    "User ID": [
+        "resources\/views\/contract-agreements\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Contract Information": [
+        "resources\/views\/contract-agreements\/show.blade.php",
+        "resources\/views\/contracts\/create.blade.php",
+        "resources\/views\/contracts\/edit.blade.php"
+    ],
+    "Contract ID": [
+        "resources\/views\/contract-agreements\/show.blade.php"
+    ],
+    "Contract Body (At Time of Viewing)": [
+        "resources\/views\/contract-agreements\/show.blade.php"
+    ],
+    "Create Contract": {
+        "0": "resources\/views\/contracts\/create.blade.php",
+        "3": "resources\/views\/contracts\/index.blade.php"
+    },
+    "Back to Contracts": [
+        "resources\/views\/contracts\/create.blade.php",
+        "resources\/views\/contracts\/edit.blade.php",
+        "resources\/views\/contracts\/show.blade.php"
+    ],
+    "Contract Title": [
+        "resources\/views\/contracts\/create.blade.php",
+        "resources\/views\/contracts\/edit.blade.php"
+    ],
+    "Contract Pages": [
+        "resources\/views\/contracts\/create.blade.php",
+        "resources\/views\/contracts\/edit.blade.php",
+        "resources\/views\/contracts\/show.blade.php"
+    ],
+    "Add Page": [
+        "resources\/views\/contracts\/create.blade.php",
+        "resources\/views\/contracts\/edit.blade.php"
+    ],
+    "Page 1": [
+        "resources\/views\/contracts\/create.blade.php",
+        "resources\/views\/contracts\/edit.blade.php"
+    ],
+    "Move Up": [
+        "resources\/views\/contracts\/create.blade.php",
+        "resources\/views\/contracts\/edit.blade.php"
+    ],
+    "Move Down": [
+        "resources\/views\/contracts\/create.blade.php",
+        "resources\/views\/contracts\/edit.blade.php"
+    ],
+    "Delete Page": [
+        "resources\/views\/contracts\/create.blade.php",
+        "resources\/views\/contracts\/edit.blade.php"
+    ],
+    "Page Content": {
+        "0": "resources\/views\/contracts\/create.blade.php",
+        "2": "resources\/views\/contracts\/edit.blade.php"
+    },
+    "Please enter content for this page.": [
+        "resources\/views\/contracts\/create.blade.php",
+        "resources\/views\/contracts\/edit.blade.php"
+    ],
+    "Page": {
+        "0": "resources\/views\/contracts\/create.blade.php",
+        "1": "resources\/views\/contracts\/edit.blade.php",
+        "3": "resources\/views\/contracts\/show.blade.php"
+    },
+    "Edit Contract": [
+        "resources\/views\/contracts\/edit.blade.php"
+    ],
+    "Update Contract": [
+        "resources\/views\/contracts\/edit.blade.php"
+    ],
+    "Contracts": {
+        "0": "resources\/views\/contracts\/index.blade.php",
+        "2": "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    },
+    "Pages": [
+        "resources\/views\/contracts\/index.blade.php"
+    ],
+    "Are you sure you want to delete this contract?": [
+        "resources\/views\/contracts\/index.blade.php"
+    ],
+    "Contract Details": [
+        "resources\/views\/contracts\/show.blade.php"
+    ],
+    "Create Deal": {
+        "0": "resources\/views\/deals\/create.blade.php",
+        "2": "resources\/views\/deals\/index.blade.php"
+    },
+    "Fullname": [
+        "resources\/views\/deals\/create.blade.php",
+        "resources\/views\/deals\/edit.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/deals\/show.blade.php"
+    ],
+    "Nationality": [
+        "resources\/views\/deals\/create.blade.php",
+        "resources\/views\/deals\/edit.blade.php",
+        "resources\/views\/deals\/index.blade.php"
+    ],
+    "Compound": [
+        "resources\/views\/deals\/create.blade.php",
+        "resources\/views\/deals\/edit.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/deals\/show.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php",
+        "resources\/views\/uptowns\/index.blade.php",
+        "resources\/views\/uptowns\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Unit Type": [
+        "resources\/views\/deals\/create.blade.php",
+        "resources\/views\/deals\/edit.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/deals\/show.blade.php",
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Number Of Units": [
+        "resources\/views\/deals\/create.blade.php",
+        "resources\/views\/deals\/edit.blade.php",
+        "resources\/views\/deals\/index.blade.php",
+        "resources\/views\/deals\/show.blade.php"
+    ],
+    "Edit Deal": [
+        "resources\/views\/deals\/edit.blade.php"
+    ],
+    "All": [
+        "resources\/views\/deals\/index.blade.php"
+    ],
+    "Nationality Id": [
+        "resources\/views\/deals\/show.blade.php"
+    ],
+    "Create Developer": [
+        "resources\/views\/developers\/create.blade.php"
+    ],
+    "Developers": {
+        "0": "resources\/views\/developers\/create.blade.php",
+        "1": "resources\/views\/developers\/edit.blade.php",
+        "2": "resources\/views\/developers\/index.blade.php",
+        "4": "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    },
+    "Basic Information": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php",
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Name (English)": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php",
+        "resources\/views\/uptown-types\/create.blade.php",
+        "resources\/views\/uptown-types\/edit.blade.php",
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Name (Arabic)": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php",
+        "resources\/views\/uptown-types\/create.blade.php",
+        "resources\/views\/uptown-types\/edit.blade.php",
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Description (English)": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php",
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Description (Arabic)": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php",
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Developer Image": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "Business Information": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "Total Deals": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php",
+        "resources\/views\/developers\/index.blade.php",
+        "resources\/views\/developers\/show.blade.php",
+        "resources\/views\/home\/welcome.blade.php",
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Total Profit": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "Start Date": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "End Date": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php",
+        "resources\/views\/developers\/show.blade.php",
+        "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Places": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "Add Place": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "Enter place name": {
+        "0": "resources\/views\/developers\/create.blade.php",
+        "2": "resources\/views\/developers\/edit.blade.php"
+    },
+    "Add locations where this developer operates": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "Sales Team": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php",
+        "resources\/views\/developers\/show.blade.php"
+    ],
+    "Add Salesman": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "Salesman Name": {
+        "0": "resources\/views\/developers\/create.blade.php",
+        "2": "resources\/views\/developers\/edit.blade.php"
+    },
+    "Phone Number": {
+        "0": "resources\/views\/developers\/create.blade.php",
+        "2": "resources\/views\/developers\/edit.blade.php",
+        "5": "resources\/views\/users\/show.blade.php"
+    },
+    "Add sales team members for this developer": [
+        "resources\/views\/developers\/create.blade.php",
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "Edit Developer": [
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "Update Developer": [
+        "resources\/views\/developers\/edit.blade.php"
+    ],
+    "Mange developers, performance, and statistics.": [
+        "resources\/views\/developers\/index.blade.php"
+    ],
+    "New Developer": [
+        "resources\/views\/developers\/index.blade.php"
+    ],
+    "Total Units Listed": [
+        "resources\/views\/developers\/index.blade.php"
+    ],
+    "Deals Completed": [
+        "resources\/views\/developers\/index.blade.php"
+    ],
+    "Total Profit Generated": [
+        "resources\/views\/developers\/index.blade.php"
+    ],
+    "Active Period:": [
+        "resources\/views\/developers\/index.blade.php"
+    ],
+    "Unknown": [
+        "resources\/views\/developers\/index.blade.php"
+    ],
+    "Present": [
+        "resources\/views\/developers\/index.blade.php"
+    ],
+    "Edit Details": [
+        "resources\/views\/developers\/index.blade.php"
+    ],
+    "Are you sure you want to delete this developer?": [
+        "resources\/views\/developers\/index.blade.php",
+        "resources\/views\/developers\/show.blade.php"
+    ],
+    "No developers found.": [
+        "resources\/views\/developers\/index.blade.php"
+    ],
+    "Started": [
+        "resources\/views\/developers\/show.blade.php"
+    ],
+    "Completed": [
+        "resources\/views\/developers\/show.blade.php",
+        "resources\/views\/requests\/partials\/training-requests.blade.php"
+    ],
+    "View Compounds": [
+        "resources\/views\/developers\/show.blade.php"
+    ],
+    "Success Rate": [
+        "resources\/views\/developers\/show.blade.php"
+    ],
+    "Locations": [
+        "resources\/views\/developers\/show.blade.php"
+    ],
+    "Home": [
+        "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    ],
+    "Home Names": {
+        "0": "resources\/views\/elements\/phoenix\/sidebar.blade.php",
+        "1": "resources\/views\/home-names\/create.blade.php",
+        "2": "resources\/views\/home-names\/edit.blade.php",
+        "3": "resources\/views\/home-names\/index.blade.php",
+        "5": "resources\/views\/home-names\/show.blade.php"
+    },
+    "Users & CRM": [
+        "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    ],
+    "Users": {
+        "0": "resources\/views\/elements\/phoenix\/sidebar.blade.php",
+        "1": "resources\/views\/users\/create.blade.php",
+        "2": "resources\/views\/users\/edit.blade.php",
+        "3": "resources\/views\/users\/index.blade.php",
+        "5": "resources\/views\/users\/show.blade.php"
+    },
+    "Real Estate": [
+        "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    ],
+    "Units Types": [
+        "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    ],
+    "Unit Sub-Types": [
+        "resources\/views\/elements\/phoenix\/sidebar.blade.php",
+        "resources\/views\/unit-sub-types\/index.blade.php"
+    ],
+    "User Requests": [
+        "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    ],
+    "Units Requests": [
+        "resources\/views\/elements\/phoenix\/sidebar.blade.php",
+        "resources\/views\/sell-requests\/index.blade.php"
+    ],
+    "Complaints": [
+        "resources\/views\/elements\/phoenix\/sidebar.blade.php",
+        "resources\/views\/requests\/index.blade.php"
+    ],
+    "Marketing & Content": [
+        "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    ],
+    "Policy Terms": [
+        "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    ],
+    "Admin Management": [
+        "resources\/views\/elements\/phoenix\/sidebar.blade.php"
+    ],
+    "Create Home Name": {
+        "0": "resources\/views\/home-names\/create.blade.php",
+        "2": "resources\/views\/home-names\/index.blade.php"
+    },
+    "Name Ar": [
+        "resources\/views\/home-names\/create.blade.php",
+        "resources\/views\/home-names\/edit.blade.php",
+        "resources\/views\/home-names\/index.blade.php",
+        "resources\/views\/home-names\/show.blade.php"
+    ],
+    "Name En": [
+        "resources\/views\/home-names\/create.blade.php",
+        "resources\/views\/home-names\/edit.blade.php",
+        "resources\/views\/home-names\/index.blade.php",
+        "resources\/views\/home-names\/show.blade.php"
+    ],
+    "Edit Home Name": [
+        "resources\/views\/home-names\/edit.blade.php"
+    ],
+    "Dashboard Overview": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Filter Period:": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Current Period": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "This Month": [
+        "resources\/views\/home\/welcome.blade.php",
+        "app\/Http\/Controllers\/HomePageController.php"
+    ],
+    "This Year": [
+        "resources\/views\/home\/welcome.blade.php",
+        "app\/Http\/Controllers\/HomePageController.php"
+    ],
+    "This Quarter": [
+        "resources\/views\/home\/welcome.blade.php",
+        "app\/Http\/Controllers\/HomePageController.php"
+    ],
+    "Previous Period": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Previous Month": {
+        "0": "resources\/views\/home\/welcome.blade.php",
+        "2": "app\/Http\/Controllers\/HomePageController.php"
+    },
+    "Previous Year": {
+        "0": "resources\/views\/home\/welcome.blade.php",
+        "2": "app\/Http\/Controllers\/HomePageController.php"
+    },
+    "Previous Quarter": {
+        "0": "resources\/views\/home\/welcome.blade.php",
+        "2": "app\/Http\/Controllers\/HomePageController.php"
+    },
+    "Last N Days": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Last 7 Days": {
+        "0": "resources\/views\/home\/welcome.blade.php",
+        "2": "app\/Http\/Controllers\/HomePageController.php"
+    },
+    "Last 30 Days": {
+        "0": "resources\/views\/home\/welcome.blade.php",
+        "2": "app\/Http\/Controllers\/HomePageController.php"
+    },
+    "Last 90 Days": {
+        "0": "resources\/views\/home\/welcome.blade.php",
+        "2": "app\/Http\/Controllers\/HomePageController.php"
+    },
+    "Loading...": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Showing data for:": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Year": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Current Quarter": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Current Month": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Real Estate Submissions": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Total Units Requests": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "View All": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    " Mortgage Requests": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Total Users": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Manage Users": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Manage Units": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Total Revenue": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "No change": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "vs previous period": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Total Brokers": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Pending Items": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Needs Attention": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Payouts Forecast by Execution Date": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Sum of sell request prices grouped by their scheduled execution month": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "All Months": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "January": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "February": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "March": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "April": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "May": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "June": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "July": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "August": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "September": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "October": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "November": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "December": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Current Year Total": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "All-Time Payouts Forecast": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Next Scheduled Payout": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "None Scheduled": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Total Scheduled Requests": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "units": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Deal Status": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Approved": [
+        "resources\/views\/home\/welcome.blade.php",
+        "resources\/views\/requests\/partials\/training-requests.blade.php",
+        "app\/Enums\/PaymentStatus.php"
+    ],
+    "Semi Done": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Rejected": [
+        "resources\/views\/home\/welcome.blade.php",
+        "resources\/views\/payments\/index.blade.php",
+        "resources\/views\/requests\/partials\/training-requests.blade.php",
+        "app\/Enums\/PaymentStatus.php"
+    ],
+    "System Overview": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Total Developers": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Total Admins": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Open Complaints": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Pending Payments": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Training Requests": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Application Usage Ranking": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Routes": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "No API traffic logged in this period.": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "hits": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Most Popular Plans": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "subscriptions": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "each": [
+        "resources\/views\/home\/welcome.blade.php"
+    ],
+    "Logout": [
+        "resources\/views\/layouts\/app.blade.php"
+    ],
+    "Create Lead": {
+        "0": "resources\/views\/leads\/create.blade.php",
+        "2": "resources\/views\/leads\/index.blade.php"
+    },
+    "Leads": {
+        "0": "resources\/views\/leads\/create.blade.php",
+        "1": "resources\/views\/leads\/edit.blade.php",
+        "2": "resources\/views\/leads\/index.blade.php",
+        "4": "resources\/views\/leads\/show.blade.php"
+    },
+    "Lead Name": [
+        "resources\/views\/leads\/create.blade.php",
+        "resources\/views\/leads\/edit.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/leads\/show.blade.php"
+    ],
+    "Lead Phone": [
+        "resources\/views\/leads\/create.blade.php",
+        "resources\/views\/leads\/edit.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/leads\/show.blade.php"
+    ],
+    "Interested Place": [
+        "resources\/views\/leads\/create.blade.php",
+        "resources\/views\/leads\/edit.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/leads\/show.blade.php"
+    ],
+    "Uptown": [
+        "resources\/views\/leads\/create.blade.php",
+        "resources\/views\/leads\/edit.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/leads\/show.blade.php"
+    ],
+    "Marketing Agency": [
+        "resources\/views\/leads\/create.blade.php",
+        "resources\/views\/leads\/edit.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/leads\/show.blade.php"
+    ],
+    "Sales Man Name": [
+        "resources\/views\/leads\/create.blade.php",
+        "resources\/views\/leads\/edit.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/leads\/show.blade.php"
+    ],
+    "Sales Man Phone": [
+        "resources\/views\/leads\/create.blade.php",
+        "resources\/views\/leads\/edit.blade.php",
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/leads\/show.blade.php"
+    ],
+    "Edit Lead": [
+        "resources\/views\/leads\/edit.blade.php"
+    ],
+    "deal": [
+        "resources\/views\/leads\/edit.blade.php"
+    ],
+    "brokerlead": [
+        "resources\/views\/leads\/edit.blade.php"
+    ],
+    "Brocker": [
+        "resources\/views\/leads\/index.blade.php",
+        "resources\/views\/payments\/create.blade.php",
+        "resources\/views\/payments\/edit.blade.php",
+        "resources\/views\/payments\/index.blade.php",
+        "resources\/views\/payments\/show.blade.php"
+    ],
+    "Brocker Start Date": [
+        "resources\/views\/leads\/index.blade.php"
+    ],
+    "Brocker End Date": [
+        "resources\/views\/leads\/index.blade.php"
+    ],
+    "Lead Information": [
+        "resources\/views\/leads\/show.blade.php"
+    ],
+    "Related Information": [
+        "resources\/views\/leads\/show.blade.php"
+    ],
+    "Current Broker": [
+        "resources\/views\/leads\/show.blade.php"
+    ],
+    "None": [
+        "resources\/views\/leads\/show.blade.php"
+    ],
+    "Available Leads": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php"
+    ],
+    "Assigned Leads": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php"
+    ],
+    "Search by name or phone...": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php"
+    ],
+    "Select a lead to assign...": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php"
+    ],
+    "Assign": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Assigning...": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Selected": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Select": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Quick Assign": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "No leads found matching your search.": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php"
+    ],
+    "No available leads to assign.": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php"
+    ],
+    "Search assigned leads...": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php"
+    ],
+    "No assigned leads found matching your search.": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php"
+    ],
+    "No leads assigned to this broker yet.": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php"
+    ],
+    "Lead Info": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php"
+    ],
+    "Set end date (optional)": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Done": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "resources\/views\/livewire\/lead-assign-broker.blade.php",
+        "app\/Enums\/BrockerLeadStatus.php",
+        "app\/Enums\/LeadStatuses.php"
+    ],
+    "Lost": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php",
+        "resources\/views\/livewire\/lead-assign-broker.blade.php",
+        "app\/Enums\/BrockerLeadStatus.php",
+        "app\/Enums\/LeadStatuses.php"
+    ],
+    "Are you sure you want to unassign this lead?": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php"
+    ],
+    "Unassign Lead": [
+        "resources\/views\/livewire\/broker-add-lead.blade.php"
+    ],
+    "Available Brokers": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "A broker is currently assigned to this lead. Please remove the current assignment before assigning a new broker.": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Search by name, email or phone...": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Select a broker to assign...": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "No brokers found matching your search.": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "No available brokers.": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Assignment History": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Search history...": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "No history found matching your search.": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "No assignment history for this lead.": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Broker Info": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Active": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php",
+        "app\/Enums\/ActivationStatus.php"
+    ],
+    "Are you sure you want to remove this assignment? This will unassign the broker from the lead.": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Unassign Broker": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Are you sure you want to delete this history record?": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Delete Record": [
+        "resources\/views\/livewire\/lead-assign-broker.blade.php"
+    ],
+    "Please select a valid option from the list.": [
+        "resources\/views\/livewire\/model-autocomplete.blade.php"
+    ],
+    "This device is currently offline.": [
+        "resources\/views\/livewire\/offline.blade.php"
+    ],
+    "Shopping": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Mobile": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Supplier Product": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "EGP": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Add to Cart": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "No products.": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Client": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Supplier": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Order Channel": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Delivery Agent": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Price": {
+        "0": "resources\/views\/livewire\/shopping.blade.php",
+        "2": "resources\/views\/sell-requests\/index.blade.php",
+        "3": "resources\/views\/sell-requests\/show.blade.php",
+        "4": "resources\/views\/uptowns\/index.blade.php",
+        "5": "resources\/views\/users\/show.blade.php"
+    },
+    "Delivery Fees": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Confirm Delivery Order": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Product": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Quantity": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Total": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Are you sure you want to remove this item?": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Grand Total": [
+        "resources\/views\/livewire\/shopping.blade.php"
+    ],
+    "Create Payment Method": {
+        "0": "resources\/views\/payment-methods\/create.blade.php",
+        "2": "resources\/views\/payment-methods\/index.blade.php"
+    },
+    "Payment Methods": {
+        "0": "resources\/views\/payment-methods\/create.blade.php",
+        "1": "resources\/views\/payment-methods\/edit.blade.php",
+        "2": "resources\/views\/payment-methods\/index.blade.php",
+        "4": "resources\/views\/payment-methods\/show.blade.php"
+    },
+    "Method Name": [
+        "resources\/views\/payment-methods\/create.blade.php",
+        "resources\/views\/payment-methods\/edit.blade.php",
+        "resources\/views\/payment-methods\/index.blade.php",
+        "resources\/views\/payment-methods\/show.blade.php"
+    ],
+    "Edit Payment Method": [
+        "resources\/views\/payment-methods\/edit.blade.php"
+    ],
+    "payment": [
+        "resources\/views\/payment-methods\/edit.blade.php",
+        "resources\/views\/payment-methods\/show.blade.php",
+        "resources\/views\/plans\/edit.blade.php",
+        "resources\/views\/plans\/show.blade.php",
+        "resources\/views\/users\/edit.blade.php"
+    ],
+    "Are you sure you want to delete this payment method?": [
+        "resources\/views\/payment-methods\/index.blade.php"
+    ],
+    "Payment Method Image": [
+        "resources\/views\/payment-methods\/index.blade.php"
+    ],
+    "Create Payment": {
+        "0": "resources\/views\/payments\/create.blade.php",
+        "2": "resources\/views\/payments\/index.blade.php"
+    },
+    "Payments": {
+        "0": "resources\/views\/payments\/create.blade.php",
+        "1": "resources\/views\/payments\/edit.blade.php",
+        "2": "resources\/views\/payments\/index.blade.php",
+        "4": "resources\/views\/payments\/show.blade.php"
+    },
+    "Payment Method": [
+        "resources\/views\/payments\/create.blade.php",
+        "resources\/views\/payments\/edit.blade.php",
+        "resources\/views\/payments\/index.blade.php",
+        "resources\/views\/payments\/show.blade.php"
+    ],
+    "Receipt": {
+        "0": "resources\/views\/payments\/create.blade.php",
+        "1": "resources\/views\/payments\/edit.blade.php",
+        "2": "resources\/views\/payments\/index.blade.php",
+        "4": "resources\/views\/payments\/show.blade.php"
+    },
+    "Edit Payment": [
+        "resources\/views\/payments\/edit.blade.php"
+    ],
+    "History": [
+        "resources\/views\/payments\/index.blade.php"
+    ],
+    "No Receipt": [
+        "resources\/views\/payments\/index.blade.php"
+    ],
+    "No records found.": [
+        "resources\/views\/payments\/index.blade.php"
+    ],
+    "Receipt Image": [
+        "resources\/views\/payments\/index.blade.php"
+    ],
+    "Create Plan": {
+        "0": "resources\/views\/plans\/create.blade.php",
+        "3": "resources\/views\/plans\/index.blade.php"
+    },
+    "Plans": {
+        "0": "resources\/views\/plans\/create.blade.php",
+        "1": "resources\/views\/plans\/edit.blade.php",
+        "2": "resources\/views\/plans\/index.blade.php",
+        "4": "resources\/views\/plans\/show.blade.php"
+    },
+    "Plan Information": [
+        "resources\/views\/plans\/create.blade.php",
+        "resources\/views\/plans\/edit.blade.php"
+    ],
+    "Plan Name": [
+        "resources\/views\/plans\/create.blade.php",
+        "resources\/views\/plans\/edit.blade.php",
+        "resources\/views\/plans\/show.blade.php"
+    ],
+    "Count Of Leads": [
+        "resources\/views\/plans\/create.blade.php",
+        "resources\/views\/plans\/edit.blade.php"
+    ],
+    "Period In Days": [
+        "resources\/views\/plans\/create.blade.php",
+        "resources\/views\/plans\/edit.blade.php",
+        "resources\/views\/plans\/index.blade.php"
+    ],
+    "Original Price": {
+        "0": "resources\/views\/plans\/create.blade.php",
+        "1": "resources\/views\/plans\/edit.blade.php",
+        "3": "resources\/views\/plans\/index.blade.php",
+        "4": "resources\/views\/plans\/show.blade.php"
+    },
+    "Discount Information": [
+        "resources\/views\/plans\/create.blade.php",
+        "resources\/views\/plans\/edit.blade.php"
+    ],
+    "Optional": [
+        "resources\/views\/plans\/create.blade.php",
+        "resources\/views\/plans\/edit.blade.php"
+    ],
+    "Discount Type": [
+        "resources\/views\/plans\/create.blade.php",
+        "resources\/views\/plans\/edit.blade.php",
+        "resources\/views\/plans\/index.blade.php"
+    ],
+    "No Discount": {
+        "0": "resources\/views\/plans\/create.blade.php",
+        "1": "resources\/views\/plans\/edit.blade.php",
+        "3": "resources\/views\/plans\/index.blade.php"
+    },
+    "Fixed Amount": [
+        "resources\/views\/plans\/create.blade.php",
+        "resources\/views\/plans\/edit.blade.php"
+    ],
+    "Percentage": [
+        "resources\/views\/plans\/create.blade.php",
+        "resources\/views\/plans\/edit.blade.php"
+    ],
+    "Discount Value": [
+        "resources\/views\/plans\/create.blade.php",
+        "resources\/views\/plans\/edit.blade.php",
+        "resources\/views\/plans\/index.blade.php"
+    ],
+    "Enter discount amount or percentage": [
+        "resources\/views\/plans\/create.blade.php",
+        "resources\/views\/plans\/edit.blade.php"
+    ],
+    "The final price will be calculated automatically based on the discount type and value.": [
+        "resources\/views\/plans\/create.blade.php"
+    ],
+    "Edit Plan": [
+        "resources\/views\/plans\/edit.blade.php"
+    ],
+    "brocker": [
+        "resources\/views\/plans\/edit.blade.php",
+        "resources\/views\/plans\/show.blade.php",
+        "resources\/views\/users\/edit.blade.php"
+    ],
+    "user": [
+        "resources\/views\/plans\/edit.blade.php",
+        "resources\/views\/plans\/show.blade.php"
+    ],
+    "Discount": [
+        "resources\/views\/plans\/edit.blade.php",
+        "resources\/views\/plans\/index.blade.php",
+        "resources\/views\/plans\/show.blade.php"
+    ],
+    "Final Price": [
+        "resources\/views\/plans\/edit.blade.php",
+        "resources\/views\/plans\/index.blade.php",
+        "resources\/views\/plans\/show.blade.php"
+    ],
+    "The final price will be recalculated automatically when you save changes.": [
+        "resources\/views\/plans\/edit.blade.php"
+    ],
+    "Period (Days)": [
+        "resources\/views\/plans\/index.blade.php"
+    ],
+    "Price After Discount": [
+        "resources\/views\/plans\/index.blade.php"
+    ],
+    "Are you sure you want to delete this plan?": [
+        "resources\/views\/plans\/index.blade.php"
+    ],
+    "Plan Details": [
+        "resources\/views\/plans\/show.blade.php"
+    ],
+    "Plan ID": [
+        "resources\/views\/plans\/show.blade.php"
+    ],
+    "Number of Leads": [
+        "resources\/views\/plans\/show.blade.php"
+    ],
+    "Period": [
+        "resources\/views\/plans\/show.blade.php"
+    ],
+    "days": [
+        "resources\/views\/plans\/show.blade.php",
+        "resources\/views\/requests\/partials\/training-requests.blade.php"
+    ],
+    "Pricing Information": [
+        "resources\/views\/plans\/show.blade.php"
+    ],
+    "Off": [
+        "resources\/views\/plans\/show.blade.php"
+    ],
+    "You Save": [
+        "resources\/views\/plans\/show.blade.php"
+    ],
+    "This plan offers a discount of": [
+        "resources\/views\/plans\/show.blade.php"
+    ],
+    "Create Policy": [
+        "resources\/views\/policies\/create.blade.php",
+        "resources\/views\/policies\/index.blade.php"
+    ],
+    "Create Policy Terms & Conditions": [
+        "resources\/views\/policies\/create.blade.php"
+    ],
+    "Policy Title": [
+        "resources\/views\/policies\/create.blade.php",
+        "resources\/views\/policies\/edit.blade.php"
+    ],
+    "Policy Content": [
+        "resources\/views\/policies\/create.blade.php",
+        "resources\/views\/policies\/edit.blade.php"
+    ],
+    "Write your policy terms and conditions here...": [
+        "resources\/views\/policies\/create.blade.php",
+        "resources\/views\/policies\/edit.blade.php"
+    ],
+    "Save Policy": [
+        "resources\/views\/policies\/create.blade.php"
+    ],
+    "Edit Policy": [
+        "resources\/views\/policies\/edit.blade.php"
+    ],
+    "Edit Policy Terms & Conditions": [
+        "resources\/views\/policies\/edit.blade.php"
+    ],
+    "Update Policy": [
+        "resources\/views\/policies\/edit.blade.php"
+    ],
+    "Policy Terms & Conditions": [
+        "resources\/views\/policies\/index.blade.php"
+    ],
+    "No policy terms created yet.": [
+        "resources\/views\/policies\/index.blade.php"
+    ],
+    "Are you sure you want to delete this policy?": [
+        "resources\/views\/policies\/index.blade.php"
+    ],
+    "Last Updated:": [
+        "resources\/views\/policies\/show.blade.php"
+    ],
+    "Complaints Management": [
+        "resources\/views\/requests\/index.blade.php"
+    ],
+    "Manage user complaints and messages": [
+        "resources\/views\/requests\/index.blade.php"
+    ],
+    "items need attention": [
+        "resources\/views\/requests\/index.blade.php"
+    ],
+    "Search complaints...": [
+        "resources\/views\/requests\/index.blade.php"
+    ],
+    "Approve Training Request": [
+        "resources\/views\/requests\/modals\/approve-training.blade.php"
+    ],
+    "You are about to approve the training request for:": [
+        "resources\/views\/requests\/modals\/approve-training.blade.php"
+    ],
+    "Training Period (Days)": [
+        "resources\/views\/requests\/modals\/approve-training.blade.php"
+    ],
+    "Enter the number of days for the training period (1-365 days)": [
+        "resources\/views\/requests\/modals\/approve-training.blade.php"
+    ],
+    "Once approved, the applicant will be notified and the training period will begin.": [
+        "resources\/views\/requests\/modals\/approve-training.blade.php"
+    ],
+    "Approve Training": [
+        "resources\/views\/requests\/modals\/approve-training.blade.php"
+    ],
+    "Complainant": [
+        "resources\/views\/requests\/partials\/complaints.blade.php"
+    ],
+    "Contact": [
+        "resources\/views\/requests\/partials\/complaints.blade.php",
+        "resources\/views\/requests\/partials\/training-requests.blade.php"
+    ],
+    "Message": [
+        "resources\/views\/requests\/partials\/complaints.blade.php"
+    ],
+    "Submitted At": [
+        "resources\/views\/requests\/partials\/complaints.blade.php"
+    ],
+    "Read more...": [
+        "resources\/views\/requests\/partials\/complaints.blade.php"
+    ],
+    "Open": [
+        "resources\/views\/requests\/partials\/complaints.blade.php"
+    ],
+    "Closed": [
+        "resources\/views\/requests\/partials\/complaints.blade.php"
+    ],
+    "Are you sure you want to close this complaint?": [
+        "resources\/views\/requests\/partials\/complaints.blade.php"
+    ],
+    "No complaints found": [
+        "resources\/views\/requests\/partials\/complaints.blade.php"
+    ],
+    "Complaint Message": [
+        "resources\/views\/requests\/partials\/complaints.blade.php"
+    ],
+    "From": [
+        "resources\/views\/requests\/partials\/complaints.blade.php"
+    ],
+    "Applicant": [
+        "resources\/views\/requests\/partials\/training-requests.blade.php"
+    ],
+    "Qualification": [
+        "resources\/views\/requests\/partials\/training-requests.blade.php",
+        "resources\/views\/users\/create.blade.php",
+        "resources\/views\/users\/edit.blade.php"
+    ],
+    "Experience": [
+        "resources\/views\/requests\/partials\/training-requests.blade.php"
+    ],
+    "Applied At": [
+        "resources\/views\/requests\/partials\/training-requests.blade.php"
+    ],
+    "years": [
+        "resources\/views\/requests\/partials\/training-requests.blade.php"
+    ],
+    "Approve": [
+        "resources\/views\/requests\/partials\/training-requests.blade.php"
+    ],
+    "Are you sure you want to reject this training request?": [
+        "resources\/views\/requests\/partials\/training-requests.blade.php"
+    ],
+    "Reject": [
+        "resources\/views\/requests\/partials\/training-requests.blade.php"
+    ],
+    "No actions available": [
+        "resources\/views\/requests\/partials\/training-requests.blade.php"
+    ],
+    "No training requests found": [
+        "resources\/views\/requests\/partials\/training-requests.blade.php"
+    ],
+    "Create Residential Data Field": [
+        "resources\/views\/residential-data\/create.blade.php"
+    ],
+    "Edit Residential Data Field": [
+        "resources\/views\/residential-data\/edit.blade.php"
+    ],
+    "Residential Data Fields": [
+        "resources\/views\/residential-data\/index.blade.php"
+    ],
+    "Location": [
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/uptowns\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Sub Type": [
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Installments": [
+        "resources\/views\/sell-requests\/index.blade.php"
+    ],
+    "Visibility": [
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Public": [
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Private": [
+        "resources\/views\/sell-requests\/index.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Unit Request Details": [
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Property Information": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Execution Date": {
+        "0": "resources\/views\/sell-requests\/show.blade.php",
+        "2": "resources\/views\/users\/show.blade.php"
+    },
+    "Rooms": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Bathrooms": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php",
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Space": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/uptowns\/index.blade.php",
+        "resources\/views\/uptowns\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Floor": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Garden Area": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Sell Time": [
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Notes": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Unit Images": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Installment Details": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Total Installment Price": [
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Years Left": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Price Per Year": [
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Additional Data": [
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Call": [
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Property PDF": [
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "View Detailed PDF": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "No PDF attached": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Manage Status": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Making this request public will create a property listing in the Units section. Are you sure?": [
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Property Purpose": [
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Buy": [
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Rent": [
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Make Public": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Make Private": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Print Request": [
+        "resources\/views\/sell-requests\/show.blade.php"
+    ],
+    "Are you sure you want to delete this request?": [
+        "resources\/views\/sell-requests\/show.blade.php",
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Create Unit Sub-Type": [
+        "resources\/views\/unit-sub-types\/create.blade.php"
+    ],
+    "Parent Unit Type": [
+        "resources\/views\/unit-sub-types\/create.blade.php",
+        "resources\/views\/unit-sub-types\/edit.blade.php"
+    ],
+    "Select Unit Type": [
+        "resources\/views\/unit-sub-types\/create.blade.php",
+        "resources\/views\/unit-sub-types\/edit.blade.php"
+    ],
+    "Name (EN)": [
+        "resources\/views\/unit-sub-types\/create.blade.php",
+        "resources\/views\/unit-sub-types\/edit.blade.php",
+        "resources\/views\/unit-sub-types\/index.blade.php"
+    ],
+    "Name (AR)": [
+        "resources\/views\/unit-sub-types\/create.blade.php",
+        "resources\/views\/unit-sub-types\/edit.blade.php",
+        "resources\/views\/unit-sub-types\/index.blade.php"
+    ],
+    "Edit Unit Sub-Type": [
+        "resources\/views\/unit-sub-types\/edit.blade.php"
+    ],
+    "Create Sub-Type": [
+        "resources\/views\/unit-sub-types\/index.blade.php"
+    ],
+    "Parent Type": [
+        "resources\/views\/unit-sub-types\/index.blade.php"
+    ],
+    "Create Uptown Type": {
+        "0": "resources\/views\/uptown-types\/create.blade.php",
+        "2": "resources\/views\/uptown-types\/index.blade.php"
+    },
+    "Uptown Types": {
+        "0": "resources\/views\/uptown-types\/create.blade.php",
+        "1": "resources\/views\/uptown-types\/edit.blade.php",
+        "2": "resources\/views\/uptown-types\/index.blade.php",
+        "4": "resources\/views\/uptown-types\/show.blade.php"
+    },
+    "Edit Uptown Type": [
+        "resources\/views\/uptown-types\/edit.blade.php"
+    ],
+    "uptown": [
+        "resources\/views\/uptown-types\/edit.blade.php",
+        "resources\/views\/uptown-types\/show.blade.php"
+    ],
+    "Create Unit": [
+        "resources\/views\/uptowns\/create.blade.php"
+    ],
+    "Select Developer First": {
+        "0": "resources\/views\/uptowns\/create.blade.php",
+        "2": "resources\/views\/uptowns\/edit.blade.php"
+    },
+    "Uptown Type": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Starting Price": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php",
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Delivery Date": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php",
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Space (m²)": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Bedrooms": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php",
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Cash Payment Available": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Available": {
+        "0": "resources\/views\/uptowns\/create.blade.php",
+        "2": "resources\/views\/uptowns\/edit.blade.php",
+        "4": "resources\/views\/uptowns\/show.blade.php"
+    },
+    "Installment Payment Available": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Installment Years": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Installment Plan": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Installment Price": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php",
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Floor Plan Image": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Master Plan Image": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Drag & Drop Images Here": [
+        "resources\/views\/uptowns\/create.blade.php"
+    ],
+    "or click to browse files": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Browse Images": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Max 10 images, 2MB each. Supports: JPG, PNG, GIF": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Selected Images": [
+        "resources\/views\/uptowns\/create.blade.php"
+    ],
+    "Create Uptown": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/index.blade.php"
+    ],
+    "Select Compound": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "No compounds found for this developer": [
+        "resources\/views\/uptowns\/create.blade.php",
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Edit Unit": [
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Current Unit Images": [
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Add New Unit Images": [
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Drag & Drop New Images Here": [
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "New Images to Upload": [
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "New Images Preview": [
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Update Uptown": [
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Are you sure you want to delete this image?": [
+        "resources\/views\/uptowns\/edit.blade.php"
+    ],
+    "Search by name, description, status...": [
+        "resources\/views\/uptowns\/index.blade.php"
+    ],
+    "Unit Code": [
+        "resources\/views\/uptowns\/index.blade.php",
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Listing": [
+        "resources\/views\/uptowns\/index.blade.php"
+    ],
+    "Beds\/Baths": [
+        "resources\/views\/uptowns\/index.blade.php"
+    ],
+    "Payment": [
+        "resources\/views\/uptowns\/index.blade.php"
+    ],
+    "Delivery": [
+        "resources\/views\/uptowns\/index.blade.php"
+    ],
+    "Unit Details": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Listing Type": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Garden Space": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Commission Price": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Payment Information": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Cash Payment": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Not Available": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Installment Payment": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Description": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Latitude": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Longitude": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Images": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Unit Plan": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Floor Plan": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Master Plan": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Statistics": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Total Leads": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "And": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "more images": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Image View": [
+        "resources\/views\/uptowns\/show.blade.php"
+    ],
+    "Create User": {
+        "0": "resources\/views\/users\/create.blade.php",
+        "2": "resources\/views\/users\/index.blade.php"
+    },
+    "Experience Year": [
+        "resources\/views\/users\/create.blade.php",
+        "resources\/views\/users\/edit.blade.php"
+    ],
+    "Governce": [
+        "resources\/views\/users\/create.blade.php",
+        "resources\/views\/users\/edit.blade.php"
+    ],
+    "Edit User": {
+        "0": "resources\/views\/users\/edit.blade.php",
+        "2": "resources\/views\/users\/show.blade.php"
+    },
+    "complaint": [
+        "resources\/views\/users\/edit.blade.php"
+    ],
+    "training": [
+        "resources\/views\/users\/edit.blade.php"
+    ],
+    "contract": [
+        "resources\/views\/users\/edit.blade.php"
+    ],
+    "Full Name": [
+        "resources\/views\/users\/index.blade.php"
+    ],
+    "Are you sure you want to delete this user?": [
+        "resources\/views\/users\/index.blade.php"
+    ],
+    "User Profile": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Sell Requests": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Installment Requests": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Total Requested Units": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Email Address": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Governance": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Member Since": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "No sell requests found for this user.": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Type & Subtype": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Quick View Details": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Mark Contacted": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Open Request Page": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "No installment requests found for this user.": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Apartment Price": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Term": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Yrs": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Sell Request Details": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Unit Sub Type": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Specifications": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Baths": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Preferred Sell Time": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Total Price": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Price \/ Year": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Additional Metadata": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Front Image": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Back Image": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Detailed PDF Document": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Unit Plan Image": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Status: Contacted": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Are you sure you want to make this public?": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Go to Page": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Installment Request Details": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Installment Preferences": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Income (EGP)": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Desired Pay (EGP)": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Requester Information": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Age of Requester": [
+        "resources\/views\/users\/show.blade.php"
+    ],
+    "Showing": [
+        "resources\/views\/vendor\/livewire\/bootstrap.blade.php",
+        "resources\/views\/vendor\/livewire\/tailwind.blade.php"
+    ],
+    "to": [
+        "resources\/views\/vendor\/livewire\/bootstrap.blade.php",
+        "resources\/views\/vendor\/livewire\/tailwind.blade.php"
+    ],
+    "of": [
+        "resources\/views\/vendor\/livewire\/bootstrap.blade.php",
+        "resources\/views\/vendor\/livewire\/tailwind.blade.php"
+    ],
+    "results": [
+        "resources\/views\/vendor\/livewire\/bootstrap.blade.php",
+        "resources\/views\/vendor\/livewire\/tailwind.blade.php"
+    ],
+    "pagination.previous": {
+        "0": "resources\/views\/vendor\/livewire\/bootstrap.blade.php",
+        "4": "resources\/views\/vendor\/livewire\/simple-bootstrap.blade.php",
+        "7": "resources\/views\/vendor\/livewire\/simple-tailwind.blade.php",
+        "10": "resources\/views\/vendor\/livewire\/tailwind.blade.php",
+        "14": "resources\/views\/vendor\/pagination\/custom.blade.php"
+    },
+    "pagination.next": {
+        "0": "resources\/views\/vendor\/livewire\/bootstrap.blade.php",
+        "4": "resources\/views\/vendor\/livewire\/simple-bootstrap.blade.php",
+        "7": "resources\/views\/vendor\/livewire\/simple-tailwind.blade.php",
+        "10": "resources\/views\/vendor\/livewire\/tailwind.blade.php",
+        "14": "resources\/views\/vendor\/pagination\/custom.blade.php"
+    },
+    "Ad deleted successfully.": [
+        "app\/Http\/Controllers\/AdController.php"
+    ],
+    "Failed to delete ad. Please try again.": [
+        "app\/Http\/Controllers\/AdController.php"
+    ],
+    "Role created successfully.": [
+        "app\/Http\/Controllers\/AdminRoleController.php"
+    ],
+    "Role updated successfully.": [
+        "app\/Http\/Controllers\/AdminRoleController.php"
+    ],
+    "Cannot delete the super-admin role.": [
+        "app\/Http\/Controllers\/AdminRoleController.php"
+    ],
+    "Role deleted successfully.": [
+        "app\/Http\/Controllers\/AdminRoleController.php"
+    ],
+    "Admin created successfully.": [
+        "app\/Http\/Controllers\/AdminUserController.php"
+    ],
+    "Admin updated successfully.": [
+        "app\/Http\/Controllers\/AdminUserController.php"
+    ],
+    "You cannot delete your own account.": [
+        "app\/Http\/Controllers\/AdminUserController.php"
+    ],
+    "Admin deleted successfully.": [
+        "app\/Http\/Controllers\/AdminUserController.php"
+    ],
+    "Installment request submitted successfully": [
+        "app\/Http\/Controllers\/Api\/User\/BuyAppartmentInstallmentController.php"
+    ],
+    "Sell request submitted successfully": [
+        "app\/Http\/Controllers\/Api\/User\/SellRequestController.php"
+    ],
+    "Broker deleted successfully.": [
+        "app\/Http\/Controllers\/BrockerController.php"
+    ],
+    "Failed to delete broker. Please try again.": [
+        "app\/Http\/Controllers\/BrockerController.php"
+    ],
+    "Status updated successfully": [
+        "app\/Http\/Controllers\/BuyAppartmentInstallmentController.php",
+        "app\/Http\/Controllers\/SellRequestController.php"
+    ],
+    "Request deleted successfully": [
+        "app\/Http\/Controllers\/BuyAppartmentInstallmentController.php"
+    ],
+    "Developer created successfully.": [
+        "app\/Http\/Controllers\/DeveloperController.php"
+    ],
+    "Developer updated successfully.": [
+        "app\/Http\/Controllers\/DeveloperController.php"
+    ],
+    "Developer deleted successfully.": [
+        "app\/Http\/Controllers\/DeveloperController.php"
+    ],
+    "Failed to delete developer. Please try again.": [
+        "app\/Http\/Controllers\/DeveloperController.php"
+    ],
+    "Payment method deleted successfully.": [
+        "app\/Http\/Controllers\/PaymentMethodController.php"
+    ],
+    "Failed to delete payment method. Please try again.": [
+        "app\/Http\/Controllers\/PaymentMethodController.php"
+    ],
+    "Plan deleted successfully.": [
+        "app\/Http\/Controllers\/PlanController.php"
+    ],
+    "Failed to delete plan. Please try again.": [
+        "app\/Http\/Controllers\/PlanController.php"
+    ],
+    "Policy created successfully.": [
+        "app\/Http\/Controllers\/PolicyController.php"
+    ],
+    "Policy updated successfully.": [
+        "app\/Http\/Controllers\/PolicyController.php"
+    ],
+    "Policy deleted successfully.": [
+        "app\/Http\/Controllers\/PolicyController.php"
+    ],
+    "Failed to delete policy. Please try again.": [
+        "app\/Http\/Controllers\/PolicyController.php"
+    ],
+    "Training request approved successfully": [
+        "app\/Http\/Controllers\/RequestsController.php"
+    ],
+    "Training request rejected": [
+        "app\/Http\/Controllers\/RequestsController.php"
+    ],
+    "Complaint closed successfully": [
+        "app\/Http\/Controllers\/RequestsController.php"
+    ],
+    "Cannot publish: The delivery date could not be calculated. Please check the Sell Time value. It must be valid (e.g. \"immediate\", \"1 year\", \"6 months": [
+        "app\/Http\/Controllers\/SellRequestController.php"
+    ],
+    "Failed to create property listing: ": [
+        "app\/Http\/Controllers\/SellRequestController.php"
+    ],
+    "Visibility updated successfully": [
+        "app\/Http\/Controllers\/SellRequestController.php"
+    ],
+    "Sell request deleted successfully": [
+        "app\/Http\/Controllers\/SellRequestController.php"
+    ],
+    "User deleted successfully.": [
+        "app\/Http\/Controllers\/UserController.php"
+    ],
+    "Failed to delete user. Please try again.": [
+        "app\/Http\/Controllers\/UserController.php"
+    ],
+    "The English Title field is required.": [
+        "app\/Http\/Requests\/StoreAdRequest.php",
+        "app\/Http\/Requests\/UpdateAdRequest.php"
+    ],
+    "The Arabic Title field is required.": [
+        "app\/Http\/Requests\/StoreAdRequest.php",
+        "app\/Http\/Requests\/UpdateAdRequest.php"
+    ],
+    "The Image field is required.": [
+        "app\/Http\/Requests\/StoreAdRequest.php",
+        "app\/Http\/Requests\/StoreCompoundRequest.php",
+        "app\/Http\/Requests\/UpdateAdRequest.php"
+    ],
+    "The Image must be a string.": [
+        "app\/Http\/Requests\/StoreAdRequest.php",
+        "app\/Http\/Requests\/UpdateAdRequest.php",
+        "app\/Http\/Requests\/UpdateCompoundRequest.php"
+    ],
+    "Validation failed": [
+        "app\/Http\/Requests\/StoreAdRequest.php",
+        "app\/Http\/Requests\/StoreBrockerRequest.php",
+        "app\/Http\/Requests\/StoreCompoundRequest.php",
+        "app\/Http\/Requests\/StoreDealRequest.php",
+        "app\/Http\/Requests\/StoreDeveloperRequest.php",
+        "app\/Http\/Requests\/StoreHomeNameRequest.php",
+        "app\/Http\/Requests\/StoreLeadRequest.php",
+        "app\/Http\/Requests\/StorePaymentMethodRequest.php",
+        "app\/Http\/Requests\/StorePaymentRequest.php",
+        "app\/Http\/Requests\/StorePlanRequest.php",
+        "app\/Http\/Requests\/StoreUptownTypeRequest.php",
+        "app\/Http\/Requests\/StoreUserRequest.php",
+        "app\/Http\/Requests\/UpdateAdRequest.php",
+        "app\/Http\/Requests\/UpdateBrockerRequest.php",
+        "app\/Http\/Requests\/UpdateCompoundRequest.php",
+        "app\/Http\/Requests\/UpdateDealRequest.php",
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php",
+        "app\/Http\/Requests\/UpdateHomeNameRequest.php",
+        "app\/Http\/Requests\/UpdateLeadRequest.php",
+        "app\/Http\/Requests\/UpdatePaymentMethodRequest.php",
+        "app\/Http\/Requests\/UpdatePaymentRequest.php",
+        "app\/Http\/Requests\/UpdatePlanRequest.php",
+        "app\/Http\/Requests\/UpdateUptownTypeRequest.php",
+        "app\/Http\/Requests\/UpdateUserRequest.php"
+    ],
+    "The First Name field is required.": [
+        "app\/Http\/Requests\/StoreBrockerRequest.php",
+        "app\/Http\/Requests\/UpdateBrockerRequest.php"
+    ],
+    "The Last Name field is required.": [
+        "app\/Http\/Requests\/StoreBrockerRequest.php",
+        "app\/Http\/Requests\/UpdateBrockerRequest.php"
+    ],
+    "The Email field is required.": [
+        "app\/Http\/Requests\/StoreBrockerRequest.php",
+        "app\/Http\/Requests\/UpdateBrockerRequest.php"
+    ],
+    "The Email must be a valid email address.": [
+        "app\/Http\/Requests\/StoreBrockerRequest.php",
+        "app\/Http\/Requests\/UpdateBrockerRequest.php"
+    ],
+    "The Email has already been taken.": [
+        "app\/Http\/Requests\/StoreBrockerRequest.php",
+        "app\/Http\/Requests\/UpdateBrockerRequest.php"
+    ],
+    "The Phone field is required.": [
+        "app\/Http\/Requests\/StoreBrockerRequest.php",
+        "app\/Http\/Requests\/UpdateBrockerRequest.php"
+    ],
+    "The selected Plan is invalid.": [
+        "app\/Http\/Requests\/StoreBrockerRequest.php",
+        "app\/Http\/Requests\/UpdateBrockerRequest.php",
+        "app\/Http\/Requests\/UpdatePaymentRequest.php"
+    ],
+    "The Profit field is required.": [
+        "app\/Http\/Requests\/StoreBrockerRequest.php",
+        "app\/Http\/Requests\/UpdateBrockerRequest.php"
+    ],
+    "The Number Of Deals field is required.": [
+        "app\/Http\/Requests\/StoreBrockerRequest.php",
+        "app\/Http\/Requests\/UpdateBrockerRequest.php"
+    ],
+    "The Deals Done field is required.": [
+        "app\/Http\/Requests\/StoreBrockerRequest.php",
+        "app\/Http\/Requests\/UpdateBrockerRequest.php"
+    ],
+    "The Comission Percentage field is required.": [
+        "app\/Http\/Requests\/StoreBrockerRequest.php",
+        "app\/Http\/Requests\/UpdateBrockerRequest.php"
+    ],
+    "The Developer ID field is required.": [
+        "app\/Http\/Requests\/StoreCompoundRequest.php"
+    ],
+    "The selected Developer ID is invalid.": [
+        "app\/Http\/Requests\/StoreCompoundRequest.php"
+    ],
+    "The Compound Name field is required.": [
+        "app\/Http\/Requests\/StoreCompoundRequest.php",
+        "app\/Http\/Requests\/UpdateCompoundRequest.php"
+    ],
+    "The Units field must be a number.": [
+        "app\/Http\/Requests\/StoreCompoundRequest.php"
+    ],
+    "The Commission Percentage field must be a number.": [
+        "app\/Http\/Requests\/StoreCompoundRequest.php"
+    ],
+    "The Commission Percentage field must be between 0 and 100.": [
+        "app\/Http\/Requests\/StoreCompoundRequest.php"
+    ],
+    "The Favourite field must be a boolean value.": [
+        "app\/Http\/Requests\/StoreCompoundRequest.php"
+    ],
+    "The Name Ar field is required.": [
+        "app\/Http\/Requests\/StoreHomeNameRequest.php",
+        "app\/Http\/Requests\/UpdateHomeNameRequest.php"
+    ],
+    "The Name En field is required.": [
+        "app\/Http\/Requests\/StoreHomeNameRequest.php",
+        "app\/Http\/Requests\/UpdateHomeNameRequest.php"
+    ],
+    "The selected Marketing Agency is invalid.": [
+        "app\/Http\/Requests\/StoreLeadRequest.php",
+        "app\/Http\/Requests\/UpdateLeadRequest.php"
+    ],
+    "The selected Uptown is invalid.": [
+        "app\/Http\/Requests\/StoreLeadRequest.php",
+        "app\/Http\/Requests\/UpdateLeadRequest.php"
+    ],
+    "The Interested Place field is required.": [
+        "app\/Http\/Requests\/StoreLeadRequest.php"
+    ],
+    "The Interested Place must be a string.": [
+        "app\/Http\/Requests\/StoreLeadRequest.php",
+        "app\/Http\/Requests\/UpdateLeadRequest.php"
+    ],
+    "The selected Brocker is invalid.": [
+        "app\/Http\/Requests\/StoreLeadRequest.php",
+        "app\/Http\/Requests\/UpdateLeadRequest.php",
+        "app\/Http\/Requests\/UpdatePaymentRequest.php"
+    ],
+    "The Lead Name field is required.": [
+        "app\/Http\/Requests\/StoreLeadRequest.php"
+    ],
+    "The Lead Phone field is required.": [
+        "app\/Http\/Requests\/StoreLeadRequest.php"
+    ],
+    "The Sales Man Name must be a string.": [
+        "app\/Http\/Requests\/StoreLeadRequest.php",
+        "app\/Http\/Requests\/UpdateLeadRequest.php"
+    ],
+    "The Sales Man Phone must be a string.": [
+        "app\/Http\/Requests\/StoreLeadRequest.php",
+        "app\/Http\/Requests\/UpdateLeadRequest.php"
+    ],
+    "The Status field is required.": [
+        "app\/Http\/Requests\/StoreLeadRequest.php",
+        "app\/Http\/Requests\/StoreUptownTypeRequest.php",
+        "app\/Http\/Requests\/UpdatePaymentRequest.php"
+    ],
+    "The Name field is required.": [
+        "app\/Http\/Requests\/StorePlanRequest.php",
+        "app\/Http\/Requests\/UpdatePlanRequest.php"
+    ],
+    "The Count Of Leads field is required.": [
+        "app\/Http\/Requests\/StorePlanRequest.php",
+        "app\/Http\/Requests\/UpdatePlanRequest.php"
+    ],
+    "The Count Of Leads must be a number.": [
+        "app\/Http\/Requests\/StorePlanRequest.php",
+        "app\/Http\/Requests\/UpdatePlanRequest.php"
+    ],
+    "The Period In Days field is required.": [
+        "app\/Http\/Requests\/StorePlanRequest.php",
+        "app\/Http\/Requests\/UpdatePlanRequest.php"
+    ],
+    "The Period In Days must be a number.": [
+        "app\/Http\/Requests\/StorePlanRequest.php",
+        "app\/Http\/Requests\/UpdatePlanRequest.php"
+    ],
+    "The Price field is required.": [
+        "app\/Http\/Requests\/StorePlanRequest.php",
+        "app\/Http\/Requests\/UpdatePlanRequest.php"
+    ],
+    "The Price must be a valid number.": [
+        "app\/Http\/Requests\/StorePlanRequest.php",
+        "app\/Http\/Requests\/UpdatePlanRequest.php"
+    ],
+    "The Discount Type must be either fixed or percentage.": [
+        "app\/Http\/Requests\/StorePlanRequest.php",
+        "app\/Http\/Requests\/UpdatePlanRequest.php"
+    ],
+    "The Discount Value must be a valid number.": [
+        "app\/Http\/Requests\/StorePlanRequest.php",
+        "app\/Http\/Requests\/UpdatePlanRequest.php"
+    ],
+    "The English Name field is required.": [
+        "app\/Http\/Requests\/StoreUptownTypeRequest.php"
+    ],
+    "The English Name must be a string.": [
+        "app\/Http\/Requests\/StoreUptownTypeRequest.php",
+        "app\/Http\/Requests\/UpdateUptownTypeRequest.php"
+    ],
+    "The English Name has already been taken.": [
+        "app\/Http\/Requests\/StoreUptownTypeRequest.php",
+        "app\/Http\/Requests\/UpdateUptownTypeRequest.php"
+    ],
+    "The Arabic Name field is required.": [
+        "app\/Http\/Requests\/StoreUptownTypeRequest.php"
+    ],
+    "The Arabic Name must be a string.": [
+        "app\/Http\/Requests\/StoreUptownTypeRequest.php",
+        "app\/Http\/Requests\/UpdateUptownTypeRequest.php"
+    ],
+    "The Arabic Name has already been taken.": [
+        "app\/Http\/Requests\/StoreUptownTypeRequest.php",
+        "app\/Http\/Requests\/UpdateUptownTypeRequest.php"
+    ],
+    "The selected Status is invalid.": [
+        "app\/Http\/Requests\/StoreUptownTypeRequest.php",
+        "app\/Http\/Requests\/UpdateUptownTypeRequest.php"
+    ],
+    "The selected Developer is invalid.": [
+        "app\/Http\/Requests\/UpdateCompoundRequest.php"
+    ],
+    "The Commission Percentage field is required.": [
+        "app\/Http\/Requests\/UpdateCompoundRequest.php"
+    ],
+    "The English name field is required.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The English name has already been taken.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The Arabic name field is required.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The Arabic name has already been taken.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The email must be a valid email address.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The email has already been taken.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The units must be an integer.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The units must be at least 0.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The total deals must be an integer.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The total deals must be at least 0.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The total profit must be a number.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The total profit must be at least 0.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The deals done must be an integer.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The deals done must be at least 0.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The start date must be a valid date.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The end date must be a valid date.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The end date must be after or equal to the start date.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The file must be an image.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The image must be a file of type: jpeg, png, jpg, gif.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The image may not be greater than 2MB.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The English description may not be greater than 1000 characters.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The Arabic description may not be greater than 1000 characters.": [
+        "app\/Http\/Requests\/UpdateDeveloperRequest.php"
+    ],
+    "The Lead Name must be a string.": [
+        "app\/Http\/Requests\/UpdateLeadRequest.php"
+    ],
+    "The Lead Phone must be a string.": [
+        "app\/Http\/Requests\/UpdateLeadRequest.php"
+    ],
+    "The Status must be a string.": [
+        "app\/Http\/Requests\/UpdateLeadRequest.php"
+    ],
+    "The selected User is invalid.": [
+        "app\/Http\/Requests\/UpdatePaymentRequest.php"
+    ],
+    "The selected Payment Method is invalid.": [
+        "app\/Http\/Requests\/UpdatePaymentRequest.php"
+    ],
+    "The Receipt field is required.": [
+        "app\/Http\/Requests\/UpdatePaymentRequest.php"
+    ],
+    "The Receipt must be a string.": [
+        "app\/Http\/Requests\/UpdatePaymentRequest.php"
+    ],
+    "Inactive": [
+        "app\/Enums\/ActivationStatus.php"
+    ],
+    "In Progress": [
+        "app\/Enums\/BrockerLeadStatus.php"
+    ],
+    "Empty": [
+        "app\/Enums\/LeadStatuses.php"
+    ]
+}

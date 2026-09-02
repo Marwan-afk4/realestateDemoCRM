@@ -1,0 +1,34 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('residential_data', function (Blueprint $table) {
+            $table->id();
+            $table->string('field_name'); // e.g., 'rooms_no', 'space'
+            $table->string('label_en');
+            $table->string('label_ar')->nullable();
+            $table->string('type')->default('text'); // text, number, boolean, select
+            $table->boolean('is_required')->default(true);
+            $table->json('options')->nullable(); // for select type
+            $table->enum('status', ['active', 'inactive'])->default('active');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('residential_data');
+    }
+};

@@ -1,0 +1,57 @@
+<?php
+
+namespace App\Enums;
+
+enum PaymentStatus: string
+{
+    case Approved = 'approved';
+    case Rejected = 'rejected';
+    case Pending = 'pending'; // Optional, if you want to include a pending status
+
+    public static function labels(): array
+    {
+        return [
+            self::Approved->value => __('Approved'),
+            self::Rejected->value => __('Rejected'),
+            self::Pending->value => __('Pending'),
+        ];
+    }
+
+    public static function values(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
+
+    public function label(): string
+    {
+        return self::labels()[$this->value];
+    }
+
+    public function color(): string
+    {
+        return match ($this) {
+            self::Approved => '22C55E', // green
+            self::Rejected => 'EF4444', // red
+            self::Pending => 'FBBF24', // yellow
+        };
+    }
+
+    public function textColor(): string
+    {
+        return match ($this) {
+            self::Approved => 'FFFFFF', // white
+            self::Rejected => 'FFFFFF', // white
+            self::Pending => '000000', // black
+        };
+    }
+
+    public function badge(): string
+    {
+        return sprintf(
+            '<span class="badge rounded-pill px-3 py-2" style="background-color: #%s; color: #%s;">%s</span>',
+            $this->color(),
+            $this->textColor(),
+            $this->label()
+        );
+    }
+}
