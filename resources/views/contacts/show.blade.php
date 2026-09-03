@@ -124,6 +124,7 @@
                         <ul class="nav nav-underline fs-9" role="tablist">
                             <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#crm-log" role="tab">{{ __('Log') }}</a></li>
                             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#crm-message" role="tab">{{ __('Message') }}</a></li>
+                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#crm-inbound" role="tab">{{ __('Inbound') }}</a></li>
                             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#crm-task" role="tab">{{ __('Task') }}</a></li>
                         </ul>
                     </div>
@@ -153,7 +154,18 @@
                                     <input type="hidden" name="template_id" id="crm-template-id">
                                     <x-form-input name="subject" type="text" label="{{ __('Subject') }}" />
                                     <x-form-textarea name="body" label="{{ __('Body') }}" required />
-                                    <button class="btn btn-primary w-100" type="submit">{{ __('Send / open') }}</button>
+                                    <p class="fs-10 text-body-tertiary mb-3">{{ __('Logs the message and opens WhatsApp, email, or SMS on your device — no API send.') }}</p>
+                                    <button class="btn btn-primary w-100" type="submit">{{ __('Log & open') }}</button>
+                                </form>
+                            </div>
+                            <div class="tab-pane fade" id="crm-inbound">
+                                <form method="POST" action="{{ route('contacts.inbound', $contact) }}">
+                                    @csrf
+                                    <x-form-select name="channel" label="{{ __('Channel') }}" :options="\App\Enums\MessageChannel::labels()" required />
+                                    <x-form-input name="subject" type="text" label="{{ __('Subject') }}" />
+                                    <x-form-textarea name="body" label="{{ __('What they said') }}" required />
+                                    <p class="fs-10 text-body-tertiary mb-3">{{ __('Record a reply you received manually (no Twilio or SMTP).') }}</p>
+                                    <button class="btn btn-primary w-100" type="submit">{{ __('Log inbound') }}</button>
                                 </form>
                             </div>
                             <div class="tab-pane fade" id="crm-task">
@@ -174,12 +186,44 @@
             <div class="col-md-7 col-lg-7 col-xl-8">
                 <nav class="navbar pb-4 px-0 sticky-top bg-body nav-underline-scrollspy">
                     <ul class="nav nav-underline fs-9">
+                        @can('view-unit-matching')
+                        <li class="nav-item"><a class="nav-link" href="#crm-unit-matching">{{ __('Matching') }}</a></li>
+                        @endcan
                         <li class="nav-item"><a class="nav-link" href="#crm-pipeline">{{ __('Pipeline') }}</a></li>
                         <li class="nav-item"><a class="nav-link" href="#crm-tasks">{{ __('Tasks') }}</a></li>
                         <li class="nav-item"><a class="nav-link" href="#crm-related">{{ __('Related') }}</a></li>
                         <li class="nav-item"><a class="nav-link" href="#crm-timeline">{{ __('Timeline') }}</a></li>
                     </ul>
                 </nav>
+
+                @can('view-unit-matching')
+                <div class="mb-6" id="crm-unit-matching">
+                    <h3 class="mb-4">{{ __('Unit matching') }}</h3>
+                    @if(($unitMatches ?? collect())->isNotEmpty())
+                        <div class="table-responsive">
+                            <table class="table table-sm crm-table">
+                                <thead><tr><th>{{ __('Unit') }}</th><th>{{ __('Price') }}</th><th>{{ __('Score') }}</th><th>{{ __('Status') }}</th></tr></thead>
+                                <tbody>
+                                    @foreach($unitMatches as $row)
+                                        @php $unit = $row['unit']; @endphp
+                                        <tr>
+                                            <td><a href="{{ route('inventory-units.show', $unit) }}">{{ $unit->code }}</a><div class="fs-9 text-body-tertiary">{{ $unit->compound?->compound_name }}</div></td>
+                                            <td>{{ number_format($row['price']) }}</td>
+                                            <td><span class="badge badge-phoenix badge-phoenix-primary">{{ $row['score'] }}</span></td>
+                                            <td><span class="badge badge-phoenix {{ $unit->status->phoenixBadge() }}">{{ $unit->status->label() }}</span></td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        @can('view-agency-workspace')
+                            <a href="{{ route('agency.matching', ['contact_id' => $contact->id]) }}" class="btn btn-sm btn-phoenix-secondary mt-2">{{ __('Full matching') }}</a>
+                        @endcan
+                    @else
+                        <div class="crm-empty">{{ __('No live units match this contact\'s budget and area.') }}</div>
+                    @endif
+                </div>
+                @endcan
 
                 <div class="mb-6" id="crm-pipeline">
                     <div class="d-flex justify-content-between align-items-center mb-4">

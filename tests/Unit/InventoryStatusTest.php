@@ -9,6 +9,7 @@ it('treats listing cards as templates and physical units as stock', function () 
         ->and(InventoryStatus::fromUptownStatus('sold'))->toBe(InventoryStatus::Sold)
         ->and(InventoryStatus::Sold->toUptownStatus())->toBe('sold')
         ->and(InventoryStatus::Held->toUptownStatus())->toBe('reserved')
+        ->and(InventoryStatus::fromUptownStatus('unsold'))->toBe(InventoryStatus::Available)
         ->and(InventoryStatus::Sold->blocksOtherSale())->toBeTrue()
         ->and(InventoryStatus::Available->blocksOtherSale())->toBeFalse();
 });

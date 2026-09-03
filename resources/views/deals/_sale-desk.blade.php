@@ -148,17 +148,54 @@
             <div class="card-body">
                 <h5 class="mb-3">{{ __('Commission payout') }}</h5>
                 @if($deal->commission)
-                    <p class="mb-2">
-                        {{ __('Closed price') }} {{ number_format((float) ($deal->commission->closed_unit_price ?? $deal->value)) }}
-                        · {{ $deal->commission->percentage }}%
-                        · <strong>{{ number_format((float) $deal->commission->amount) }}</strong>
-                        <span class="badge badge-phoenix {{ $deal->commission->payout_status?->phoenixBadge() ?? 'badge-phoenix-secondary' }}">{{ $deal->commission->payout_status?->label() ?? '—' }}</span>
-                    </p>
-                    @foreach($deal->commission->splits as $split)
-                        <div class="fs-9">{{ $split->role->label() }}: {{ $split->user?->full_name ?? '—' }} · {{ $split->percentage }}% · {{ number_format((float) $split->amount) }}</div>
-                    @endforeach
-                    <form method="POST" action="{{ route('deals.payout', $deal) }}" class="d-flex gap-2 mt-3">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <div class="fs-10 text-body-tertiary">{{ __('Closed unit price') }}</div>
+                            <div class="fw-semibold">{{ number_format((float) ($deal->commission->closed_unit_price ?? $deal->value)) }}</div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="fs-10 text-body-tertiary">{{ __('Commission rate') }}</div>
+                            <div class="fw-semibold">{{ $deal->commission->percentage }}%</div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="fs-10 text-body-tertiary">{{ __('Total commission') }}</div>
+                            <div class="fw-semibold">{{ number_format((float) $deal->commission->amount) }}</div>
+                        </div>
+                    </div>
+                    @if($deal->listerBroker && $deal->lister_broker_id !== $deal->brocker_id)
+                        <p class="fs-9 text-body-secondary mb-2">
+                            {{ __('Lister') }}: {{ $deal->listerBroker->user?->full_name ?? '#'.$deal->lister_broker_id }}
+                            · {{ __('Closer') }}: {{ $deal->brocker?->user?->full_name ?? '—' }}
+                        </p>
+                    @endif
+                    <div class="table-responsive mb-3">
+                        <table class="table table-sm mb-0">
+                            <thead>
+                                <tr>
+                                    <th>{{ __('Role') }}</th>
+                                    <th>{{ __('Broker') }}</th>
+                                    <th class="text-end">{{ __('Share') }}</th>
+                                    <th class="text-end">{{ __('Amount') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($deal->commission->splits as $split)
+                                    <tr>
+                                        <td><span class="badge badge-phoenix badge-phoenix-secondary">{{ $split->role->label() }}</span></td>
+                                        <td>{{ $split->user?->full_name ?? '—' }}</td>
+                                        <td class="text-end">{{ $split->percentage }}%</td>
+                                        <td class="text-end fw-semibold">{{ number_format((float) $split->amount) }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <form method="POST" action="{{ route('deals.payout', $deal) }}" class="d-flex flex-wrap gap-2 align-items-center">
                         @csrf
+                        <span class="badge badge-phoenix {{ $deal->commission->payout_status?->phoenixBadge() ?? 'badge-phoenix-secondary' }}">{{ $deal->commission->payout_status?->label() ?? '—' }}</span>
+                        @if($deal->commission->paid_at)
+                            <span class="fs-9 text-body-tertiary">{{ __('Paid') }} {{ $deal->commission->paid_at->format('M j, Y') }}</span>
+                        @endif
                         <select name="payout_status" class="form-select form-select-sm" style="width:12rem">
                             @foreach(\App\Enums\CommissionPayoutStatus::labels() as $value => $label)
                                 <option value="{{ $value }}" @selected($deal->commission->payout_status?->value === $value)>{{ $label }}</option>

@@ -72,8 +72,29 @@ enum InventoryStatus: string
         return match ($status) {
             'reserved' => self::Reserved,
             'sold' => self::Sold,
+            'unsold', 'available', null, '' => self::Available,
             default => self::Available,
         };
+    }
+
+    /** Listing-card statuses stored on uptowns (physical stock uses the full enum). */
+    public static function listingStatusOptions(): array
+    {
+        return [
+            self::Available->toUptownStatus() => self::Available->label(),
+            self::Reserved->toUptownStatus() => self::Reserved->label(),
+            self::Sold->toUptownStatus() => self::Sold->label(),
+        ];
+    }
+
+    public static function openStockStatuses(): array
+    {
+        return [
+            self::Available,
+            self::Held,
+            self::Reserved,
+            self::Contracted,
+        ];
     }
 
     public function toUptownStatus(): string

@@ -77,8 +77,8 @@
                                         <td><strong>{{ __('Status') }}:</strong></td>
                                         <td>
                                             <span
-                                                class="badge bg-{{ $uptown->status === 'available' ? 'success' : ($uptown->status === 'sold' ? 'danger' : 'warning') }}">
-                                                {{ ucfirst($uptown->status) }}
+                                                class="badge badge-phoenix {{ $uptown->listingStatus()->phoenixBadge() }}">
+                                                {{ $uptown->listingStatus()->label() }}
                                             </span>
                                         </td>
                                     </tr>

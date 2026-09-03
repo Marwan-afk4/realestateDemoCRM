@@ -13,6 +13,7 @@ use App\Models\PipelineTicket;
 use App\Models\Uptown;
 use App\Models\UptownType;
 use App\Services\Crm\DealCloser;
+use App\Services\Crm\InventoryService;
 use App\Services\Crm\SalesVisibility;
 
 
@@ -118,7 +119,7 @@ class DealController extends Controller
 
     public function show(Deal $deal)
     {
-        $deal->load(['developer', 'compound', 'uptownType', 'uptown', 'brocker.user', 'lead', 'contact', 'commission.splits.user', 'inventoryUnit.compound', 'activeOffer', 'saleDocuments', 'paymentPlan.installments']);
+        $deal->load(['developer', 'compound', 'uptownType', 'uptown', 'brocker.user', 'listerBroker.user', 'lead', 'contact', 'commission.splits.user', 'inventoryUnit.compound', 'activeOffer', 'saleDocuments', 'paymentPlan.installments']);
         return view('deals.show', compact('deal'));
     }
 
@@ -155,20 +156,41 @@ class DealController extends Controller
 
     private function mergeTicket(array $data, ?Deal $deal = null): array
     {
-        if (empty($data['pipeline_ticket_id'])) {
+        if (! empty($data['pipeline_ticket_id'])) {
+            $ticket = PipelineTicket::query()->with('contact')->find($data['pipeline_ticket_id']);
+            if ($ticket) {
+                $data['contact_id'] = $data['contact_id'] ?? $ticket->contact_id;
+                $data['brocker_id'] = $data['brocker_id'] ?? $ticket->brocker_id;
+                $data['inventory_unit_id'] = $data['inventory_unit_id'] ?? $ticket->inventory_unit_id;
+                if (empty($data['lead_id']) && $ticket->ticketable_type === Lead::class) {
+                    $data['lead_id'] = $ticket->ticketable_id;
+                }
+            }
+        }
+
+        return $this->mergeListerBroker($data, $deal);
+    }
+
+    private function mergeListerBroker(array $data, ?Deal $deal = null): array
+    {
+        if (! empty($data['lister_broker_id']) || empty($data['brocker_id'])) {
             return $data;
         }
 
-        $ticket = PipelineTicket::query()->with('contact')->find($data['pipeline_ticket_id']);
-        if (! $ticket) {
+        $inventoryUnitId = $data['inventory_unit_id'] ?? $deal?->inventory_unit_id;
+        if (! $inventoryUnitId) {
             return $data;
         }
 
-        $data['contact_id'] = $data['contact_id'] ?? $ticket->contact_id;
-        $data['brocker_id'] = $data['brocker_id'] ?? $ticket->brocker_id;
-        $data['inventory_unit_id'] = $data['inventory_unit_id'] ?? $ticket->inventory_unit_id;
-        if (empty($data['lead_id']) && $ticket->ticketable_type === Lead::class) {
-            $data['lead_id'] = $ticket->ticketable_id;
+        $listerBrokerId = PipelineTicket::query()
+            ->where('inventory_unit_id', $inventoryUnitId)
+            ->whereNotNull('brocker_id')
+            ->where('brocker_id', '!=', $data['brocker_id'])
+            ->orderBy('id')
+            ->value('brocker_id');
+
+        if ($listerBrokerId) {
+            $data['lister_broker_id'] = $listerBrokerId;
         }
 
         return $data;
@@ -176,6 +198,14 @@ class DealController extends Controller
 
     private function attachInventory(array $data, ?Deal $deal = null): array
     {
+        if (empty($data['inventory_unit_id']) && ! empty($data['uptown_id'])) {
+            $uptown = Uptown::query()->find($data['uptown_id']);
+            if ($uptown) {
+                $unit = app(InventoryService::class)->ensureForUptown($uptown);
+                $data['inventory_unit_id'] = $unit->id;
+            }
+        }
+
         if (! empty($data['inventory_unit_id'])) {
             $unit = InventoryUnit::query()->find($data['inventory_unit_id']);
             if ($unit) {

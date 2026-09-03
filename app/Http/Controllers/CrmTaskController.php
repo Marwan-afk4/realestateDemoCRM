@@ -68,4 +68,33 @@ class CrmTaskController extends Controller
 
         return back()->with('success', __('Task completed.'));
     }
+
+    public function calendarEvents(Request $request)
+    {
+        abort_unless($request->user()->can('view-crm-tasks') || $request->user()->can('view-pipeline'), 403);
+
+        $start = $request->date('start') ?? now()->startOfMonth();
+        $end = $request->date('end') ?? now()->endOfMonth()->addMonth();
+
+        $tasks = $this->visibility->scopeTasks(
+            CrmTask::query()->with('contact'),
+            $request->user(),
+        )
+            ->whereNotNull('due_at')
+            ->whereBetween('due_at', [$start, $end])
+            ->get();
+
+        return response()->json($tasks->map(fn (CrmTask $task) => [
+            'id' => $task->id,
+            'title' => trim(($task->contact?->name ?? __('Contact')).': '.$task->title),
+            'start' => $task->due_at->toIso8601String(),
+            'url' => $task->contact_id ? route('contacts.show', $task->contact_id).'#crm-tasks' : null,
+            'backgroundColor' => $task->completed_at ? '#8a94ad' : ($task->isOverdue() ? '#e63757' : '#3874ff'),
+            'borderColor' => $task->completed_at ? '#8a94ad' : ($task->isOverdue() ? '#e63757' : '#3874ff'),
+            'extendedProps' => [
+                'completed' => (bool) $task->completed_at,
+                'type' => $task->type?->label(),
+            ],
+        ]));
+    }
 }

@@ -68,6 +68,26 @@ class Developer extends Model
         return $this->hasMany(Compound::class);
     }
 
+    public function inventoryUnits()
+    {
+        return $this->hasMany(InventoryUnit::class);
+    }
+
+    public function portalUsers()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    public function authorizedBrokers()
+    {
+        return $this->belongsToMany(Brocker::class, 'developer_brocker');
+    }
+
+    public function afterSalesTickets()
+    {
+        return $this->hasMany(AfterSalesTicket::class);
+    }
+
     // Accessor for formatted profit
     public function getFormattedProfitAttribute()
     {

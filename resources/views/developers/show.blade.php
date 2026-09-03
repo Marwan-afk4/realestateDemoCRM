@@ -141,6 +141,30 @@
                 </div>
             </div>
 
+            {{-- Portal access --}}
+            @can('view-developers')
+            <div class="card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">{{ __('Developer portal') }}</h5>
+                    <a href="{{ route('developer-portal.index', ['developer_id' => $developer->id]) }}" class="btn btn-sm btn-outline-primary">{{ __('Open portal') }}</a>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted small">{{ __('Create a login scoped to this developer\'s compounds, inventory, and authorized brokers.') }}</p>
+                    <form method="POST" action="{{ route('developers.portal-users.store', $developer) }}">
+                        @csrf
+                        <div class="row g-2">
+                            <div class="col-md-6"><input class="form-control" name="first_name" placeholder="{{ __('First name') }}" required></div>
+                            <div class="col-md-6"><input class="form-control" name="last_name" placeholder="{{ __('Last name') }}" required></div>
+                            <div class="col-md-6"><input class="form-control" name="phone" placeholder="{{ __('Phone') }}" required></div>
+                            <div class="col-md-6"><input class="form-control" type="email" name="email" placeholder="{{ __('Email') }}"></div>
+                            <div class="col-12"><input class="form-control" type="password" name="password" placeholder="{{ __('Password') }}" required minlength="6"></div>
+                            <div class="col-12"><button class="btn btn-primary" type="submit">{{ __('Create portal user') }}</button></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            @endcan
+
             {{-- Places --}}
             @if($developer->places && $developer->places->count() > 0)
                 <div class="card mb-4">

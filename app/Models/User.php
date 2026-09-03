@@ -36,6 +36,8 @@ class User extends Authenticatable
         'plan_id',
         'google_id',
         'status',
+        'marketing_agency_id',
+        'developer_id',
     ];
 
     protected $hidden = [
@@ -131,5 +133,20 @@ class User extends Authenticatable
     public function broker()
     {
         return $this->hasOne(Brocker::class);
+    }
+
+    public function marketingAgency()
+    {
+        return $this->belongsTo(MarketingAgency::class);
+    }
+
+    public function developer()
+    {
+        return $this->belongsTo(Developer::class);
+    }
+
+    public function assignedAfterSalesTickets()
+    {
+        return $this->hasMany(AfterSalesTicket::class, 'assigned_to');
     }
 }

@@ -1,19 +1,28 @@
 @extends('layouts.app')
 @php $currentPage = 'crm-tasks'; @endphp
 @section('title', __('Tasks'))
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" rel="stylesheet">
+@endpush
 @section('content')
 @include('crm.styles')
 <div class="container-fluid">
     <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-4">
         <div>
             <h2 class="mb-2">{{ __('Tasks') }}</h2>
-            <p class="text-body-tertiary mb-0">{{ __('Follow-ups, visits, and assignment expiry — not a date column.') }}</p>
+            <p class="text-body-tertiary mb-0">{{ __('Follow-ups, visits, assignment expiry, and calendar view.') }}</p>
         </div>
         <div class="btn-group" role="group">
             <a href="{{ route('crm-tasks.index') }}" class="btn btn-sm {{ request('filter') ? 'btn-phoenix-secondary' : 'btn-primary' }}">{{ __('All') }}</a>
             <a href="{{ route('crm-tasks.index', ['filter' => 'open']) }}" class="btn btn-sm {{ request('filter') === 'open' ? 'btn-primary' : 'btn-phoenix-secondary' }}">{{ __('Open') }}</a>
             <a href="{{ route('crm-tasks.index', ['filter' => 'today']) }}" class="btn btn-sm {{ request('filter') === 'today' ? 'btn-primary' : 'btn-phoenix-secondary' }}">{{ __('Today') }}</a>
             <a href="{{ route('crm-tasks.index', ['filter' => 'overdue']) }}" class="btn btn-sm {{ request('filter') === 'overdue' ? 'btn-danger' : 'btn-phoenix-secondary' }}">{{ __('Overdue') }}</a>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div id="crm-task-calendar"></div>
         </div>
     </div>
 
@@ -95,3 +104,31 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('crm-task-calendar');
+    if (!calendarEl || typeof FullCalendar === 'undefined') return;
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+        initialView: 'dayGridMonth',
+        height: 'auto',
+        headerToolbar: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,listWeek',
+        },
+        events: '{{ route('crm-tasks.calendar-events') }}',
+        eventClick: function (info) {
+            if (info.event.url) {
+                info.jsEvent.preventDefault();
+                window.location.href = info.event.url;
+            }
+        },
+    });
+
+    calendar.render();
+});
+</script>
+@endpush

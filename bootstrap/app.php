@@ -60,6 +60,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'role'       => \App\Http\Middleware\RoleMiddleware::class,
+            'panel'      => \App\Http\Middleware\PanelAccessMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'spatie-role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
         ]);

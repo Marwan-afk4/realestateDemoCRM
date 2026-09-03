@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\InventoryStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -107,4 +108,8 @@ class Uptown extends Model
         return $this->hasMany(InventoryUnit::class);
     }
 
+    public function listingStatus(): InventoryStatus
+    {
+        return InventoryStatus::fromUptownStatus($this->status);
+    }
 }

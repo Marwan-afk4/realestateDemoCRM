@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\InventoryStatus;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -107,5 +108,18 @@ class InventoryUnit extends Model
     public function price(): float
     {
         return (float) ($this->current_price ?: $this->list_price ?: $this->uptown?->strat_price ?: 0);
+    }
+
+    public function scopeOpenStock(Builder $query): Builder
+    {
+        return $query->whereIn(
+            'status',
+            array_map(fn (InventoryStatus $status) => $status->value, InventoryStatus::openStockStatuses()),
+        );
+    }
+
+    public function scopeForCompound(Builder $query, int $compoundId): Builder
+    {
+        return $query->where('compound_id', $compoundId);
     }
 }

@@ -84,8 +84,12 @@ class PipelineService
                 $ticketable->saveQuietly();
             }
 
-            $ownerId = $ticketAttributes['owner_id'] ?? $contact->owner_id;
+            $ownerId = $ticketAttributes['owner_id'] ?? $contact->owner_id ?? config('crm.default_inbound_owner_user_id');
             $brockerId = $ticketAttributes['brocker_id'] ?? null;
+
+            if (! $brockerId && $ownerId) {
+                $brockerId = Brocker::query()->where('user_id', $ownerId)->value('id');
+            }
             $stage = $ticketAttributes['stage'] ?? PipelineStage::New;
             if (is_string($stage)) {
                 $stage = PipelineStage::tryFrom($stage) ?? PipelineStage::New;

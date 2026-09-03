@@ -4,7 +4,6 @@ namespace App\Services\Crm;
 
 use App\Enums\ActivityType;
 use App\Enums\CommissionPayoutStatus;
-use App\Enums\CommissionSplitRole;
 use App\Enums\DealStatuses;
 use App\Enums\PipelineStage;
 use App\Enums\SaleDocumentType;
@@ -21,13 +20,14 @@ class DealCloser
         private ActivityLogger $activities,
         private InventoryService $inventory,
         private SaleDeskService $sales,
+        private CommissionSplitService $commissionSplits,
     ) {
     }
 
     public function applyStatus(Deal $deal, DealStatuses $status): Deal
     {
         return DB::transaction(function () use ($deal, $status) {
-            $deal->loadMissing(['uptown', 'inventoryUnit', 'ticket', 'lead', 'contact', 'brocker.user', 'brocker.teamLead']);
+            $deal->loadMissing(['uptown', 'inventoryUnit', 'ticket', 'lead', 'contact', 'brocker.user', 'brocker.teamLead', 'listerBroker.user']);
             $previous = $deal->status instanceof DealStatuses ? $deal->status : DealStatuses::tryFrom((string) $deal->status);
 
             if ($status === DealStatuses::Approved || $status === DealStatuses::SemiDone) {
@@ -64,7 +64,12 @@ class DealCloser
             $deal->save();
 
             if ($status === DealStatuses::Approved) {
-                $deal->load(['brocker.user', 'brocker.teamLead', 'inventoryUnit', 'activeOffer', 'compound']);
+                if (! $deal->brocker_id) {
+                    throw ValidationException::withMessages([
+                        'brocker_id' => __('A broker is required to approve a deal and accrue commission.'),
+                    ]);
+                }
+                $deal->load(['brocker.user', 'brocker.teamLead', 'listerBroker.user', 'inventoryUnit', 'activeOffer', 'compound']);
                 $this->snapshotCommission($deal);
                 if ($deal->ticket && $deal->ticket->stage !== PipelineStage::Won) {
                     $this->pipeline->changeStage($deal->ticket, PipelineStage::Won, auth()->user());
@@ -96,7 +101,7 @@ class DealCloser
                 );
             }
 
-            return $deal->fresh(['uptown', 'inventoryUnit', 'commission.splits', 'ticket', 'contact']);
+            return $deal->fresh(['uptown', 'inventoryUnit', 'commission.splits.user', 'listerBroker.user', 'ticket', 'contact']);
         });
     }
 
@@ -118,6 +123,15 @@ class DealCloser
             ?: 0);
         $amount = round($closedPrice * $percentage / 100, 2);
 
+        $existing = Commission::query()->where('deal_id', $deal->id)->first();
+        $payoutStatus = $existing?->payout_status ?? CommissionPayoutStatus::Accrued;
+        $paidAt = $existing?->paid_at;
+
+        $listerBroker = $this->commissionSplits->resolveListerBroker($deal);
+        if ($listerBroker && ! $deal->lister_broker_id) {
+            $deal->forceFill(['lister_broker_id' => $listerBroker->id])->saveQuietly();
+        }
+
         $commission = Commission::query()->updateOrCreate(
             ['deal_id' => $deal->id],
             [
@@ -129,35 +143,21 @@ class DealCloser
                 'percentage' => $percentage,
                 'amount' => $amount,
                 'closed_unit_price' => $closedPrice,
-                'payout_status' => CommissionPayoutStatus::Accrued,
+                'payout_status' => $payoutStatus,
+                'paid_at' => $paidAt,
             ]
         );
 
         $commission->splits()->delete();
 
-        $manager = $deal->brocker?->teamLead;
-        $closer = $deal->brocker?->user;
-        $managerShare = $manager ? 20.0 : 0.0;
-        $closerShare = 100.0 - $managerShare;
-
-        $this->addSplit($commission, $closer?->id, CommissionSplitRole::Closer, $closerShare, $amount);
-        if ($manager && $managerShare > 0) {
-            $this->addSplit($commission, $manager->id, CommissionSplitRole::Manager, $managerShare, $amount);
+        foreach ($this->commissionSplits->buildForDeal($deal, $amount) as $split) {
+            CommissionSplit::create([
+                'commission_id' => $commission->id,
+                'user_id' => $split['user_id'],
+                'role' => $split['role'],
+                'percentage' => $split['percentage'],
+                'amount' => $split['amount'],
+            ]);
         }
-    }
-
-    private function addSplit(Commission $commission, ?int $userId, CommissionSplitRole $role, float $percent, float $total): void
-    {
-        if (! $userId || $percent <= 0) {
-            return;
-        }
-
-        CommissionSplit::create([
-            'commission_id' => $commission->id,
-            'user_id' => $userId,
-            'role' => $role,
-            'percentage' => $percent,
-            'amount' => round($total * $percent / 100, 2),
-        ]);
     }
 }

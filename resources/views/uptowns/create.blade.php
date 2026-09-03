@@ -104,7 +104,7 @@
 					<div class="col-md-6">
 						<x-form-select
 							name="status"
-							:options="['available' => 'Available', 'sold' => 'Sold', 'reserved' => 'Reserved']"
+							:options="\App\Enums\InventoryStatus::listingStatusOptions()"
 							label="{{__('Status')}}"
 							required
 						/>

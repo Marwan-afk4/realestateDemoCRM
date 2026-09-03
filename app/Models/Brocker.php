@@ -49,4 +49,9 @@ class Brocker extends Model
     {
         return $this->hasMany(PipelineTicket::class);
     }
+
+    public function authorizedDevelopers()
+    {
+        return $this->belongsToMany(Developer::class, 'developer_brocker');
+    }
 }

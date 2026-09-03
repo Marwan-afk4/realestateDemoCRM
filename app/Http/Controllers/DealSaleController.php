@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\ActivityType;
 use App\Enums\CommissionPayoutStatus;
 use App\Enums\HoldType;
 use App\Enums\SaleDocumentType;
 use App\Models\BuyerInstallment;
 use App\Models\Deal;
 use App\Models\SaleOffer;
+use App\Services\Crm\ActivityLogger;
+use App\Services\Crm\AfterSalesService;
 use App\Services\Crm\InventoryService;
 use App\Services\Crm\SaleDeskService;
 use Illuminate\Http\Request;
@@ -18,6 +21,8 @@ class DealSaleController extends Controller
     public function __construct(
         private InventoryService $inventory,
         private SaleDeskService $sales,
+        private ActivityLogger $activities,
+        private AfterSalesService $afterSales,
     ) {
     }
 
@@ -116,8 +121,9 @@ class DealSaleController extends Controller
 
         $unit = $this->inventory->resolveForDeal($deal);
         $this->inventory->markHandedOver($unit, $deal);
+        $this->afterSales->openFromHandover($deal->fresh(['contact']), $unit->fresh(), $request->user());
 
-        return back()->with('success', __('Unit marked handed over.'));
+        return back()->with('success', __('Unit marked handed over. Snagging ticket opened.'));
     }
 
     public function payout(Request $request, Deal $deal)
@@ -131,10 +137,23 @@ class DealSaleController extends Controller
         $commission = $deal->commission;
         abort_unless($commission, 404);
 
+        $previous = $commission->payout_status;
         $status = CommissionPayoutStatus::from($data['payout_status']);
         $commission->payout_status = $status;
-        $commission->paid_at = $status === CommissionPayoutStatus::Paid ? now() : null;
+        $commission->paid_at = $status === CommissionPayoutStatus::Paid ? ($commission->paid_at ?? now()) : null;
         $commission->save();
+
+        if ($deal->contact && $previous !== $status) {
+            $this->activities->log(
+                $deal->contact,
+                ActivityType::System,
+                __('Commission payout updated'),
+                __('Payout status is now :status.', ['status' => $status->label()]),
+                ['deal_id' => $deal->id, 'payout_status' => $status->value],
+                $deal->ticket,
+                $request->user(),
+            );
+        }
 
         return back()->with('success', __('Commission payout updated.'));
     }

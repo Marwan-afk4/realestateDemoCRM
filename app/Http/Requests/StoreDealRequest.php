@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
+use App\Enums\DealStatuses;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Http\FormRequest;
@@ -26,6 +27,7 @@ class StoreDealRequest extends FormRequest
             'status' => 'nullable',
             'lead_id' => 'nullable|exists:leads,id',
             'brocker_id' => 'nullable|exists:brockers,id',
+            'lister_broker_id' => 'nullable|exists:brockers,id',
             'uptown_id' => 'nullable|exists:uptowns,id',
             'inventory_unit_id' => 'nullable|exists:inventory_units,id',
             'pipeline_ticket_id' => 'nullable|exists:pipeline_tickets,id',
@@ -33,6 +35,30 @@ class StoreDealRequest extends FormRequest
             'close_date' => 'nullable|date',
             'probability' => 'nullable|integer|min:0|max:100',
         ];
+    }
+
+    public function withValidator($validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            $status = DealStatuses::tryFrom((string) $this->input('status', 'pending'));
+            if (! in_array($status, [DealStatuses::Approved, DealStatuses::SemiDone], true)) {
+                return;
+            }
+
+            if (! $this->input('inventory_unit_id') && ! $this->input('uptown_id')) {
+                $validator->errors()->add(
+                    'inventory_unit_id',
+                    __('Select a physical unit or listing before reserving or approving.'),
+                );
+            }
+
+            if (! $this->input('brocker_id')) {
+                $validator->errors()->add(
+                    'brocker_id',
+                    __('Assign a broker before reserving or approving — commission is calculated on approval.'),
+                );
+            }
+        });
     }
 
     public function messages()

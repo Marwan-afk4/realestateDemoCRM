@@ -10,8 +10,10 @@ use App\Models\Contact;
 use App\Models\MessageTemplate;
 use App\Models\UptownType;
 use App\Services\Crm\ActivityLogger;
+use App\Services\Crm\MessagingService;
 use App\Services\Crm\PipelineService;
 use App\Services\Crm\SalesVisibility;
+use App\Services\Crm\UnitMatchingService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -21,6 +23,8 @@ class ContactController extends Controller
         private SalesVisibility $visibility,
         private ActivityLogger $activities,
         private PipelineService $pipeline,
+        private MessagingService $messaging,
+        private UnitMatchingService $unitMatching,
     ) {
     }
 
@@ -113,9 +117,13 @@ class ContactController extends Controller
             ->whereNotIn('status', [\App\Enums\InventoryStatus::Sold->value, \App\Enums\InventoryStatus::HandedOver->value])
             ->orderBy('code')
             ->get()
-            ->mapWithKeys(fn ($unit) => [$unit->id => $unit->code.' — '.$unit->address().' ('.$unit->status->label().')']);
+            ->mapWithKeys(fn ($unit) => [$unit->id => $unit->code.' — '.$unit->address().' ('.$unit->status->label().')]);
 
-        return view('contacts.show', compact('contact', 'activities', 'tasks', 'templates', 'brokers', 'inventoryUnits'));
+        $unitMatches = auth()->user()?->can('view-unit-matching')
+            ? $this->unitMatching->matchForContact($contact, 10)
+            : collect();
+
+        return view('contacts.show', compact('contact', 'activities', 'tasks', 'templates', 'brokers', 'inventoryUnits', 'unitMatches'));
     }
 
     public function edit(Contact $contact)
@@ -179,37 +187,44 @@ class ContactController extends Controller
         ]);
 
         $channel = MessageChannel::from($data['channel']);
-        $type = match ($channel) {
-            MessageChannel::Whatsapp => ActivityType::Whatsapp,
-            MessageChannel::Sms => ActivityType::Sms,
-            MessageChannel::Email => ActivityType::Email,
-        };
-
-        $this->activities->log(
+        $result = $this->messaging->prepareOutbound(
             $contact,
-            $type,
-            $channel->label(),
+            $channel,
             $data['body'],
-            ['subject' => $data['subject'] ?? null, 'template_id' => $data['template_id'] ?? null],
+            $request->user(),
+            $data['subject'] ?? null,
+            $channel->label(),
+            ['template_id' => $data['template_id'] ?? null],
         );
 
-        $redirect = match ($channel) {
-            MessageChannel::Whatsapp => $contact->whatsappLink()
-                ? $contact->whatsappLink().'?text='.rawurlencode($data['body'])
-                : null,
-            MessageChannel::Email => $contact->email
-                ? 'mailto:'.$contact->email.'?subject='.rawurlencode($data['subject'] ?? '').'&body='.rawurlencode($data['body'])
-                : null,
-            MessageChannel::Sms => $contact->telLink()
-                ? 'sms:'.ltrim((string) $contact->phone_e164, '+').'?body='.rawurlencode($data['body'])
-                : null,
-        };
-
-        if ($redirect) {
-            return redirect()->away($redirect);
+        if ($result['link']) {
+            return redirect()->away($result['link']);
         }
 
-        return back()->with('success', __('Message logged.'));
+        return back()->with('success', __('Message logged. No :channel contact on file — copy the body and reach out manually.', [
+            'channel' => $channel->label(),
+        ]));
+    }
+
+    public function logInbound(Request $request, Contact $contact)
+    {
+        $this->authorize('update', $contact);
+
+        $data = $request->validate([
+            'channel' => ['required', Rule::enum(MessageChannel::class)],
+            'body' => 'required|string',
+            'subject' => 'nullable|string',
+        ]);
+
+        $this->messaging->logInbound(
+            $contact,
+            MessageChannel::from($data['channel']),
+            $data['body'],
+            $request->user(),
+            $data['subject'] ?? null,
+        );
+
+        return back()->with('success', __('Inbound message logged on timeline.'));
     }
 
     private function validated(Request $request, ?Contact $contact = null): array

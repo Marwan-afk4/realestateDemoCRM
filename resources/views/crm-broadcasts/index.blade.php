@@ -29,7 +29,7 @@
                         @forelse ($broadcasts as $broadcast)
                             <tr>
                                 <td class="ps-4">
-                                    <div class="fw-semibold">{{ $broadcast->title }}</div>
+                                    <a href="{{ route('crm-broadcasts.show', $broadcast) }}" class="fw-semibold text-decoration-none">{{ $broadcast->title }}</a>
                                     <div class="fs-10 text-body-tertiary text-truncate" style="max-width:28rem;">{{ $broadcast->body }}</div>
                                 </td>
                                 <td><span class="badge {{ $broadcast->channel->badgeClass() }}">{{ $broadcast->channel->label() }}</span></td>

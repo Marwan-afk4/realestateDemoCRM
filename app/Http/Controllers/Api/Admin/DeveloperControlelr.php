@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Compound;
 use App\Models\Developer;
+use App\Models\InventoryUnit;
 use App\Models\Place;
 use App\Models\SalesDeveloper;
-use App\Models\Uptown;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,10 +24,11 @@ class DeveloperControlelr extends Controller
     public function developer($id){
         $developer = Developer::with('places','sales_developer')->findOrFail($id);
 
-        $developerCompounds=Compound::where('developer_id',$id)->get();
-        $units = Uptown::whereIn('compound_id', $developerCompounds->pluck('id'))
-        ->where('status', 'unsold')
-        ->count();
+        $developerCompounds = Compound::where('developer_id', $id)->get();
+        $units = InventoryUnit::query()
+            ->whereIn('compound_id', $developerCompounds->pluck('id'))
+            ->openStock()
+            ->count();
 
         $sales_deevlopers = SalesDeveloper::where('developer_id', $id)->get();
 

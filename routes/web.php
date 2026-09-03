@@ -33,6 +33,8 @@ use App\Http\Controllers\{
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [HomePageController::class, 'index'])->name('home');
+    Route::post('/notifications/{notification}/read', [\App\Http\Controllers\NotificationController::class, 'markRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllRead'])->name('notifications.read-all');
 });
 
 Route::controller(AuthController::class)->group(function () {
@@ -42,7 +44,7 @@ Route::controller(AuthController::class)->group(function () {
     });
 
 
-    Route::middleware(['auth:sanctum','role:admin'])->prefix('admin')
+    Route::middleware(['auth:sanctum','panel'])->prefix('admin')
     ->group(function () {
 
         // Admin Management (super-admin only — permission middleware)
@@ -77,17 +79,19 @@ Route::controller(AuthController::class)->group(function () {
             Route::post('/contacts/{contact}/pipeline', [\App\Http\Controllers\ContactController::class, 'addToPipeline'])->name('contacts.pipeline');
             Route::post('/contacts/{contact}/activities', [\App\Http\Controllers\ContactController::class, 'logActivity'])->name('contacts.activities.store');
             Route::post('/contacts/{contact}/message', [\App\Http\Controllers\ContactController::class, 'sendMessage'])->name('contacts.message');
+            Route::post('/contacts/{contact}/inbound', [\App\Http\Controllers\ContactController::class, 'logInbound'])->name('contacts.inbound');
         });
 
         Route::middleware('permission:view-crm-tasks')->group(function () {
             Route::get('/crm-tasks', [\App\Http\Controllers\CrmTaskController::class, 'index'])->name('crm-tasks.index');
+            Route::get('/crm-tasks/calendar-events', [\App\Http\Controllers\CrmTaskController::class, 'calendarEvents'])->name('crm-tasks.calendar-events');
             Route::post('/crm-tasks', [\App\Http\Controllers\CrmTaskController::class, 'store'])->name('crm-tasks.store');
             Route::post('/crm-tasks/{crm_task}/complete', [\App\Http\Controllers\CrmTaskController::class, 'complete'])->name('crm-tasks.complete');
         });
 
         Route::middleware('permission:view-message-templates')->group(function () {
             Route::resource('/message-templates', \App\Http\Controllers\MessageTemplateController::class)->except(['show']);
-            Route::resource('/crm-broadcasts', \App\Http\Controllers\CrmBroadcastController::class)->only(['index', 'create', 'store']);
+            Route::resource('/crm-broadcasts', \App\Http\Controllers\CrmBroadcastController::class)->only(['index', 'create', 'store', 'show']);
         });
 
         Route::middleware('permission:view-crm-reports')
@@ -129,6 +133,34 @@ Route::controller(AuthController::class)->group(function () {
         Route::middleware('permission:view-collections')->group(function () {
             Route::get('/collections', [\App\Http\Controllers\BuyerCollectionController::class, 'index'])->name('collections.index');
             Route::post('/collections/{buyer_installment}/receipts', [\App\Http\Controllers\BuyerCollectionController::class, 'receipt'])->name('collections.receipts.store');
+        });
+
+        Route::middleware('permission:view-marketing-agencies')->group(function () {
+            Route::resource('/marketing-agencies', \App\Http\Controllers\MarketingAgencyController::class)->except(['destroy']);
+            Route::post('/marketing-agencies/{marketingAgency}/agents', [\App\Http\Controllers\AgencyWorkspaceController::class, 'storeAgent'])->name('marketing-agencies.agents.store');
+        });
+
+        Route::middleware('permission:view-agency-workspace')->group(function () {
+            Route::get('/agency', [\App\Http\Controllers\AgencyWorkspaceController::class, 'index'])->name('agency.workspace');
+            Route::get('/agency/matching', [\App\Http\Controllers\AgencyWorkspaceController::class, 'matching'])->name('agency.matching');
+        });
+
+        Route::middleware('permission:view-developer-portal')->prefix('developer-portal')->name('developer-portal.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\DeveloperPortalController::class, 'index'])->name('index');
+            Route::get('/inventory', [\App\Http\Controllers\DeveloperPortalController::class, 'inventory'])->name('inventory');
+            Route::get('/brokers', [\App\Http\Controllers\DeveloperPortalController::class, 'brokers'])->name('brokers');
+            Route::post('/brokers', [\App\Http\Controllers\DeveloperPortalController::class, 'syncBrokers'])->name('brokers.sync');
+        });
+
+        Route::middleware('permission:view-developers')
+            ->post('/developers/{developer}/portal-users', [\App\Http\Controllers\DeveloperPortalController::class, 'storePortalUser'])
+            ->name('developers.portal-users.store');
+
+        Route::middleware('permission:view-after-sales')->group(function () {
+            Route::get('/after-sales', [\App\Http\Controllers\AfterSalesController::class, 'index'])->name('after-sales.index');
+            Route::post('/after-sales', [\App\Http\Controllers\AfterSalesController::class, 'store'])->name('after-sales.store');
+            Route::get('/after-sales/{after_sales_ticket}', [\App\Http\Controllers\AfterSalesController::class, 'show'])->name('after-sales.show');
+            Route::post('/after-sales/{after_sales_ticket}/status', [\App\Http\Controllers\AfterSalesController::class, 'updateStatus'])->name('after-sales.status');
         });
 
         Route::get('/sale-documents/{sale_document}', function (\App\Models\SaleDocument $sale_document) {

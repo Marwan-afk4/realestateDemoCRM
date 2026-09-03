@@ -77,7 +77,7 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <x-form-select name="status" :options="['available' => 'Available', 'sold' => 'Sold', 'reserved' => 'Reserved']" label="{{ __('Status') }}"
+                            <x-form-select name="status" :options="\App\Enums\InventoryStatus::listingStatusOptions()" label="{{ __('Status') }}"
                                 :selected="$uptown->status" />
                         </div>
                         <div class="col-md-6">

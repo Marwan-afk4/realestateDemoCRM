@@ -11,6 +11,7 @@ use App\Http\Requests\StoreBrockerRequest;
 use App\Http\Requests\UpdateBrockerRequest;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class BrockerController extends Controller
 {
@@ -57,6 +58,9 @@ class BrockerController extends Controller
                 'role' => 'brocker',
                 'plan_id' => $request->plan_id,
             ]);
+
+            $brokerRole = Role::findByName('broker', 'web');
+            $user->assignRole($brokerRole);
 
             // Create the broker
             Brocker::create([

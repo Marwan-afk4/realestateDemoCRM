@@ -32,4 +32,14 @@ class MarketingAgency extends Model
     public function leads(){
         return $this->hasMany(Lead::class);
     }
+
+    public function agents()
+    {
+        return $this->hasMany(User::class, 'marketing_agency_id')->where('role', 'agency');
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class, 'marketing_agency_id');
+    }
 }

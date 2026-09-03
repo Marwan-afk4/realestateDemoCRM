@@ -103,6 +103,63 @@
                     @endcan
                     @endcanany
 
+                    {{-- Section: Workspaces --}}
+                    @canany(['view-agency-workspace','view-marketing-agencies','view-developer-portal','view-after-sales','view-unit-matching'])
+                    <p class="navbar-vertical-label mt-3">{{ __('Workspaces') }}</p>
+                    <hr class="navbar-vertical-line" />
+
+                    @can('view-agency-workspace')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'agency-workspace' ? 'active' : '' }}" href="{{ route('agency.workspace') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="briefcase"></span></span>
+                                <span class="nav-link-text">{{ __('Agency workspace') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    @endcan
+                    @can('view-marketing-agencies')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'marketing-agencies' ? 'active' : '' }}" href="{{ route('marketing-agencies.index') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="users"></span></span>
+                                <span class="nav-link-text">{{ __('Marketing agencies') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    @endcan
+                    @can('view-unit-matching')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'agency-matching' ? 'active' : '' }}" href="{{ route('agency.matching') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="search"></span></span>
+                                <span class="nav-link-text">{{ __('Unit matching') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    @endcan
+                    @can('view-developer-portal')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'developer-portal' ? 'active' : '' }}" href="{{ route('developer-portal.index') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="box"></span></span>
+                                <span class="nav-link-text">{{ __('Developer portal') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    @endcan
+                    @can('view-after-sales')
+                    <div class="nav-item-wrapper">
+                        <a class="nav-link label-1 {{ isset($currentPage) && $currentPage == 'after-sales' ? 'active' : '' }}" href="{{ route('after-sales.index') }}">
+                            <div class="d-flex align-items-center">
+                                <span class="nav-link-icon"><span data-feather="life-buoy"></span></span>
+                                <span class="nav-link-text">{{ __('After-sales') }}</span>
+                            </div>
+                        </a>
+                    </div>
+                    @endcan
+                    @endcanany
+
                     {{-- Section: Real Estate --}}
                     @canany(['view-uptowns','view-uptown-types','view-unit-sub-types','view-developers','view-deals','view-inventory','view-collections'])
                     <p class="navbar-vertical-label mt-3">{{ __('Real Estate') }}</p>

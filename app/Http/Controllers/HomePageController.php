@@ -11,19 +11,34 @@ use App\Models\Payment;
 use App\Models\Plan;
 use App\Models\TrainingSubscription;
 use App\Models\Deal;
+use App\Services\Crm\DealRevenueService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomePageController extends Controller
 {
+    public function __construct(private DealRevenueService $revenue)
+    {
+    }
+
     public function index(Request $request)
     {
+        if ($request->user()?->role === 'brocker') {
+            return redirect()->route('pipeline.index');
+        }
+        if ($request->user()?->role === 'agency') {
+            return redirect()->route('agency.workspace');
+        }
+        if ($request->user()?->role === 'developer') {
+            return redirect()->route('developer-portal.index');
+        }
+
         $filter = $request->input('filter', 'monthly');
 
         // Existing counts (always total)
         $userCount = User::where('role', 'user')->count();
         $brockerCount = User::where('role', 'brocker')->count();
-        $unitCount = \App\Models\Uptown::count();
+        $unitCount = \App\Models\InventoryUnit::count();
         $sellRequestCount = \App\Models\SellRequest::count();
         $installmentRequestCount = \App\Models\BuyAppartmentInstallment::count();
 
@@ -138,26 +153,7 @@ class HomePageController extends Controller
                 break;
         }
 
-        // Calculate total revenue with error handling
-        $totalRevenue = 0;
-        try {
-            $totalRevenue = Deal::all()
-                ->sum(function ($deal) {
-                    try {
-                        $unitCommissionPrice = $deal->uptown->commission_price ?? 0;
-                        $stratPrice = $deal->uptown->strat_price ?? 0;
-                        $developerprofit = $stratPrice - $unitCommissionPrice;
-                        $commissionPercentage = $deal->brocker->comission_percentage ?? 0;
-                        $brockerprofit = ($stratPrice - $developerprofit) * $commissionPercentage / 100;
-                        $delerprofit = $unitCommissionPrice - $brockerprofit;
-                        return max(0, $delerprofit); // Ensure non-negative
-                    } catch (\Exception $e) {
-                        return 0; // Skip this deal if there's an error
-                    }
-                });
-        } catch (\Exception $e) {
-            $totalRevenue = 0;
-        }
+        $totalRevenue = $this->revenue->totalRevenue($startDate, $endDate);
 
         // User counts by role (current month)
         $users = User::where('role', 'user')

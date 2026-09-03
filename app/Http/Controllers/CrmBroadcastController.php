@@ -8,15 +8,17 @@ use App\Enums\PipelineStage;
 use App\Models\Contact;
 use App\Models\CrmBroadcast;
 use App\Models\MessageTemplate;
-use App\Services\Crm\ActivityLogger;
+use App\Services\Crm\MessagingService;
 use App\Services\Crm\SalesVisibility;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 class CrmBroadcastController extends Controller
 {
-    public function __construct(private SalesVisibility $visibility, private ActivityLogger $activities)
-    {
+    public function __construct(
+        private SalesVisibility $visibility,
+        private MessagingService $messaging,
+    ) {
     }
 
     public function index()
@@ -51,25 +53,22 @@ class CrmBroadcastController extends Controller
             'source' => 'nullable|string',
         ]);
 
-        $contacts = $this->visibility->scopeContacts(Contact::query(), $request->user())
-            ->when($data['source'] ?? null, fn ($q, $source) => $q->where('source', $source))
-            ->when($data['stage'] ?? null, function ($q, $stage) {
-                $q->whereHas('tickets', fn ($tickets) => $tickets->where('stage', $stage));
-            })
-            ->get();
-
+        $contacts = $this->resolveRecipients($data);
         $channel = MessageChannel::from($data['channel']);
-        $type = match ($channel) {
-            MessageChannel::Whatsapp => ActivityType::Whatsapp,
-            MessageChannel::Sms => ActivityType::Sms,
-            MessageChannel::Email => ActivityType::Email,
-        };
 
         foreach ($contacts as $contact) {
-            $this->activities->log($contact, $type, $data['title'], $data['body'], ['broadcast' => true]);
+            $this->messaging->prepareOutbound(
+                $contact,
+                $channel,
+                $data['body'],
+                $request->user(),
+                null,
+                $data['title'],
+                ['broadcast' => true],
+            );
         }
 
-        CrmBroadcast::create([
+        $broadcast = CrmBroadcast::create([
             'title' => $data['title'],
             'channel' => $channel,
             'message_template_id' => $data['message_template_id'] ?? null,
@@ -80,8 +79,34 @@ class CrmBroadcastController extends Controller
             'sent_at' => now(),
         ]);
 
-        return redirect()->route('crm-broadcasts.index')
-            ->with('success', __('Broadcast logged to :count contacts.', ['count' => $contacts->count()]));
+        return redirect()->route('crm-broadcasts.show', $broadcast)
+            ->with('success', __('Broadcast logged to :count contacts. Open each link below.', ['count' => $contacts->count()]));
+    }
+
+    public function show(CrmBroadcast $crm_broadcast)
+    {
+        $this->authorizeView();
+
+        $contacts = $this->resolveRecipients($crm_broadcast->filters ?? []);
+        $recipients = $contacts->map(fn (Contact $contact) => [
+            'contact' => $contact,
+            'link' => $this->messaging->deepLink($contact, $crm_broadcast->channel, $crm_broadcast->body),
+        ]);
+
+        return view('crm-broadcasts.show', [
+            'broadcast' => $crm_broadcast,
+            'recipients' => $recipients,
+        ]);
+    }
+
+    private function resolveRecipients(array $filters)
+    {
+        return $this->visibility->scopeContacts(Contact::query(), auth()->user())
+            ->when($filters['source'] ?? null, fn ($q, $source) => $q->where('source', $source))
+            ->when($filters['stage'] ?? null, function ($q, $stage) {
+                $q->whereHas('tickets', fn ($tickets) => $tickets->where('stage', $stage));
+            })
+            ->get();
     }
 
     private function authorizeView(): void

@@ -5,23 +5,24 @@ namespace App\Http\Controllers\Api\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Brocker;
 use App\Models\Complaint;
-use App\Models\Contract;
 use App\Models\Developer;
 use App\Models\Payment;
 use App\Models\Plan;
-use App\Models\Request as ModelsRequest;
 use App\Models\TrainingSubscription;
 use App\Models\Deal;
 use App\Models\User;
+use App\Services\Crm\DealRevenueService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class HomepageController extends Controller
 {
+    public function __construct(private DealRevenueService $revenue)
+    {
+    }
 
-
-    public function homepage(Request $request){
-
+    public function homepage(Request $request)
+    {
         $filter = $request->input('filter', 'monthly');
 
         $startDate = Carbon::now()->startOfMonth();
@@ -32,20 +33,7 @@ class HomepageController extends Controller
             $endDate = Carbon::now()->endOfYear();
         }
 
-        $totalRevenue = Deal::all()
-        ->sum(function ($deal) {
-        $unitCommissionPrice = $deal->compound->commission_percentage ?? 0;
-        $developerprofit = $deal->uptown->strat_price - $unitCommissionPrice; //start price =100  =90
-        $brockerprofit = ($deal->uptown->strat_price - $developerprofit)*$deal->brocker->comission_percentage/100;//9
-        $delerprofit =$unitCommissionPrice - $brockerprofit;
-        return $delerprofit;
-        });
-
-
-
-
-
-        $totalUsers = User::whereBetween('created_at', [$startDate, $endDate])->count();
+        $totalRevenue = $this->revenue->totalRevenue($startDate, $endDate);
 
         $users = User::where('role', 'user')
             ->whereBetween('created_at', [$startDate, $endDate])
@@ -58,8 +46,6 @@ class HomepageController extends Controller
         $trainers = User::where('role', 'trainer')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->count();
-
-
 
         $totalDeals = Deal::whereBetween('created_at', [$startDate, $endDate])->count();
 
@@ -79,18 +65,12 @@ class HomepageController extends Controller
             ->whereBetween('created_at', [$startDate, $endDate])
             ->count();
 
-        $brocker = Brocker::all()->count();
-        $developer = Developer::all()->count();
-        $admin = User::where('role', 'admin')->get()->count();
-        $complaint = Complaint::where('status', 'open')->get()->count();
-        $triningRequest = TrainingSubscription::where('status', 'pending')->get()->count();
-
         return response()->json([
-            'brocker' => $brocker,
-            'developer' => $developer,
-            'admin' => $admin,
-            'complaint' => $complaint,
-            'triningRequest' => $triningRequest,
+            'brocker' => Brocker::count(),
+            'developer' => Developer::count(),
+            'admin' => User::where('role', 'admin')->count(),
+            'complaint' => Complaint::where('status', 'open')->count(),
+            'triningRequest' => TrainingSubscription::where('status', 'pending')->count(),
             'deals' => $totalDeals,
             'deals_status' => [
                 'approved' => $approvedDeals,
@@ -103,7 +83,7 @@ class HomepageController extends Controller
                 'brocker' => $brockers,
                 'trainer' => $trainers,
             ],
-            'total_revenue' => $totalRevenue
+            'total_revenue' => $totalRevenue,
         ]);
     }
 
@@ -119,7 +99,7 @@ class HomepageController extends Controller
                 $data[] = [
                     'plan_name' => $plan->name,
                     'plan_price' => $plan->price_after_discount,
-                    'total_amount' => $count * $plan->price_after_discount
+                    'total_amount' => $count * $plan->price_after_discount,
                 ];
             }
         }

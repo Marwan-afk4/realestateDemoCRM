@@ -21,6 +21,7 @@ class Deal extends Model
         'lead_id',
         'pipeline_ticket_id',
         'brocker_id',
+        'lister_broker_id',
         'uptown_id',
         'inventory_unit_id',
         'sale_offer_id',
@@ -71,6 +72,11 @@ class Deal extends Model
     public function brocker()
     {
         return $this->belongsTo(Brocker::class);
+    }
+
+    public function listerBroker()
+    {
+        return $this->belongsTo(Brocker::class, 'lister_broker_id');
     }
 
     public function uptown()

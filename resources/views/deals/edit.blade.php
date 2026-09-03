@@ -82,9 +82,15 @@
 				/>
 				<x-form-select
 					name="brocker_id"
-					label="{{ __('Broker') }}"
+					label="{{ __('Broker (closer)') }}"
 					:selected="$deal->brocker_id ?? ''"
 					:options="$brokers ?? []"
+				/>
+				<x-form-select
+					name="lister_broker_id"
+					label="{{ __('Lister broker') }}"
+					:selected="$deal->lister_broker_id ?? ''"
+					:options="['' => __('Auto-detect from pipeline')] + ($brokers ?? [])"
 				/>
 				<x-form-input
 					name="value"

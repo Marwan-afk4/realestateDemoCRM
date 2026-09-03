@@ -108,8 +108,8 @@
 					</td>
 					<td>${{ number_format($uptown->strat_price) }}</td>
 					<td>
-						<span class="badge bg-{{ $uptown->status === 'available' ? 'success' : ($uptown->status === 'sold' ? 'danger' : 'warning') }}">
-							{{ ucfirst($uptown->status) }}
+						<span class="badge badge-phoenix {{ $uptown->listingStatus()->phoenixBadge() }}">
+							{{ $uptown->listingStatus()->label() }}
 						</span>
 					</td>
 					<td>{{ $uptown->space }} m²</td>
