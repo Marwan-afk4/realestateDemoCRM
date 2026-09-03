@@ -117,7 +117,9 @@ class ContactController extends Controller
             ->whereNotIn('status', [\App\Enums\InventoryStatus::Sold->value, \App\Enums\InventoryStatus::HandedOver->value])
             ->orderBy('code')
             ->get()
-            ->mapWithKeys(fn ($unit) => [$unit->id => $unit->code.' — '.$unit->address().' ('.$unit->status->label().')]);
+            ->mapWithKeys(fn ($unit) => [
+                $unit->id => sprintf('%s — %s (%s)', $unit->code, $unit->address(), $unit->status->label()),
+            ]);
 
         $unitMatches = auth()->user()?->can('view-unit-matching')
             ? $this->unitMatching->matchForContact($contact, 10)
