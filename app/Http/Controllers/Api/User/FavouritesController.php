@@ -36,7 +36,12 @@ class FavouritesController extends Controller
             }
         }
 
-        $compounds = Compound::where('favourite', 1)->get();
+        $compoundIds = Favourite::query()
+            ->where('user_id', $request->user()->id)
+            ->where('type', 'compound')
+            ->pluck('compound_id');
+
+        $compounds = Compound::whereIn('id', $compoundIds)->get();
 
         return response()->json([
             'units' => $units,
@@ -81,9 +86,7 @@ class FavouritesController extends Controller
             return response()->json(['errors' => $validation->errors()], 422);
         }
 
-        $compound->update([
-            'favourite' => $request->favourite,
-        ]);
+        $this->syncCompoundFavourite($request->user()->id, $compound, (int) $request->favourite === 1);
 
         return response()->json(['message' => 'Compound Favourite Successfully']);
     }
@@ -99,6 +102,25 @@ class FavouritesController extends Controller
         if ($favourite) {
             Favourite::updateOrCreate($keys, [
                 'compound_id' => $uptown->compound_id,
+            ]);
+
+            return;
+        }
+
+        Favourite::query()->where($keys)->delete();
+    }
+
+    private function syncCompoundFavourite(int $userId, Compound $compound, bool $favourite): void
+    {
+        $keys = [
+            'user_id' => $userId,
+            'compound_id' => $compound->id,
+            'type' => 'compound',
+        ];
+
+        if ($favourite) {
+            Favourite::updateOrCreate($keys, [
+                'uptown_id' => null,
             ]);
 
             return;

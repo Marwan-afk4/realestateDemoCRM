@@ -111,6 +111,8 @@ class SellRequestController extends Controller
 
     public function updateDeliveryDate(Request $request, $id)
     {
+        abort_unless($request->user()?->can('view-uptowns'), 403);
+
         $validation = Validator::make($request->all(), [
             'delivery_date' => 'required|date',
         ]);

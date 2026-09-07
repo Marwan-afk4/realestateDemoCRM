@@ -366,9 +366,10 @@ it('covers the old marketplace APIs under /api/user', function () {
     $sellId = $sell->json('data.id');
     $this->getJson('/api/user/sell-requests')->assertOk()->assertJsonPath('status', 'success');
     $this->getJson('/api/user/sell-requests/'.$sellId)->assertOk()->assertJsonPath('data.id', $sellId);
+    // Marketplace users may not set delivery dates on arbitrary units (back-office only).
     $this->putJson('/api/user/unit-sell-request/'.$catalog['listing']->id.'/delivery-date', [
         'delivery_date' => now()->addYears(2)->toDateString(),
-    ])->assertOk()->assertJsonPath('status', 'success');
+    ])->assertForbidden();
 
     $this->postJson('/api/user/apartment-installments', [
         'apartment_id' => $catalog['listing']->id,
@@ -431,7 +432,7 @@ it('deletes the marketplace profile', function () {
 });
 
 it('stars a unit favourite and lists it for the current user', function () {
-    marketplaceUser();
+    $user = marketplaceUser();
     $catalog = marketplaceCatalog();
 
     $this->getJson('/api/user/favourites')
@@ -452,8 +453,29 @@ it('stars a unit favourite and lists it for the current user', function () {
         'type' => 'unit',
     ]);
 
+    // Compound favourites are per-user, so they only appear after this user stars them.
     $this->getJson('/api/user/favourites')
         ->assertOk()
         ->assertJsonPath('units.0.id', $catalog['listing']->id)
+        ->assertJsonPath('compounds', []);
+
+    $this->putJson('/api/user/Compoundfavourite/'.$catalog['compound']->id, [
+        'favourite' => 1,
+    ])->assertOk()->assertJsonPath('message', 'Compound Favourite Successfully');
+
+    $this->assertDatabaseHas('favourites', [
+        'user_id' => $user->id,
+        'compound_id' => $catalog['compound']->id,
+        'type' => 'compound',
+    ]);
+
+    $this->getJson('/api/user/favourites')
+        ->assertOk()
         ->assertJsonPath('compounds.0.id', $catalog['compound']->id);
+
+    $this->putJson('/api/user/Compoundfavourite/'.$catalog['compound']->id, [
+        'favourite' => 0,
+    ])->assertOk();
+
+    expect($this->getJson('/api/user/favourites')->json('compounds'))->toBe([]);
 });

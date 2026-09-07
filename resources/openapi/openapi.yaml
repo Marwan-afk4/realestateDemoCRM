@@ -1163,7 +1163,7 @@ paths:
       tags: [Favourites]
       operationId: toggleCompoundFavourite
       summary: Favourite or unfavourite a compound
-      description: Sets the compound `favourite` flag (0 or 1).
+      description: Adds or removes the compound from the authenticated user's favourites (per-user). Send `favourite: 1` to add, `favourite: 0` to remove.
       parameters:
         - name: id
           in: path
@@ -1418,7 +1418,7 @@ paths:
       tags: [Sell Requests]
       operationId: updateUnitDeliveryDate
       summary: Update unit delivery date
-      description: "`id` is an uptown / unit id."
+      description: "`id` is an uptown / unit id. Back-office only: requires the `view-uptowns` permission. Regular marketplace users receive `403`."
       parameters:
         - name: id
           in: path

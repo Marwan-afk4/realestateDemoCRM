@@ -351,7 +351,6 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::post('/user/sell-requests',[SellRequestController::class, 'store']);
     Route::get('/user/sell-requests',[SellRequestController::class, 'index']);
     Route::get('/user/sell-requests/{id}',[SellRequestController::class, 'show']);
-    Route::put('/user/unit-sell-request/{id}/delivery-date',[SellRequestController::class, 'updateDeliveryDate']);
 
 ////////////////////////////////////////////////////// Apartment Installments ////////////////////////////////////////////////
     Route::post('/user/apartment-installments',[BuyAppartmentInstallmentController::class, 'store']);
@@ -361,6 +360,13 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::get('/user/policies', [PolicyController::class, 'index']);
     Route::get('/user/policies/{id}', [PolicyController::class, 'show']);
     });
+
+// Setting a unit's delivery date is a back-office action. It is not scoped to the
+// caller, so it must not be available to arbitrary marketplace users. Gate it behind
+// the uptown-management permission (admins / staff), independent of the role:user group.
+Route::middleware('auth:sanctum')->group(function () {
+    Route::put('/user/unit-sell-request/{id}/delivery-date', [SellRequestController::class, 'updateDeliveryDate']);
+});
 
 Route::middleware('auth:sanctum')->prefix('crm')->group(function () {
     Route::get('/lookups', [CrmLookupController::class, 'index']);
