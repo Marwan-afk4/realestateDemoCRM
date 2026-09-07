@@ -1163,7 +1163,7 @@ paths:
       tags: [Favourites]
       operationId: toggleCompoundFavourite
       summary: Favourite or unfavourite a compound
-      description: Adds or removes the compound from the authenticated user's favourites (per-user). Send `favourite: 1` to add, `favourite: 0` to remove.
+      description: "Adds or removes the compound from the authenticated user's favourites (per-user). Send `favourite: 1` to add, `favourite: 0` to remove."
       parameters:
         - name: id
           in: path
