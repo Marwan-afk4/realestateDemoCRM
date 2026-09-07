@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiDocsController;
 use App\Http\Controllers\HomeNameController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,10 @@ use App\Http\Controllers\{
     UnitSubTypeController,
     PushNotificationController,
 };
+
+// 📘 API documentation (Swagger UI)
+Route::get('/docs/api', [ApiDocsController::class, 'ui'])->name('docs.api');
+Route::get('/docs/openapi.yaml', [ApiDocsController::class, 'spec'])->name('docs.openapi');
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/', [HomePageController::class, 'index'])->name('home');

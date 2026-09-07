@@ -1,0 +1,4466 @@
+openapi: 3.0.3
+info:
+  title: CRM API
+  version: 1.0.0
+  description: |
+    Mobile marketplace APIs and authenticated CRM APIs.
+
+    **Admin APIs are not documented here.**
+
+    **Auth:** register or log in to get a Sanctum bearer token. Click **Authorize**
+    and paste `Bearer {token}` or just the token.
+
+    - Public auth routes (`/register`, `/login`, OTP, Google) need no token.
+    - Device-token routes need any authenticated Sanctum user.
+    - `/user/*` marketplace routes need Sanctum **and** `role=user`.
+    - `/crm/*` routes need Sanctum plus the matching permission (contacts, pipeline, deals, and so on).
+    - Phone OTP routes are limited to **10 or 20 requests per minute** per IP.
+  contact:
+    name: CRM
+servers:
+  - url: '{{API_BASE_URL}}'
+    description: Application URL from APP_URL
+security:
+  - bearerAuth: []
+tags:
+  - name: Authentication
+    description: Register, login, Google Sign-In, password reset, and logout
+  - name: Device Tokens
+    description: Register or remove FCM device tokens
+  - name: Home Names
+    description: Public listing names shown on the home screen
+  - name: User Homepage
+    description: Ads and broker summary for the signed-in user
+  - name: User Profile
+    description: Profile, update, and delete account
+  - name: Developers
+    description: Developers and their compounds
+  - name: Plans & Payments
+    description: Subscription plans, payment methods, and receipts
+  - name: Contracts
+    description: View, agree, and download contracts
+  - name: Bot
+    description: Help-bot option tree
+  - name: Requests
+    description: Training applications and complaints
+  - name: User Deals
+    description: Broker deal submissions from the mobile app
+  - name: Commission
+    description: Compound commission percentages
+  - name: Leads
+    description: Broker leads from the mobile app
+  - name: Profit
+    description: Broker leads, closed deals, and profit totals
+  - name: Favourites
+    description: Favourite units and compounds
+  - name: Units
+    description: Units, buy/rent listings, and unit types
+  - name: Sell Requests
+    description: User sell-unit applications
+  - name: Apartment Installments
+    description: Mortgage / installment applications
+  - name: Policies
+    description: Published policies
+  - name: CRM Lookups
+    description: Enums and dropdown data for CRM screens
+  - name: CRM Notifications
+    description: In-app notifications
+  - name: CRM Contacts
+    description: Contacts, timeline, messaging, and unit matching
+  - name: CRM Pipeline
+    description: Kanban pipeline tickets
+  - name: CRM Tasks
+    description: Follow-up tasks and calendar
+  - name: CRM Deals
+    description: Sales desk — holds, offers, documents, collections, handover
+  - name: CRM Inventory
+    description: Physical units
+  - name: CRM Collections
+    description: Buyer installment collections
+  - name: CRM Reports
+    description: Pipeline and sales KPIs
+  - name: CRM Message Templates
+    description: WhatsApp / SMS / email templates
+  - name: CRM Broadcasts
+    description: Outbound broadcasts to contacts
+  - name: CRM After Sales
+    description: Snagging and customer-care tickets
+  - name: CRM Agency
+    description: Marketing-agency workspace
+  - name: CRM Developer Portal
+    description: Developer inventory and authorized brokers
+paths:
+  /register:
+    post:
+      tags: [Authentication]
+      operationId: register
+      summary: Register a user
+      description: Sends a WhatsApp OTP unless the phone was already verified. After OTP verification the account is created and a Sanctum token is returned. Optional `fcm_token` / `device_token` and `platform` are stored on success.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+            example:
+              first_name: Ahmed
+              last_name: Hassan
+              email: ahmed@example.com
+              phone: '01012345678'
+              password: secret12
+              age: 28
+              qualification: Broker
+              experience_year: 3
+              governce: Cairo
+      responses:
+        '200':
+          description: OTP sent, or user registered when the phone was already verified
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OtpSentResponse'
+                  - $ref: '#/components/schemas/AuthTokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /register/phone:
+    post:
+      tags: [Authentication]
+      operationId: sendRegisterPhoneOtp
+      summary: Send registration WhatsApp OTP
+      description: Throttled to 10 requests per minute. Phone may be local (`010…`) or E.164 (`+2010…`).
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneRequest'
+            example:
+              phone: '01012345678'
+      responses:
+        '200':
+          description: OTP sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /register/phone/verify:
+    post:
+      tags: [Authentication]
+      operationId: verifyRegisterPhoneOtp
+      summary: Verify registration OTP
+      description: Throttled to 20 requests per minute. If registration payload was stored, the user is created and a token is returned.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneCodeRequest'
+            example:
+              phone: '01012345678'
+              code: '483920'
+      responses:
+        '200':
+          description: Phone verified, or user registered
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/MessageResponse'
+                  - $ref: '#/components/schemas/AuthTokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /forgot-password:
+    post:
+      tags: [Authentication]
+      operationId: forgotPassword
+      summary: Start forgot-password
+      description: Stores the new password and sends a WhatsApp OTP. Throttled to 10 requests per minute.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordRequest'
+            example:
+              phone: '01012345678'
+              password: newpass1
+      responses:
+        '200':
+          description: OTP sent, or password reset if already verified
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/OtpSentResponse'
+                  - $ref: '#/components/schemas/AuthTokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /forgot-password/verify:
+    post:
+      tags: [Authentication]
+      operationId: verifyForgotPassword
+      summary: Confirm forgot-password OTP
+      description: Applies the stored password, revokes existing tokens, and returns a new token. Throttled to 20 requests per minute.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PhoneCodeRequest'
+            example:
+              phone: '01012345678'
+              code: '483920'
+      responses:
+        '200':
+          description: Password reset or phone verified
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/AuthTokenResponse'
+                  - $ref: '#/components/schemas/MessageResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+  /login:
+    post:
+      tags: [Authentication]
+      operationId: login
+      summary: Log in
+      description: Accepts `email` or `phone` plus `password`. Optional `fcm_token` / `device_token` and `platform` register the device.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              phone: '01012345678'
+              password: secret12
+              fcm_token: fcm-device-token
+              platform: android
+      responses:
+        '200':
+          description: Logged in
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokenResponse'
+        '401':
+          $ref: '#/components/responses/AuthError'
+  /login/google:
+    post:
+      tags: [Authentication]
+      operationId: loginGoogle
+      summary: Google Sign-In
+      description: Verify a Google ID token from the mobile SDK and issue a Sanctum token. Creates the user if needed.
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoogleLoginRequest'
+            example:
+              id_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+      responses:
+        '200':
+          description: Authenticated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthTokenResponse'
+        '401':
+          $ref: '#/components/responses/AuthError'
+        '500':
+          description: Google auth not configured or verification failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthErrorBody'
+  /user/logout:
+    delete:
+      tags: [Authentication]
+      operationId: logoutUser
+      summary: Log out
+      description: Deletes the current Sanctum token. Optional `fcm_token` / `device_token` also removes that device. Requires `role=user`.
+      responses:
+        '200':
+          description: Logged out
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/device-token:
+    post:
+      tags: [Device Tokens]
+      operationId: storeDeviceToken
+      summary: Register FCM token
+      description: Any authenticated Sanctum user. Send `token` or `fcm_token`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceTokenRequest'
+            example:
+              token: fcm-device-token
+              platform: android
+      responses:
+        '200':
+          description: Registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '422':
+          $ref: '#/components/responses/ValidationErrorBag'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    delete:
+      tags: [Device Tokens]
+      operationId: destroyDeviceToken
+      summary: Remove FCM token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeviceTokenDeleteRequest'
+            example:
+              token: fcm-device-token
+      responses:
+        '200':
+          description: Removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '422':
+          $ref: '#/components/responses/ValidationErrorBag'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/home-names:
+    get:
+      tags: [Home Names]
+      operationId: listHomeNames
+      summary: List home names
+      description: Public. No authentication required.
+      security: []
+      responses:
+        '200':
+          description: Home names
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: array
+                    items:
+                      type: object
+  /user/homepage:
+    get:
+      tags: [User Homepage]
+      operationId: userHomepage
+      summary: User homepage
+      description: Returns ads. If the user is a broker (`role=brocker` on the model), also returns the broker record. Route middleware still requires `role=user`.
+      responses:
+        '200':
+          description: Homepage payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ads:
+                    type: array
+                    items:
+                      type: object
+                  brocker:
+                    nullable: true
+                    type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/profile:
+    get:
+      tags: [User Profile]
+      operationId: getUserProfile
+      summary: Get profile
+      responses:
+        '200':
+          description: Current user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/delete-profile:
+    delete:
+      tags: [User Profile]
+      operationId: deleteUserProfile
+      summary: Delete account
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/update-profile:
+    put:
+      tags: [User Profile]
+      operationId: updateUserProfile
+      summary: Update profile
+      description: All fields optional. Omitted fields keep their current values. `password` is hashed by the User model.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProfileRequest'
+            example:
+              first_name: Ahmed
+              last_name: Hassan
+              governce: Giza
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  user:
+                    $ref: '#/components/schemas/User'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/developers:
+    get:
+      tags: [Developers]
+      operationId: listUserDevelopers
+      summary: List developers
+      responses:
+        '200':
+          description: Developers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  developers:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/compounds/{developer_id}:
+    get:
+      tags: [Developers]
+      operationId: listUserCompounds
+      summary: List compounds for a developer
+      description: Includes units (`uptwons`) and unit images with full storage URLs.
+      parameters:
+        - name: developer_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Compounds
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  compounds:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/plans-payment-method:
+    get:
+      tags: [Plans & Payments]
+      operationId: listPlansAndPaymentMethods
+      summary: List plans and payment methods
+      responses:
+        '200':
+          description: Plans and payment methods
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  plans:
+                    type: array
+                    items:
+                      type: object
+                  payment_methods:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/make-payment:
+    post:
+      tags: [Plans & Payments]
+      operationId: makeUserPayment
+      summary: Submit a subscription payment
+      description: Creates a pending payment. `receipt` is stored as a string (typically a storage path).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MakePaymentRequest'
+            example:
+              plan_id: 1
+              payment_method_id: 1
+              receipt: payments/receipt.jpg
+      responses:
+        '200':
+          description: Payment submitted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '422':
+          $ref: '#/components/responses/MessageValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/contracts:
+    get:
+      tags: [Contracts]
+      operationId: listUserContracts
+      summary: List contracts
+      responses:
+        '200':
+          description: Contracts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contracts:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/contract/{id}:
+    get:
+      tags: [Contracts]
+      operationId: showUserContract
+      summary: Show a contract
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Contract
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  contract:
+                    type: object
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/contract/{id}/agree:
+    post:
+      tags: [Contracts]
+      operationId: agreeUserContract
+      summary: Agree to a contract
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Agreed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '400':
+          description: Already agreed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/contract/{id}/pdf:
+    get:
+      tags: [Contracts]
+      operationId: downloadUserContractPdf
+      summary: Download contract PDF
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: PDF file
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/agreed-contracts:
+    get:
+      tags: [Contracts]
+      operationId: listAgreedContracts
+      summary: List agreed contracts
+      responses:
+        '200':
+          description: Agreements with nested contract
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  agreedContracts:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /bot/start:
+    get:
+      tags: [Bot]
+      operationId: botStart
+      summary: Start bot options
+      description: Root-level bot messages (`parent_id` is null).
+      responses:
+        '200':
+          description: Options
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  options:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        text:
+                          type: string
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /bot/select/{id}:
+    get:
+      tags: [Bot]
+      operationId: botSelect
+      summary: Select a bot option
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Selected option, bot reply, and next options
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  text:
+                    type: string
+                  response:
+                    nullable: true
+                    type: string
+                  options:
+                    type: array
+                    items:
+                      type: object
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/send-training-request:
+    post:
+      tags: [Requests]
+      operationId: sendTrainingRequest
+      summary: Send a training request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingRequest'
+            example:
+              full_name: Ahmed Hassan
+              email: ahmed@example.com
+              phone: 1012345678
+              age: 28
+              qualification: Sales
+              governate: Cairo
+              experience_year: 2
+      responses:
+        '200':
+          description: Sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '422':
+          $ref: '#/components/responses/MessageValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/send-complaint:
+    post:
+      tags: [Requests]
+      operationId: sendComplaint
+      summary: Send a complaint
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplaintRequest'
+            example:
+              name: Ahmed
+              phone: 1012345678
+              message: Need help with my listing
+      responses:
+        '200':
+          description: Sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '422':
+          $ref: '#/components/responses/MessageValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/send-deal:
+    post:
+      tags: [User Deals]
+      operationId: sendUserDeal
+      summary: Submit a deal
+      description: Attaches the signed-in user's broker id when a broker record exists. `uptown_id` must belong to `compound_id`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendDealRequest'
+            example:
+              fullname: Buyer Name
+              nationality_id: '29801011234567'
+              phone: '01011112222'
+              email: buyer@example.com
+              developer_id: 1
+              compound_id: 1
+              uptown_type_id: 1
+              uptown_id: 10
+              number_of_units: 1
+      responses:
+        '200':
+          description: Deal created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  deal_id:
+                    type: integer
+        '422':
+          $ref: '#/components/responses/MessageValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/get-developer-ids:
+    get:
+      tags: [User Deals]
+      operationId: getDeveloperIds
+      summary: Developer id/name list
+      responses:
+        '200':
+          description: Developers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  developers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        name:
+                          type: string
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/get-compound-ids/{developer_id}:
+    get:
+      tags: [User Deals]
+      operationId: getCompoundIds
+      summary: Compound id/name list for a developer
+      parameters:
+        - name: developer_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Compounds
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  compounds:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        compound_name:
+                          type: string
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/GetCompounds-Commission:
+    get:
+      tags: [Commission]
+      operationId: getCompoundsCommission
+      summary: Compound commissions
+      responses:
+        '200':
+          description: Commissions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  compounds_commission:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        compound_name:
+                          type: string
+                        commission:
+                          nullable: true
+                          type: number
+                        developer_id:
+                          type: integer
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/add-lead:
+    post:
+      tags: [Leads]
+      operationId: addUserLead
+      summary: Add a lead
+      description: Requires the signed-in user to have a broker record. Validation errors return HTTP 401 with `errors`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddLeadRequest'
+            example:
+              lead_name: Sara Ali
+              lead_phone: '01099998888'
+              interested_place: New Cairo
+      responses:
+        '200':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '401':
+          description: Unauthenticated, or validation failed. This endpoint returns validation errors as HTTP 401 with an `errors` bag.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    properties:
+                      errors:
+                        type: object
+                  - type: object
+                    properties:
+                      message:
+                        type: string
+                        example: Unauthenticated.
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/brocker-leads:
+    get:
+      tags: [Profit]
+      operationId: brokerLeads
+      summary: Broker leads
+      responses:
+        '200':
+          description: Leads
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  leads:
+                    type: array
+                    items:
+                      type: object
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/deals-done:
+    get:
+      tags: [Profit]
+      operationId: dealsDone
+      summary: Approved deals with profit
+      responses:
+        '200':
+          description: Deals
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dealsDone:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                        lead:
+                          type: string
+                        unit:
+                          type: integer
+                        profit:
+                          type: number
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/profit-sales:
+    get:
+      tags: [Profit]
+      operationId: profitSales
+      summary: Broker profit totals
+      responses:
+        '200':
+          description: Profit
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  profit:
+                    nullable: true
+                    type: number
+                  dealer_profit:
+                    type: number
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/favourites:
+    get:
+      tags: [Favourites]
+      operationId: listFavourites
+      summary: List favourites
+      responses:
+        '200':
+          description: Favourite units and compounds
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  units:
+                    type: array
+                    items:
+                      type: object
+                  compounds:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/Unitfavourite/{id}:
+    put:
+      tags: [Favourites]
+      operationId: toggleUnitFavourite
+      summary: Favourite or unfavourite a unit
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Uptown / unit id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavouriteToggleRequest'
+            example:
+              favourite: 1
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ErrorsBag'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/Compoundfavourite/{id}:
+    put:
+      tags: [Favourites]
+      operationId: toggleCompoundFavourite
+      summary: Favourite or unfavourite a compound
+      description: Sets the compound `favourite` flag (0 or 1).
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavouriteToggleRequest'
+            example:
+              favourite: 1
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ErrorsBag'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/uptown-types:
+    get:
+      tags: [Units]
+      operationId: listUptownTypes
+      summary: Active unit types
+      responses:
+        '200':
+          description: Types
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uptownTypes:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/units:
+    get:
+      tags: [Units]
+      operationId: listUnits
+      summary: List all units
+      responses:
+        '200':
+          description: Units with developer, compound, type, and images
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  units:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/buy-units:
+    get:
+      tags: [Units]
+      operationId: listBuyUnits
+      summary: List buy units
+      responses:
+        '200':
+          description: Units where type is buy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  units:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/rent-units:
+    get:
+      tags: [Units]
+      operationId: listRentUnits
+      summary: List rent units
+      responses:
+        '200':
+          description: Units where type is rent
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  units:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/compounds-with-commission:
+    get:
+      tags: [Units]
+      operationId: listCompoundsWithCommission
+      summary: Compounds with commission
+      responses:
+        '200':
+          description: Compounds
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  compounds:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/sell-requests/sub-types/{uptown_type_id}:
+    get:
+      tags: [Sell Requests]
+      operationId: listSellRequestSubTypes
+      summary: Sub-types for a unit type
+      parameters:
+        - name: uptown_type_id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sub-types
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  data:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/sell-requests:
+    get:
+      tags: [Sell Requests]
+      operationId: listSellRequests
+      summary: List my sell requests
+      responses:
+        '200':
+          description: Sell requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusDataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [Sell Requests]
+      operationId: createSellRequest
+      summary: Create a sell request
+      description: JSON or multipart. Identity images, PDF, unit plan, and `images` are base64 strings. `video` is a multipart file (mp4/mov/avi/webm/3gp, max 100MB).
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StoreSellRequest'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreSellRequest'
+            example:
+              age: 30
+              identity_front_image: data:image/jpeg;base64,...
+              identity_back_image: data:image/jpeg;base64,...
+              country: Egypt
+              city: Cairo
+              area: New Cairo
+              detailed_pdf: data:application/pdf;base64,...
+              price: 3500000
+              installments: true
+              installments_years: 8
+              installments_years_left: 6
+              installments_total_price: 4200000
+              installments_price_per_year: 525000
+              uptown_type_id: 1
+              unit_sub_type_id: 1
+              finishing: finished
+              execution_date: immediately
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusMessageDataResponse'
+        '422':
+          $ref: '#/components/responses/StatusValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/sell-requests/{id}:
+    get:
+      tags: [Sell Requests]
+      operationId: showSellRequest
+      summary: Show a sell request
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Sell request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusDataResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/unit-sell-request/{id}/delivery-date:
+    put:
+      tags: [Sell Requests]
+      operationId: updateUnitDeliveryDate
+      summary: Update unit delivery date
+      description: "`id` is an uptown / unit id."
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeliveryDateRequest'
+            example:
+              delivery_date: '2027-06-01'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusMessageDataResponse'
+        '422':
+          $ref: '#/components/responses/StatusValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/apartment-installments:
+    get:
+      tags: [Apartment Installments]
+      operationId: listApartmentInstallments
+      summary: List my installment requests
+      responses:
+        '200':
+          description: Requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusDataResponse'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+    post:
+      tags: [Apartment Installments]
+      operationId: createApartmentInstallment
+      summary: Submit an installment request
+      description: Identity images are base64 strings. `deposit_percetage` is the field name (typo in the API).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreInstallmentRequest'
+            example:
+              age: 32
+              identity_front_image: data:image/jpeg;base64,...
+              identity_back_image: data:image/jpeg;base64,...
+              city: Cairo
+              area: Maadi
+              job_title: Engineer
+              monthly_income: 25000
+              years_of_installment: 10
+              deposit_percetage: 20
+              apartment_id: 5
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusMessageDataResponse'
+        '422':
+          $ref: '#/components/responses/StatusValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/policies:
+    get:
+      tags: [Policies]
+      operationId: listPolicies
+      summary: List policies
+      responses:
+        '200':
+          description: Policies
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  policies:
+                    type: array
+                    items:
+                      type: object
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /user/policies/{id}:
+    get:
+      tags: [Policies]
+      operationId: showPolicy
+      summary: Show a policy
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Policy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  policy:
+                    type: object
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+  /crm/lookups:
+    get:
+      tags: [CRM Lookups]
+      operationId: crmLookups
+      summary: CRM lookups
+      description: Requires authentication. Returns enum options plus uptown types, developers, compounds, and brokers.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/notifications:
+    get:
+      tags: [CRM Notifications]
+      operationId: crmNotifications
+      summary: List notifications
+      description: Latest 50 notifications plus unread count.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/notifications/read-all:
+    post:
+      tags: [CRM Notifications]
+      operationId: crmNotificationsReadAll
+      summary: Mark all notifications read
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/notifications/{notification}/read:
+    post:
+      tags: [CRM Notifications]
+      operationId: crmNotificationRead
+      summary: Mark one notification read
+      parameters:
+        - name: notification
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/contacts:
+    get:
+      tags: [CRM Contacts]
+      operationId: crmListContacts
+      summary: List contacts
+      description: Requires `viewAny` on Contact. Paginated 30 per page.
+      parameters:
+        - name: keyword
+          in: query
+          schema:
+            type: string
+          description: Search name, phone, phone_e164, email, whatsapp
+        - name: source
+          in: query
+          schema:
+            $ref: '#/components/schemas/ContactSource'
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Paginated list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+    post:
+      tags: [CRM Contacts]
+      operationId: crmCreateContact
+      summary: Create a contact
+      description: Requires create permission. Duplicate phones return 422. Set `add_to_pipeline` to open a ticket.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreContactRequest'
+            example:
+              name: Ahmed Hassan
+              phone: '01011112222'
+              source: walk_in
+              preferred_area: New Cairo
+              add_to_pipeline: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/contacts/{contact}:
+    get:
+      tags: [CRM Contacts]
+      operationId: crmShowContact
+      summary: Show a contact
+      description: Includes activities, tasks, tickets, deals, templates, and unit matches when permitted.
+      parameters:
+        - name: contact
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+    put:
+      tags: [CRM Contacts]
+      operationId: crmUpdateContact
+      summary: Update a contact
+      parameters:
+        - name: contact
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreContactRequest'
+            example:
+              name: Ahmed Hassan
+              phone: '01011112222'
+              source: walk_in
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/contacts/{contact}/pipeline:
+    post:
+      tags: [CRM Contacts]
+      operationId: crmContactAddToPipeline
+      summary: Add contact to pipeline
+      parameters:
+        - name: contact
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/contacts/{contact}/activities:
+    post:
+      tags: [CRM Contacts]
+      operationId: crmContactLogActivity
+      summary: Log an activity
+      parameters:
+        - name: contact
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LogActivityRequest'
+            example:
+              type: call
+              body: Left a voicemail
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/contacts/{contact}/messages:
+    post:
+      tags: [CRM Contacts]
+      operationId: crmContactSendMessage
+      summary: Log outbound message
+      description: Prepares an outbound message and returns a deep link for WhatsApp/SMS when applicable.
+      parameters:
+        - name: contact
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SendMessageRequest'
+            example:
+              channel: whatsapp
+              body: Hello, following up on the unit.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/contacts/{contact}/inbound:
+    post:
+      tags: [CRM Contacts]
+      operationId: crmContactLogInbound
+      summary: Log inbound message
+      parameters:
+        - name: contact
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InboundMessageRequest'
+            example:
+              channel: whatsapp
+              body: Interested in Saturday viewing
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/contacts/{contact}/matches:
+    get:
+      tags: [CRM Contacts]
+      operationId: crmContactMatches
+      summary: Unit matches for a contact
+      description: Requires `view-unit-matching` or `view-pipeline`.
+      parameters:
+        - name: contact
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/pipeline:
+    get:
+      tags: [CRM Pipeline]
+      operationId: crmPipeline
+      summary: Pipeline board
+      parameters:
+        - name: type
+          in: query
+          schema:
+            $ref: '#/components/schemas/PipelineTicketType'
+        - name: owner_id
+          in: query
+          schema:
+            type: integer
+        - name: stage
+          in: query
+          schema:
+            $ref: '#/components/schemas/PipelineStage'
+        - name: keyword
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/pipeline/{pipeline}:
+    get:
+      tags: [CRM Pipeline]
+      operationId: crmShowPipelineTicket
+      summary: Show a pipeline ticket
+      parameters:
+        - name: pipeline
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/pipeline/{pipeline}/stage:
+    post:
+      tags: [CRM Pipeline]
+      operationId: crmUpdatePipelineStage
+      summary: Change pipeline stage
+      description: Moving to `lost` requires `lost_reason`.
+      parameters:
+        - name: pipeline
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateStageRequest'
+            example:
+              stage: contacted
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/pipeline/{pipeline}/assign:
+    post:
+      tags: [CRM Pipeline]
+      operationId: crmAssignPipeline
+      summary: Assign or transfer broker
+      description: Requires `transfer` permission on the ticket.
+      parameters:
+        - name: pipeline
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignPipelineRequest'
+            example:
+              brocker_id: 1
+              expires_at: '2026-09-15T18:00:00'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/pipeline/{pipeline}/unit:
+    post:
+      tags: [CRM Pipeline]
+      operationId: crmAttachPipelineUnit
+      summary: Attach or clear inventory unit
+      description: Send `inventory_unit_id` to attach, or omit/null to clear.
+      parameters:
+        - name: pipeline
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AttachUnitRequest'
+            example:
+              inventory_unit_id: 12
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/pipeline/{pipeline}/unlock:
+    post:
+      tags: [CRM Pipeline]
+      operationId: crmUnlockPipeline
+      summary: Unlock a locked lead
+      parameters:
+        - name: pipeline
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/tasks:
+    get:
+      tags: [CRM Tasks]
+      operationId: crmListTasks
+      summary: List tasks
+      description: Requires `view-crm-tasks` or `view-pipeline`. Paginated 40 per page.
+      parameters:
+        - name: filter
+          in: query
+          schema:
+            type: string
+            enum: [open, overdue, today]
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Paginated list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+    post:
+      tags: [CRM Tasks]
+      operationId: crmCreateTask
+      summary: Create a task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreTaskRequest'
+            example:
+              contact_id: 1
+              type: call
+              title: Call back tomorrow
+              due_at: '2026-09-08T10:00:00+03:00'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/tasks/calendar:
+    get:
+      tags: [CRM Tasks]
+      operationId: crmTaskCalendar
+      summary: Task calendar events
+      parameters:
+        - name: start
+          in: query
+          schema:
+            type: string
+            format: date
+        - name: end
+          in: query
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/tasks/{crm_task}/complete:
+    post:
+      tags: [CRM Tasks]
+      operationId: crmCompleteTask
+      summary: Complete a task
+      parameters:
+        - name: crm_task
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/deals:
+    get:
+      tags: [CRM Deals]
+      operationId: crmListDeals
+      summary: List deals
+      description: Requires `view-deals`. Paginated 30 per page.
+      parameters:
+        - name: developer_id
+          in: query
+          schema:
+            type: integer
+        - name: compound_id
+          in: query
+          schema:
+            type: integer
+        - name: status
+          in: query
+          schema:
+            $ref: '#/components/schemas/DealStatus'
+        - name: keyword
+          in: query
+          schema:
+            type: string
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Paginated list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+    post:
+      tags: [CRM Deals]
+      operationId: crmCreateDeal
+      summary: Create a deal
+      description: Approving or reserving (`approved` / `semidone`) requires a unit (`inventory_unit_id` or `uptown_id`) and `brocker_id`.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreCrmDealRequest'
+            example:
+              fullname: Buyer Name
+              nationality_id: '29801011234567'
+              phone: '01011112222'
+              email: buyer@example.com
+              developer_id: 1
+              compound_id: 1
+              uptown_type_id: 1
+              number_of_units: 1
+              status: pending
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/deals/{deal}:
+    get:
+      tags: [CRM Deals]
+      operationId: crmShowDeal
+      summary: Show a deal
+      parameters:
+        - name: deal
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+    put:
+      tags: [CRM Deals]
+      operationId: crmUpdateDeal
+      summary: Update a deal
+      parameters:
+        - name: deal
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateCrmDealRequest'
+            example:
+              value: 4200000
+              probability: 60
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/deals/{deal}/hold:
+    post:
+      tags: [CRM Deals]
+      operationId: crmDealHold
+      summary: Place a unit hold
+      parameters:
+        - name: deal
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HoldRequest'
+            example:
+              type: reservation
+              expires_at: '2026-09-10T18:00:00'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/deals/{deal}/offers:
+    post:
+      tags: [CRM Deals]
+      operationId: crmDealOffer
+      summary: Issue an offer
+      parameters:
+        - name: deal
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfferRequest'
+            example:
+              list_price: 4000000
+              discount: 50000
+              payment_method: installment
+              down_payment_percent: 10
+              installment_count: 96
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/deals/{deal}/offers/{sale_offer}/accept:
+    post:
+      tags: [CRM Deals]
+      operationId: crmAcceptOffer
+      summary: Accept an offer
+      description: Issues a reservation letter.
+      parameters:
+        - name: deal
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: sale_offer
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/deals/{deal}/documents:
+    post:
+      tags: [CRM Deals]
+      operationId: crmIssueDocument
+      summary: Issue a sale document
+      parameters:
+        - name: deal
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentRequest'
+            example:
+              type: sale_contract
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/deals/{deal}/payment-plan:
+    post:
+      tags: [CRM Deals]
+      operationId: crmDealPaymentPlan
+      summary: Create buyer payment plan
+      description: Requires `view-deals` or `view-collections`.
+      parameters:
+        - name: deal
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/deals/{deal}/installments/{buyer_installment}/receipts:
+    post:
+      tags: [CRM Deals]
+      operationId: crmDealReceipt
+      summary: Record a deal installment receipt
+      parameters:
+        - name: deal
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: buyer_installment
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceiptRequest'
+            example:
+              amount: 150000
+              reference: REC-001
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/deals/{deal}/handover:
+    post:
+      tags: [CRM Deals]
+      operationId: crmDealHandover
+      summary: Mark unit handed over
+      description: Opens a snagging after-sales ticket.
+      parameters:
+        - name: deal
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/deals/{deal}/payout:
+    post:
+      tags: [CRM Deals]
+      operationId: crmDealPayout
+      summary: Update commission payout status
+      parameters:
+        - name: deal
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayoutRequest'
+            example:
+              payout_status: paid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/inventory:
+    get:
+      tags: [CRM Inventory]
+      operationId: crmListInventory
+      summary: List inventory units
+      description: Requires `view-inventory` or `view-uptowns`. Paginated 40 per page.
+      parameters:
+        - name: keyword
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            $ref: '#/components/schemas/InventoryStatus'
+        - name: compound_id
+          in: query
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Paginated list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+    post:
+      tags: [CRM Inventory]
+      operationId: crmCreateInventory
+      summary: Create an inventory unit
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreInventoryRequest'
+            example:
+              compound_id: 1
+              unit_number: A-1204
+              building: A
+              floor: '12'
+              list_price: 4100000
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/inventory/{inventory_unit}:
+    get:
+      tags: [CRM Inventory]
+      operationId: crmShowInventory
+      summary: Show an inventory unit
+      parameters:
+        - name: inventory_unit
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+    put:
+      tags: [CRM Inventory]
+      operationId: crmUpdateInventory
+      summary: Update an inventory unit
+      description: "`status` in the body is ignored; use hold/release/handover flows instead."
+      parameters:
+        - name: inventory_unit
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreInventoryRequest'
+            example:
+              compound_id: 1
+              unit_number: A-1204
+              list_price: 4200000
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/inventory/{inventory_unit}/release:
+    post:
+      tags: [CRM Inventory]
+      operationId: crmReleaseInventory
+      summary: Release hold
+      description: Requires `view-inventory` or `view-deals`.
+      parameters:
+        - name: inventory_unit
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/collections:
+    get:
+      tags: [CRM Collections]
+      operationId: crmListCollections
+      summary: List buyer installments
+      description: Default filter is overdue. Requires `view-collections` or `view-deals`.
+      parameters:
+        - name: filter
+          in: query
+          schema:
+            type: string
+            enum: [overdue, due, all]
+          description: Default overdue
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Paginated list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/collections/{buyer_installment}/receipts:
+    post:
+      tags: [CRM Collections]
+      operationId: crmCollectionReceipt
+      summary: Record a collection receipt
+      parameters:
+        - name: buyer_installment
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReceiptRequest'
+            example:
+              amount: 150000
+              reference: COL-001
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/reports:
+    get:
+      tags: [CRM Reports]
+      operationId: crmReports
+      summary: Sales reports
+      description: Requires `view-crm-reports` or `view-pipeline`.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/message-templates:
+    get:
+      tags: [CRM Message Templates]
+      operationId: crmListTemplates
+      summary: List message templates
+      description: Requires `view-message-templates` or `view-pipeline`.
+      responses:
+        '200':
+          description: Paginated list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+    post:
+      tags: [CRM Message Templates]
+      operationId: crmCreateTemplate
+      summary: Create a message template
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreTemplateRequest'
+            example:
+              name: Follow up
+              channel: whatsapp
+              body: 'Hello {{name}}, following up.'
+              is_active: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/message-templates/{message_template}:
+    get:
+      tags: [CRM Message Templates]
+      operationId: crmShowTemplate
+      summary: Show a message template
+      parameters:
+        - name: message_template
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+    put:
+      tags: [CRM Message Templates]
+      operationId: crmUpdateTemplate
+      summary: Update a message template
+      parameters:
+        - name: message_template
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreTemplateRequest'
+            example:
+              name: Follow up
+              channel: whatsapp
+              body: Hello again
+              is_active: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+    delete:
+      tags: [CRM Message Templates]
+      operationId: crmDeleteTemplate
+      summary: Delete a message template
+      parameters:
+        - name: message_template
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/broadcasts:
+    get:
+      tags: [CRM Broadcasts]
+      operationId: crmListBroadcasts
+      summary: List broadcasts
+      responses:
+        '200':
+          description: Paginated list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+    post:
+      tags: [CRM Broadcasts]
+      operationId: crmCreateBroadcast
+      summary: Send a broadcast
+      description: Logs outbound messages to matching contacts. Optional `stage` and `source` filter recipients.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreBroadcastRequest'
+            example:
+              title: September viewing
+              channel: whatsapp
+              body: Open house this Saturday.
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/broadcasts/{crm_broadcast}:
+    get:
+      tags: [CRM Broadcasts]
+      operationId: crmShowBroadcast
+      summary: Show a broadcast
+      parameters:
+        - name: crm_broadcast
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/after-sales:
+    get:
+      tags: [CRM After Sales]
+      operationId: crmListAfterSales
+      summary: List after-sales tickets
+      description: Requires `view-after-sales`. Developer-role users only see their developer.
+      parameters:
+        - name: status
+          in: query
+          schema:
+            $ref: '#/components/schemas/AfterSalesStatus'
+        - name: type
+          in: query
+          schema:
+            $ref: '#/components/schemas/AfterSalesType'
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Paginated list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+    post:
+      tags: [CRM After Sales]
+      operationId: crmCreateAfterSales
+      summary: Create an after-sales ticket
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreAfterSalesRequest'
+            example:
+              type: snagging
+              priority: high
+              title: Kitchen leak
+              deal_id: 1
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/after-sales/{after_sales_ticket}:
+    get:
+      tags: [CRM After Sales]
+      operationId: crmShowAfterSales
+      summary: Show an after-sales ticket
+      parameters:
+        - name: after_sales_ticket
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/after-sales/{after_sales_ticket}/status:
+    post:
+      tags: [CRM After Sales]
+      operationId: crmUpdateAfterSalesStatus
+      summary: Update after-sales status
+      parameters:
+        - name: after_sales_ticket
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAfterSalesStatusRequest'
+            example:
+              status: in_progress
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/agency:
+    get:
+      tags: [CRM Agency]
+      operationId: crmAgencyWorkspace
+      summary: Agency workspace
+      description: Requires `view-agency-workspace`. Agency users see their agency. Admins may pass `agency_id`.
+      parameters:
+        - name: agency_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/agency/matching:
+    get:
+      tags: [CRM Agency]
+      operationId: crmAgencyMatching
+      summary: Unit matching
+      description: Requires `view-unit-matching`. Pass `contact_id` to score units.
+      parameters:
+        - name: contact_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/marketing-agencies/{marketingAgency}/agents:
+    post:
+      tags: [CRM Agency]
+      operationId: crmCreateAgencyAgent
+      summary: Create an agency agent
+      description: Requires `view-marketing-agencies` or `view-agency-workspace`. Assigns Spatie role `agency-manager`.
+      parameters:
+        - name: marketingAgency
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreAgentRequest'
+            example:
+              first_name: Mona
+              last_name: Ali
+              phone: '01055556666'
+              email: mona@agency.test
+              password: secret12
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/developer-portal:
+    get:
+      tags: [CRM Developer Portal]
+      operationId: crmDeveloperPortal
+      summary: Developer portal stats
+      description: Requires `view-developer-portal`. Developer users see their developer. Admins may pass `developer_id`.
+      parameters:
+        - name: developer_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/developer-portal/inventory:
+    get:
+      tags: [CRM Developer Portal]
+      operationId: crmDeveloperInventory
+      summary: Developer inventory
+      parameters:
+        - name: developer_id
+          in: query
+          schema:
+            type: integer
+        - name: page
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Paginated list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmPaginated'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/developer-portal/brokers:
+    get:
+      tags: [CRM Developer Portal]
+      operationId: crmDeveloperBrokers
+      summary: Authorized brokers
+      parameters:
+        - name: developer_id
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+    post:
+      tags: [CRM Developer Portal]
+      operationId: crmSyncDeveloperBrokers
+      summary: Sync authorized brokers
+      description: Requires `manage-developer-brokers`.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SyncBrokersRequest'
+            example:
+              brocker_ids: [1, 2]
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+  /crm/developers/{developer}/portal-users:
+    post:
+      tags: [CRM Developer Portal]
+      operationId: crmCreatePortalUser
+      summary: Create a developer portal user
+      description: Allowed for `admin` / `SuperAdmin`, or a developer user belonging to this developer. Assigns Spatie role `developer-admin`.
+      parameters:
+        - name: developer
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreAgentRequest'
+            example:
+              first_name: Karim
+              last_name: Nabil
+              phone: '01077778888'
+              email: karim@developer.test
+              password: secret12
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmSuccess'
+        '401':
+          $ref: '#/components/responses/Unauthenticated'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '422':
+          $ref: '#/components/responses/CrmValidationError'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: Sanctum
+      description: Paste the `token` from login or register.
+
+  responses:
+    Unauthenticated:
+      description: Missing or invalid token
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Unauthenticated.
+    Forbidden:
+      description: Wrong role or missing permission
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Unauthorized action.
+    AuthError:
+      description: Validation or credential error from auth endpoints (often HTTP 401)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthErrorBody'
+    BadRequest:
+      description: Invalid phone or similar
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AuthErrorBody'
+    ValidationError:
+      description: Laravel validation error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LaravelValidationError'
+    ValidationErrorBag:
+      description: Validation failed with `error` key
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: object
+    MessageValidationError:
+      description: Validation failed with `message` key holding the error bag
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: object
+    ErrorsBag:
+      description: Validation failed with `errors` key
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              errors:
+                type: object
+    StatusValidationError:
+      description: Form-request JSON validation error
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: error
+              message:
+                type: string
+              errors:
+                type: object
+    CrmValidationError:
+      description: CRM validation failed
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+              errors:
+                type: object
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+
+  schemas:
+    AuthErrorBody:
+      type: object
+      properties:
+        error:
+          description: String or validation object
+          oneOf:
+            - type: string
+            - type: object
+        details:
+          type: string
+
+    MessageResponse:
+      type: object
+      properties:
+        message:
+          type: string
+
+    OtpSentResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: Verification code sent via WhatsApp
+        needs_verification:
+          type: boolean
+          example: true
+
+    AuthTokenResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        user:
+          $ref: '#/components/schemas/User'
+        token:
+          type: string
+          description: Sanctum plain-text token
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        first_name:
+          type: string
+          nullable: true
+        last_name:
+          type: string
+          nullable: true
+        email:
+          type: string
+          format: email
+          nullable: true
+        phone:
+          type: string
+          nullable: true
+        role:
+          type: string
+          example: user
+        age:
+          type: integer
+          nullable: true
+        qualification:
+          type: string
+          nullable: true
+        experience_year:
+          type: integer
+          nullable: true
+        governce:
+          type: string
+          nullable: true
+        status:
+          type: string
+          enum: [active, inactive]
+        full_name:
+          type: string
+
+    RegisterRequest:
+      type: object
+      required: [email, phone, password]
+      properties:
+        first_name:
+          type: string
+          description: Required unless `full_name` is sent
+        last_name:
+          type: string
+          description: Required unless `full_name` is sent
+        full_name:
+          type: string
+          description: Split into first/last when first_name or last_name is missing
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        password:
+          type: string
+          minLength: 6
+        age:
+          type: integer
+          nullable: true
+        qualification:
+          type: string
+          nullable: true
+        experience_year:
+          type: integer
+          nullable: true
+        governce:
+          type: string
+          nullable: true
+        fcm_token:
+          type: string
+        device_token:
+          type: string
+        platform:
+          type: string
+          enum: [android, ios, web]
+
+    PhoneRequest:
+      type: object
+      required: [phone]
+      properties:
+        phone:
+          type: string
+
+    PhoneCodeRequest:
+      type: object
+      required: [phone, code]
+      properties:
+        phone:
+          type: string
+        code:
+          type: string
+          minLength: 4
+          maxLength: 10
+          description: Alphanumeric OTP, 4–10 characters
+
+    ForgotPasswordRequest:
+      type: object
+      required: [phone, password]
+      properties:
+        phone:
+          type: string
+        password:
+          type: string
+          minLength: 6
+
+    LoginRequest:
+      type: object
+      required: [password]
+      properties:
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+        fcm_token:
+          type: string
+        device_token:
+          type: string
+        platform:
+          type: string
+
+    GoogleLoginRequest:
+      type: object
+      required: [id_token]
+      properties:
+        id_token:
+          type: string
+        fcm_token:
+          type: string
+        device_token:
+          type: string
+        platform:
+          type: string
+
+    DeviceTokenRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          maxLength: 512
+          description: Required unless `fcm_token` is sent
+        fcm_token:
+          type: string
+          maxLength: 512
+        platform:
+          type: string
+          enum: [android, ios, web]
+          nullable: true
+
+    DeviceTokenDeleteRequest:
+      type: object
+      properties:
+        token:
+          type: string
+        fcm_token:
+          type: string
+
+    UpdateProfileRequest:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        age:
+          type: integer
+        governce:
+          type: string
+        password:
+          type: string
+        experience_year:
+          type: integer
+        qualification:
+          type: string
+
+    MakePaymentRequest:
+      type: object
+      required: [plan_id, payment_method_id, receipt]
+      properties:
+        plan_id:
+          type: integer
+        payment_method_id:
+          type: integer
+        receipt:
+          type: string
+
+    TrainingRequest:
+      type: object
+      required: [full_name, email, phone, age]
+      properties:
+        full_name:
+          type: string
+        email:
+          type: string
+          format: email
+        phone:
+          type: integer
+        age:
+          type: integer
+        qualification:
+          type: string
+        governate:
+          type: string
+        experience_year:
+          type: integer
+
+    ComplaintRequest:
+      type: object
+      required: [name, phone, message]
+      properties:
+        name:
+          type: string
+        phone:
+          type: integer
+        message:
+          type: string
+
+    SendDealRequest:
+      type: object
+      required: [fullname, nationality_id, phone, email, developer_id, compound_id, uptown_type_id, number_of_units]
+      properties:
+        fullname:
+          type: string
+        nationality_id:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        developer_id:
+          type: integer
+        compound_id:
+          type: integer
+        uptown_type_id:
+          type: integer
+        uptown_id:
+          type: integer
+          nullable: true
+        number_of_units:
+          type: integer
+          minimum: 1
+
+    AddLeadRequest:
+      type: object
+      required: [lead_name, lead_phone]
+      properties:
+        lead_name:
+          type: string
+        lead_phone:
+          type: string
+        interested_place:
+          type: string
+          nullable: true
+
+    FavouriteToggleRequest:
+      type: object
+      required: [favourite]
+      properties:
+        favourite:
+          type: integer
+          minimum: 0
+          maximum: 1
+
+    StoreSellRequest:
+      type: object
+      required:
+        - age
+        - identity_front_image
+        - identity_back_image
+        - country
+        - city
+        - area
+        - detailed_pdf
+        - price
+        - installments
+        - uptown_type_id
+        - unit_sub_type_id
+        - finishing
+        - execution_date
+      properties:
+        age:
+          type: integer
+          minimum: 18
+        identity_front_image:
+          type: string
+          description: Base64 image
+        identity_back_image:
+          type: string
+          description: Base64 image
+        country:
+          type: string
+        city:
+          type: string
+        area:
+          type: string
+        developer_id:
+          type: integer
+          nullable: true
+        compound_id:
+          type: integer
+          nullable: true
+        detailed_pdf:
+          type: string
+          description: Base64 PDF
+        price:
+          type: number
+          minimum: 0
+        installments:
+          type: boolean
+        installments_years:
+          type: integer
+          minimum: 1
+          description: Required when installments is true
+        installments_years_left:
+          type: integer
+          minimum: 0
+        installments_total_price:
+          type: number
+          minimum: 0
+        installments_price_per_year:
+          type: number
+          minimum: 0
+        uptown_type_id:
+          type: integer
+        unit_sub_type_id:
+          type: integer
+        rooms_no:
+          type: integer
+          minimum: 1
+        bathrooms_no:
+          type: integer
+          minimum: 1
+        space:
+          type: number
+          minimum: 1
+        floor_no:
+          type: integer
+        garden_area:
+          type: boolean
+        garden_space:
+          type: number
+          minimum: 0
+        unit_plan:
+          type: string
+          description: Base64 image
+        video:
+          type: string
+          format: binary
+          description: Multipart video file, max 100MB
+        finishing:
+          type: string
+          enum: [finished, semi_finished, unfinished]
+        notes:
+          type: string
+          nullable: true
+        execution_date:
+          type: string
+          enum: [immediately, 6_months, 1_year, 2_years, 3_years, 4_years_or_more]
+        extra_data:
+          type: object
+          additionalProperties: true
+        images:
+          type: object
+          additionalProperties:
+            type: string
+          description: Map of key to base64 image
+
+    DeliveryDateRequest:
+      type: object
+      required: [delivery_date]
+      properties:
+        delivery_date:
+          type: string
+          format: date
+
+    StoreInstallmentRequest:
+      type: object
+      required: [age, identity_front_image, identity_back_image, city, area, job_title, monthly_income, years_of_installment, deposit_percetage]
+      properties:
+        apartment_id:
+          type: integer
+          nullable: true
+        age:
+          type: integer
+          minimum: 18
+        identity_front_image:
+          type: string
+        identity_back_image:
+          type: string
+        city:
+          type: string
+        area:
+          type: string
+        job_title:
+          type: string
+        monthly_income:
+          type: number
+          minimum: 0
+        monthly_installment:
+          type: number
+          minimum: 0
+        years_of_installment:
+          type: integer
+          enum: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+        deposit_percetage:
+          type: number
+          minimum: 5
+          maximum: 80
+          description: Field name is deposit_percetage (API spelling)
+
+    StatusDataResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data: {}
+
+    StatusMessageDataResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+        data: {}
+
+    CrmSuccess:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        message:
+          type: string
+        data: {}
+
+    CrmPaginated:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          type: array
+          items: {}
+        meta:
+          type: object
+          properties:
+            current_page:
+              type: integer
+            last_page:
+              type: integer
+            per_page:
+              type: integer
+            total:
+              type: integer
+
+    ContactSource:
+      type: string
+      enum: [facebook, website, broker, agency, walk_in, sell_request, mortgage, other]
+
+    PipelineStage:
+      type: string
+      enum: [new, contacted, qualified, viewing, negotiation, reserved, won, lost]
+
+    PipelineTicketType:
+      type: string
+      enum: [lead, sell_request, mortgage]
+
+    LostReason:
+      type: string
+      enum: [no_response, price, location, financing, competitor, not_qualified, other]
+
+    ActivityType:
+      type: string
+      enum: [note, call, whatsapp, sms, email, meeting, site_visit, stage_change, assignment, transfer, document, task, system]
+
+    CrmTaskType:
+      type: string
+      enum: [call, visit, send_offer, assignment_expiry, other]
+
+    MessageChannel:
+      type: string
+      enum: [whatsapp, sms, email]
+
+    DealStatus:
+      type: string
+      enum: [pending, approved, rejected, semidone]
+
+    HoldType:
+      type: string
+      enum: [eoi, reservation]
+
+    SaleDocumentType:
+      type: string
+      enum: [offer, reservation_letter, sale_contract]
+
+    CommissionPayoutStatus:
+      type: string
+      enum: [accrued, approved, paid]
+
+    InventoryStatus:
+      type: string
+      enum: [available, held, reserved, contracted, sold, handed_over]
+
+    AfterSalesType:
+      type: string
+      enum: [snagging, customer_care, warranty]
+
+    AfterSalesStatus:
+      type: string
+      enum: [open, scheduled, in_progress, resolved, closed]
+
+    StoreContactRequest:
+      type: object
+      required: [name, phone, source]
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        phone:
+          type: string
+          maxLength: 30
+        phone_secondary:
+          type: string
+          maxLength: 30
+        email:
+          type: string
+          format: email
+        whatsapp:
+          type: string
+          maxLength: 30
+        national_id:
+          type: string
+          maxLength: 50
+        source:
+          $ref: '#/components/schemas/ContactSource'
+        budget_min:
+          type: number
+          minimum: 0
+        budget_max:
+          type: number
+          minimum: 0
+        preferred_area:
+          type: string
+        uptown_type_id:
+          type: integer
+        intent:
+          type: string
+          enum: [buy, rent, sell, mortgage]
+        payment_preference:
+          type: string
+          enum: [cash, installment]
+        owner_id:
+          type: integer
+        notes:
+          type: string
+        tags:
+          description: Array of strings or a comma-separated string
+          oneOf:
+            - type: array
+              items:
+                type: string
+            - type: string
+        add_to_pipeline:
+          type: boolean
+          description: Only used on create
+
+    LogActivityRequest:
+      type: object
+      required: [type]
+      properties:
+        type:
+          $ref: '#/components/schemas/ActivityType'
+        body:
+          type: string
+        pipeline_ticket_id:
+          type: integer
+
+    SendMessageRequest:
+      type: object
+      required: [channel, body]
+      properties:
+        template_id:
+          type: integer
+        channel:
+          $ref: '#/components/schemas/MessageChannel'
+        body:
+          type: string
+        subject:
+          type: string
+
+    InboundMessageRequest:
+      type: object
+      required: [channel, body]
+      properties:
+        channel:
+          $ref: '#/components/schemas/MessageChannel'
+        body:
+          type: string
+        subject:
+          type: string
+
+    UpdateStageRequest:
+      type: object
+      required: [stage]
+      properties:
+        stage:
+          $ref: '#/components/schemas/PipelineStage'
+        lost_reason:
+          $ref: '#/components/schemas/LostReason'
+        lost_note:
+          type: string
+          maxLength: 1000
+
+    AssignPipelineRequest:
+      type: object
+      required: [brocker_id]
+      properties:
+        brocker_id:
+          type: integer
+        expires_at:
+          type: string
+          format: date-time
+
+    AttachUnitRequest:
+      type: object
+      properties:
+        inventory_unit_id:
+          type: integer
+          nullable: true
+
+    StoreTaskRequest:
+      type: object
+      required: [contact_id, type, title, due_at]
+      properties:
+        contact_id:
+          type: integer
+        pipeline_ticket_id:
+          type: integer
+        type:
+          $ref: '#/components/schemas/CrmTaskType'
+        title:
+          type: string
+          maxLength: 255
+        body:
+          type: string
+        due_at:
+          type: string
+          format: date-time
+        owner_id:
+          type: integer
+
+    StoreCrmDealRequest:
+      type: object
+      required: [fullname, nationality_id, phone, email, developer_id, compound_id, uptown_type_id, number_of_units]
+      properties:
+        fullname:
+          type: string
+          maxLength: 255
+        nationality_id:
+          type: string
+        phone:
+          type: string
+          maxLength: 11
+        email:
+          type: string
+          format: email
+        developer_id:
+          type: integer
+        compound_id:
+          type: integer
+        uptown_type_id:
+          type: integer
+        number_of_units:
+          type: number
+          minimum: 1
+        status:
+          $ref: '#/components/schemas/DealStatus'
+        lead_id:
+          type: integer
+        brocker_id:
+          type: integer
+        lister_broker_id:
+          type: integer
+        uptown_id:
+          type: integer
+        inventory_unit_id:
+          type: integer
+        pipeline_ticket_id:
+          type: integer
+        value:
+          type: number
+          minimum: 0
+        close_date:
+          type: string
+          format: date
+        probability:
+          type: integer
+          minimum: 0
+          maximum: 100
+
+    UpdateCrmDealRequest:
+      type: object
+      properties:
+        fullname:
+          type: string
+        nationality_id:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+          format: email
+        developer_id:
+          type: integer
+        compound_id:
+          type: integer
+        uptown_type_id:
+          type: integer
+        number_of_units:
+          type: number
+          minimum: 1
+        status:
+          $ref: '#/components/schemas/DealStatus'
+        lead_id:
+          type: integer
+        brocker_id:
+          type: integer
+        lister_broker_id:
+          type: integer
+        uptown_id:
+          type: integer
+        inventory_unit_id:
+          type: integer
+        value:
+          type: number
+          minimum: 0
+        close_date:
+          type: string
+          format: date
+        probability:
+          type: integer
+          minimum: 0
+          maximum: 100
+
+    HoldRequest:
+      type: object
+      required: [type]
+      properties:
+        type:
+          $ref: '#/components/schemas/HoldType'
+        expires_at:
+          type: string
+          format: date-time
+          description: Must be after now
+
+    OfferRequest:
+      type: object
+      required: [list_price, payment_method]
+      properties:
+        list_price:
+          type: number
+          minimum: 0
+        discount:
+          type: number
+          minimum: 0
+        payment_method:
+          type: string
+          enum: [cash, installment, mixed]
+        down_payment_percent:
+          type: integer
+          minimum: 0
+          maximum: 100
+        installment_count:
+          type: integer
+          minimum: 0
+          maximum: 120
+        valid_until:
+          type: string
+          format: date
+        notes:
+          type: string
+
+    DocumentRequest:
+      type: object
+      required: [type]
+      properties:
+        type:
+          $ref: '#/components/schemas/SaleDocumentType'
+
+    ReceiptRequest:
+      type: object
+      required: [amount]
+      properties:
+        amount:
+          type: number
+          minimum: 0.01
+        received_at:
+          type: string
+          format: date
+        reference:
+          type: string
+          maxLength: 100
+        notes:
+          type: string
+
+    PayoutRequest:
+      type: object
+      required: [payout_status]
+      properties:
+        payout_status:
+          $ref: '#/components/schemas/CommissionPayoutStatus'
+
+    StoreInventoryRequest:
+      type: object
+      required: [compound_id, unit_number]
+      properties:
+        uptown_id:
+          type: integer
+        developer_id:
+          type: integer
+        compound_id:
+          type: integer
+        phase:
+          type: string
+          maxLength: 40
+        building:
+          type: string
+          maxLength: 40
+        floor:
+          type: string
+          maxLength: 20
+        unit_number:
+          type: string
+          maxLength: 40
+        list_price:
+          type: number
+          minimum: 0
+        current_price:
+          type: number
+          minimum: 0
+
+    StoreTemplateRequest:
+      type: object
+      required: [name, channel, body]
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        channel:
+          $ref: '#/components/schemas/MessageChannel'
+        subject:
+          type: string
+          maxLength: 255
+        body:
+          type: string
+        is_active:
+          type: boolean
+
+    StoreBroadcastRequest:
+      type: object
+      required: [title, channel, body]
+      properties:
+        title:
+          type: string
+          maxLength: 255
+        channel:
+          $ref: '#/components/schemas/MessageChannel'
+        message_template_id:
+          type: integer
+        body:
+          type: string
+        stage:
+          $ref: '#/components/schemas/PipelineStage'
+        source:
+          type: string
+
+    StoreAfterSalesRequest:
+      type: object
+      required: [type, priority, title]
+      properties:
+        deal_id:
+          type: integer
+        inventory_unit_id:
+          type: integer
+        contact_id:
+          type: integer
+        type:
+          $ref: '#/components/schemas/AfterSalesType'
+        priority:
+          type: string
+          enum: [low, normal, high]
+        title:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+        assigned_to:
+          type: integer
+        scheduled_at:
+          type: string
+          format: date-time
+
+    UpdateAfterSalesStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          $ref: '#/components/schemas/AfterSalesStatus'
+        assigned_to:
+          type: integer
+        scheduled_at:
+          type: string
+          format: date-time
+
+    StoreAgentRequest:
+      type: object
+      required: [first_name, last_name, phone, password]
+      properties:
+        first_name:
+          type: string
+          maxLength: 255
+        last_name:
+          type: string
+          maxLength: 255
+        phone:
+          type: string
+          maxLength: 30
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 6
+
+    SyncBrokersRequest:
+      type: object
+      properties:
+        brocker_ids:
+          type: array
+          items:
+            type: integer
+
+    LaravelValidationError:
+      type: object
+      properties:
+        message:
+          type: string
+        errors:
+          type: object
