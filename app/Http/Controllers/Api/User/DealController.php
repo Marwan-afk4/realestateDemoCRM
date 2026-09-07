@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Brocker;
 use App\Models\Compound;
 use App\Models\Deal;
 use App\Models\Developer;
+use App\Models\Uptown;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,12 +23,25 @@ class DealController extends Controller
             'developer_id' => 'required|exists:developers,id',
             'compound_id' => 'required|exists:compounds,id',
             'uptown_type_id' => 'required|exists:uptown_types,id',
+            'uptown_id' => 'nullable|exists:uptowns,id',
             'number_of_units' => 'required|integer|min:1',
         ]);
 
         if ($validation->fails()) {
             return response()->json(['message' => $validation->errors()], 422);
         }
+
+        $uptown = $request->filled('uptown_id')
+            ? Uptown::find($request->uptown_id)
+            : null;
+
+        if ($uptown && (int) $uptown->compound_id !== (int) $request->compound_id) {
+            return response()->json([
+                'message' => ['uptown_id' => ['The selected unit does not belong to this compound.']],
+            ], 422);
+        }
+
+        $brockerId = Brocker::query()->where('user_id', $request->user()->id)->value('id');
 
         $new_deal = Deal::create([
             'fullname' => $request->fullname,
@@ -36,6 +51,8 @@ class DealController extends Controller
             'developer_id' => $request->developer_id,
             'compound_id' => $request->compound_id,
             'uptown_type_id' => $request->uptown_type_id,
+            'uptown_id' => $uptown?->id,
+            'brocker_id' => $brockerId,
             'number_of_units' => $request->number_of_units,
         ]);
 

@@ -37,6 +37,20 @@ use App\Http\Controllers\Api\User\UserProfitController;
 use App\Http\Controllers\Api\User\SellRequestController;
 use App\Http\Controllers\Api\User\BuyAppartmentInstallmentController;
 use App\Http\Controllers\Api\User\DeviceTokenController;
+use App\Http\Controllers\Api\Crm\AfterSalesController as CrmAfterSalesController;
+use App\Http\Controllers\Api\Crm\AgencyWorkspaceController as CrmAgencyWorkspaceController;
+use App\Http\Controllers\Api\Crm\CollectionController as CrmCollectionController;
+use App\Http\Controllers\Api\Crm\ContactController as CrmContactController;
+use App\Http\Controllers\Api\Crm\CrmBroadcastController as CrmBroadcastApiController;
+use App\Http\Controllers\Api\Crm\CrmTaskController as CrmTaskApiController;
+use App\Http\Controllers\Api\Crm\DealController as CrmDealController;
+use App\Http\Controllers\Api\Crm\DeveloperPortalController as CrmDeveloperPortalController;
+use App\Http\Controllers\Api\Crm\InventoryUnitController as CrmInventoryUnitController;
+use App\Http\Controllers\Api\Crm\LookupController as CrmLookupController;
+use App\Http\Controllers\Api\Crm\MessageTemplateController as CrmMessageTemplateController;
+use App\Http\Controllers\Api\Crm\NotificationController as CrmNotificationController;
+use App\Http\Controllers\Api\Crm\PipelineController as CrmPipelineController;
+use App\Http\Controllers\Api\Crm\SalesReportController as CrmSalesReportController;
 use App\Http\Controllers\UptownTypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -347,3 +361,82 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::get('/user/policies', [PolicyController::class, 'index']);
     Route::get('/user/policies/{id}', [PolicyController::class, 'show']);
     });
+
+Route::middleware('auth:sanctum')->prefix('crm')->group(function () {
+    Route::get('/lookups', [CrmLookupController::class, 'index']);
+
+    Route::get('/notifications', [CrmNotificationController::class, 'index']);
+    Route::post('/notifications/read-all', [CrmNotificationController::class, 'markAllRead']);
+    Route::post('/notifications/{notification}/read', [CrmNotificationController::class, 'markRead']);
+
+    Route::get('/contacts', [CrmContactController::class, 'index']);
+    Route::post('/contacts', [CrmContactController::class, 'store']);
+    Route::get('/contacts/{contact}', [CrmContactController::class, 'show']);
+    Route::put('/contacts/{contact}', [CrmContactController::class, 'update']);
+    Route::post('/contacts/{contact}/pipeline', [CrmContactController::class, 'addToPipeline']);
+    Route::post('/contacts/{contact}/activities', [CrmContactController::class, 'logActivity']);
+    Route::post('/contacts/{contact}/messages', [CrmContactController::class, 'sendMessage']);
+    Route::post('/contacts/{contact}/inbound', [CrmContactController::class, 'logInbound']);
+    Route::get('/contacts/{contact}/matches', [CrmContactController::class, 'matches']);
+
+    Route::get('/pipeline', [CrmPipelineController::class, 'index']);
+    Route::get('/pipeline/{pipeline}', [CrmPipelineController::class, 'show']);
+    Route::post('/pipeline/{pipeline}/stage', [CrmPipelineController::class, 'updateStage']);
+    Route::post('/pipeline/{pipeline}/assign', [CrmPipelineController::class, 'assign']);
+    Route::post('/pipeline/{pipeline}/unit', [CrmPipelineController::class, 'attachUnit']);
+    Route::post('/pipeline/{pipeline}/unlock', [CrmPipelineController::class, 'unlock']);
+
+    Route::get('/tasks', [CrmTaskApiController::class, 'index']);
+    Route::get('/tasks/calendar', [CrmTaskApiController::class, 'calendarEvents']);
+    Route::post('/tasks', [CrmTaskApiController::class, 'store']);
+    Route::post('/tasks/{crm_task}/complete', [CrmTaskApiController::class, 'complete']);
+
+    Route::get('/deals', [CrmDealController::class, 'index']);
+    Route::post('/deals', [CrmDealController::class, 'store']);
+    Route::get('/deals/{deal}', [CrmDealController::class, 'show']);
+    Route::put('/deals/{deal}', [CrmDealController::class, 'update']);
+    Route::post('/deals/{deal}/hold', [CrmDealController::class, 'hold']);
+    Route::post('/deals/{deal}/offers', [CrmDealController::class, 'offer']);
+    Route::post('/deals/{deal}/offers/{sale_offer}/accept', [CrmDealController::class, 'acceptOffer']);
+    Route::post('/deals/{deal}/documents', [CrmDealController::class, 'document']);
+    Route::post('/deals/{deal}/payment-plan', [CrmDealController::class, 'paymentPlan']);
+    Route::post('/deals/{deal}/installments/{buyer_installment}/receipts', [CrmDealController::class, 'receipt']);
+    Route::post('/deals/{deal}/handover', [CrmDealController::class, 'handover']);
+    Route::post('/deals/{deal}/payout', [CrmDealController::class, 'payout']);
+
+    Route::get('/inventory', [CrmInventoryUnitController::class, 'index']);
+    Route::post('/inventory', [CrmInventoryUnitController::class, 'store']);
+    Route::get('/inventory/{inventory_unit}', [CrmInventoryUnitController::class, 'show']);
+    Route::put('/inventory/{inventory_unit}', [CrmInventoryUnitController::class, 'update']);
+    Route::post('/inventory/{inventory_unit}/release', [CrmInventoryUnitController::class, 'release']);
+
+    Route::get('/collections', [CrmCollectionController::class, 'index']);
+    Route::post('/collections/{buyer_installment}/receipts', [CrmCollectionController::class, 'receipt']);
+
+    Route::get('/reports', [CrmSalesReportController::class, 'index']);
+
+    Route::get('/message-templates', [CrmMessageTemplateController::class, 'index']);
+    Route::post('/message-templates', [CrmMessageTemplateController::class, 'store']);
+    Route::get('/message-templates/{message_template}', [CrmMessageTemplateController::class, 'show']);
+    Route::put('/message-templates/{message_template}', [CrmMessageTemplateController::class, 'update']);
+    Route::delete('/message-templates/{message_template}', [CrmMessageTemplateController::class, 'destroy']);
+
+    Route::get('/broadcasts', [CrmBroadcastApiController::class, 'index']);
+    Route::post('/broadcasts', [CrmBroadcastApiController::class, 'store']);
+    Route::get('/broadcasts/{crm_broadcast}', [CrmBroadcastApiController::class, 'show']);
+
+    Route::get('/after-sales', [CrmAfterSalesController::class, 'index']);
+    Route::post('/after-sales', [CrmAfterSalesController::class, 'store']);
+    Route::get('/after-sales/{after_sales_ticket}', [CrmAfterSalesController::class, 'show']);
+    Route::post('/after-sales/{after_sales_ticket}/status', [CrmAfterSalesController::class, 'updateStatus']);
+
+    Route::get('/agency', [CrmAgencyWorkspaceController::class, 'index']);
+    Route::get('/agency/matching', [CrmAgencyWorkspaceController::class, 'matching']);
+    Route::post('/marketing-agencies/{marketingAgency}/agents', [CrmAgencyWorkspaceController::class, 'storeAgent']);
+
+    Route::get('/developer-portal', [CrmDeveloperPortalController::class, 'index']);
+    Route::get('/developer-portal/inventory', [CrmDeveloperPortalController::class, 'inventory']);
+    Route::get('/developer-portal/brokers', [CrmDeveloperPortalController::class, 'brokers']);
+    Route::post('/developer-portal/brokers', [CrmDeveloperPortalController::class, 'syncBrokers']);
+    Route::post('/developers/{developer}/portal-users', [CrmDeveloperPortalController::class, 'storePortalUser']);
+});

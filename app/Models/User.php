@@ -10,6 +10,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -148,5 +150,38 @@ class User extends Authenticatable
     public function assignedAfterSalesTickets()
     {
         return $this->hasMany(AfterSalesTicket::class, 'assigned_to');
+    }
+
+    public function ensureDefaultRole(): void
+    {
+        $roleName = match ($this->role) {
+            'SuperAdmin' => 'super-admin',
+            'brocker', 'user' => 'broker',
+            'agency' => 'agency-manager',
+            'developer' => 'developer-admin',
+            default => null,
+        };
+
+        if (! $roleName) {
+            return;
+        }
+
+        $role = Role::firstOrCreate(['name' => $roleName, 'guard_name' => 'web']);
+
+        if ($roleName === 'broker' && $role->permissions()->count() === 0) {
+            $permissionNames = [
+                'view-contacts', 'view-pipeline', 'view-team-pipeline', 'view-crm-tasks',
+                'view-crm-reports', 'view-deals', 'view-inventory', 'view-collections',
+                'view-leads', 'view-unit-matching',
+            ];
+            foreach ($permissionNames as $name) {
+                Permission::firstOrCreate(['name' => $name, 'guard_name' => 'web']);
+            }
+            $role->syncPermissions($permissionNames);
+        }
+
+        if (! $this->hasRole($role)) {
+            $this->assignRole($role);
+        }
     }
 }

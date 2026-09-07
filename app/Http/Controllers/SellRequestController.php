@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\SellRequestExecutionDate;
+use App\Models\Compound;
+use App\Models\Developer;
 use App\Models\SellRequest;
+use App\Models\UnitSubType;
 use App\Models\Uptown;
+use App\Models\UptownType;
 use App\Models\UnitsImage;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class SellRequestController extends Controller
 {
@@ -34,6 +41,64 @@ class SellRequestController extends Controller
             ->paginate(30);
 
         return view('sell-requests.index', compact('sellRequests', 'sortField', 'sortOrder'));
+    }
+
+    public function create()
+    {
+        return view('sell-requests.create', $this->formData());
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'age' => 'required|integer|min:18',
+            'identity_front_image' => 'required|image|max:5120',
+            'identity_back_image' => 'required|image|max:5120',
+            'country' => 'required|string|max:255',
+            'city' => 'required|string|max:255',
+            'area' => 'required|string|max:255',
+            'developer_id' => 'nullable|exists:developers,id',
+            'compound_id' => 'nullable|exists:compounds,id',
+            'detailed_pdf' => 'required|file|mimes:pdf|max:10240',
+            'price' => 'required|numeric|min:0',
+            'installments' => 'required|boolean',
+            'installments_years' => 'required_if:installments,1,true|nullable|integer|min:1',
+            'installments_years_left' => 'required_if:installments,1,true|nullable|integer|min:0',
+            'installments_total_price' => 'required_if:installments,1,true|nullable|numeric|min:0',
+            'installments_price_per_year' => 'required_if:installments,1,true|nullable|numeric|min:0',
+            'uptown_type_id' => 'required|exists:uptown_types,id',
+            'unit_sub_type_id' => 'required|exists:unit_sub_types,id',
+            'rooms_no' => 'nullable|integer|min:1',
+            'bathrooms_no' => 'nullable|integer|min:1',
+            'space' => 'nullable|numeric|min:1',
+            'floor_no' => 'nullable|integer',
+            'garden_area' => 'nullable|boolean',
+            'garden_space' => 'nullable|numeric|min:0',
+            'finishing' => 'required|in:finished,semi_finished,unfinished',
+            'notes' => 'nullable|string',
+            'execution_date' => ['required', Rule::enum(SellRequestExecutionDate::class)],
+        ]);
+
+        $data['identity_front_image'] = $request->file('identity_front_image')->store('sell_requests/identity', 'public');
+        $data['identity_back_image'] = $request->file('identity_back_image')->store('sell_requests/identity', 'public');
+        $data['detailed_pdf'] = $request->file('detailed_pdf')->store('sell_requests/pdfs', 'public');
+        $data['installments'] = $request->boolean('installments');
+        $data['garden_area'] = $request->boolean('garden_area');
+        $data['status'] = 'pending';
+        $data['visibility'] = 'private';
+
+        if (! $data['installments']) {
+            $data['installments_years'] = null;
+            $data['installments_years_left'] = null;
+            $data['installments_total_price'] = null;
+            $data['installments_price_per_year'] = null;
+        }
+
+        $sellRequest = SellRequest::create($data);
+
+        return redirect()->route('sell-requests.show', $sellRequest)
+            ->with('success', __('Unit request created successfully'));
     }
 
     /**
@@ -132,5 +197,28 @@ class SellRequestController extends Controller
     {
         $sellRequest->delete();
         return redirect()->route('sell-requests.index')->with('success', __('Sell request deleted successfully'));
+    }
+
+    private function formData(): array
+    {
+        $nameColumn = app()->getLocale() === 'ar' ? 'name_ar' : 'name_en';
+
+        return [
+            'users' => User::query()->orderBy('first_name')->get()
+                ->mapWithKeys(fn (User $user) => [$user->id => trim($user->full_name).' ('.$user->phone.')'])
+                ->all(),
+            'developers' => Developer::orderBy($nameColumn)->pluck($nameColumn, 'id')->all(),
+            'compounds' => Compound::orderBy('compound_name')->pluck('compound_name', 'id')->all(),
+            'uptownTypes' => UptownType::orderBy($nameColumn)->pluck($nameColumn, 'id')->all(),
+            'unitSubTypes' => UnitSubType::orderBy($nameColumn)->get()
+                ->mapWithKeys(fn (UnitSubType $type) => [$type->id => $type->{$nameColumn} ?: $type->name_en])
+                ->all(),
+            'executionDates' => SellRequestExecutionDate::labels(),
+            'finishings' => [
+                'finished' => __('Finished'),
+                'semi_finished' => __('Semi finished'),
+                'unfinished' => __('Unfinished'),
+            ],
+        ];
     }
 }

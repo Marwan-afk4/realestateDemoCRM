@@ -86,6 +86,8 @@ class AuthController extends Controller
             return response()->json(['error' => 'The provided credentials are incorrect'], 401);
         }
 
+        $user->ensureDefaultRole();
+
         $token = $user->createToken('auth_token')->plainTextToken;
         DeviceToken::syncFromRequest($user, $request);
 
@@ -287,6 +289,7 @@ class AuthController extends Controller
     private function createdRegistration(array $payload)
     {
         $user = User::create($payload);
+        $user->ensureDefaultRole();
         $token = $user->createToken('auth_token')->plainTextToken;
         DeviceToken::syncFromRequest($user, request());
 
@@ -370,6 +373,8 @@ class AuthController extends Controller
                     $user->update($updates);
                 }
             }
+
+            $user->ensureDefaultRole();
 
             $token = $user->createToken('auth_token')->plainTextToken;
             DeviceToken::syncFromRequest($user, $request);

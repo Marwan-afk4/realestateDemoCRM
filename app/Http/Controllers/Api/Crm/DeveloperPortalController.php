@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Crm;
 
 use App\Enums\InventoryStatus;
+use App\Http\Controllers\Api\Crm\Concerns\RespondsJson;
+use App\Http\Controllers\Controller;
 use App\Models\Brocker;
 use App\Models\Compound;
 use App\Models\Deal;
@@ -15,6 +17,8 @@ use Spatie\Permission\Models\Role;
 
 class DeveloperPortalController extends Controller
 {
+    use RespondsJson;
+
     public function __construct(private DeveloperVisibility $visibility)
     {
     }
@@ -36,7 +40,10 @@ class DeveloperPortalController extends Controller
             'brokers' => $developer->authorizedBrokers()->count(),
         ];
 
-        return view('developer-portal.index', compact('developer', 'stats'));
+        return $this->ok([
+            'developer' => $developer->only(['id', 'name_en', 'name_ar']),
+            'stats' => $stats,
+        ]);
     }
 
     public function inventory(Request $request)
@@ -51,7 +58,18 @@ class DeveloperPortalController extends Controller
             $request->user(),
         )->orderBy('code')->paginate(40);
 
-        return view('developer-portal.inventory', compact('developer', 'units'));
+        return $this->paginated($units, fn (InventoryUnit $unit) => [
+            'id' => $unit->id,
+            'code' => $unit->code,
+            'status' => $unit->status?->value,
+            'status_label' => $unit->status?->label(),
+            'price' => $unit->price(),
+            'compound' => $unit->compound?->compound_name,
+            'active_deal' => $unit->activeDeal ? [
+                'id' => $unit->activeDeal->id,
+                'contact' => $unit->activeDeal->contact?->name,
+            ] : null,
+        ]);
     }
 
     public function brokers(Request $request)
@@ -61,10 +79,19 @@ class DeveloperPortalController extends Controller
         $developer = $this->resolveDeveloper($request);
         abort_unless($developer, 404);
 
-        $authorized = $developer->authorizedBrokers()->with('user')->get()->pluck('id')->all();
-        $brokers = Brocker::with('user')->get()->mapWithKeys(fn ($b) => [$b->id => $b->user?->full_name ?? '#'.$b->id])->toArray();
+        $authorized = $developer->authorizedBrokers()->with('user')->get()->map(fn (Brocker $broker) => [
+            'id' => $broker->id,
+            'name' => $broker->user?->full_name ?? '#'.$broker->id,
+        ]);
 
-        return view('developer-portal.brokers', compact('developer', 'authorized', 'brokers'));
+        return $this->ok([
+            'developer' => $developer->only(['id', 'name_en', 'name_ar']),
+            'authorized' => $authorized,
+            'brokers' => Brocker::with('user')->get()->map(fn (Brocker $broker) => [
+                'id' => $broker->id,
+                'name' => $broker->user?->full_name ?? '#'.$broker->id,
+            ]),
+        ]);
     }
 
     public function syncBrokers(Request $request)
@@ -81,12 +108,12 @@ class DeveloperPortalController extends Controller
 
         $this->visibility->syncAuthorizedBrokers($developer, $data['brocker_ids'] ?? []);
 
-        return back()->with('success', __('Authorized brokers updated.'));
+        return $this->ok(null, __('Authorized brokers updated.'));
     }
 
     public function storePortalUser(Request $request, Developer $developer)
     {
-        abort_unless(in_array($request->user()->role, ['admin', 'SuperAdmin'], true) || $request->user()->developer_id === $developer->id, 403);
+        abort_unless($request->user()->role === 'admin' || $request->user()->role === 'SuperAdmin' || ($request->user()->developer_id === $developer->id), 403);
 
         $data = $request->validate([
             'first_name' => 'required|string|max:255',
@@ -104,7 +131,7 @@ class DeveloperPortalController extends Controller
 
         $user->assignRole(Role::findByName('developer-admin', 'web'));
 
-        return back()->with('success', __('Developer portal user created.'));
+        return $this->created($this->userSummary($user), __('Developer portal user created.'));
     }
 
     private function resolveDeveloper(Request $request): ?Developer
@@ -113,7 +140,7 @@ class DeveloperPortalController extends Controller
             return Developer::query()->find($request->user()->developer_id);
         }
 
-        if ($request->user()->role === 'admin') {
+        if (in_array($request->user()->role, ['admin', 'SuperAdmin'], true)) {
             $id = $request->get('developer_id', Developer::query()->orderBy('name_en')->value('id'));
 
             return $id ? Developer::query()->find($id) : null;

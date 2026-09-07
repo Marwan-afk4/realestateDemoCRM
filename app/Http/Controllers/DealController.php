@@ -13,7 +13,7 @@ use App\Models\PipelineTicket;
 use App\Models\Uptown;
 use App\Models\UptownType;
 use App\Services\Crm\DealCloser;
-use App\Services\Crm\InventoryService;
+use App\Services\Crm\DealFormService;
 use App\Services\Crm\SalesVisibility;
 
 
@@ -107,7 +107,7 @@ class DealController extends Controller
 
     public function store(StoreDealRequest $request)
     {
-        $data = $this->attachInventory($this->mergeTicket($request->validated()));
+        $data = app(DealFormService::class)->prepare($request->validated());
         $deal = Deal::create($data);
         $status = DealStatuses::tryFrom($request->input('status', 'pending')) ?? DealStatuses::Pending;
         if (in_array($status, [DealStatuses::Approved, DealStatuses::SemiDone, DealStatuses::Rejected], true)) {
@@ -140,7 +140,7 @@ class DealController extends Controller
 
     public function update(UpdateDealRequest $request, Deal $deal)
     {
-        $data = $this->attachInventory($this->mergeTicket($request->validated(), $deal), $deal);
+        $data = app(DealFormService::class)->prepare($request->validated(), $deal);
         $newStatus = isset($data['status']) ? DealStatuses::tryFrom($data['status']) : null;
         unset($data['status']);
         $deal->update($data);
@@ -152,78 +152,6 @@ class DealController extends Controller
         }
 
         return redirect()->route('deals.index')->with('success', 'Updated successfully.');
-    }
-
-    private function mergeTicket(array $data, ?Deal $deal = null): array
-    {
-        if (! empty($data['pipeline_ticket_id'])) {
-            $ticket = PipelineTicket::query()->with('contact')->find($data['pipeline_ticket_id']);
-            if ($ticket) {
-                $data['contact_id'] = $data['contact_id'] ?? $ticket->contact_id;
-                $data['brocker_id'] = $data['brocker_id'] ?? $ticket->brocker_id;
-                $data['inventory_unit_id'] = $data['inventory_unit_id'] ?? $ticket->inventory_unit_id;
-                if (empty($data['lead_id']) && $ticket->ticketable_type === Lead::class) {
-                    $data['lead_id'] = $ticket->ticketable_id;
-                }
-            }
-        }
-
-        return $this->mergeListerBroker($data, $deal);
-    }
-
-    private function mergeListerBroker(array $data, ?Deal $deal = null): array
-    {
-        if (! empty($data['lister_broker_id']) || empty($data['brocker_id'])) {
-            return $data;
-        }
-
-        $inventoryUnitId = $data['inventory_unit_id'] ?? $deal?->inventory_unit_id;
-        if (! $inventoryUnitId) {
-            return $data;
-        }
-
-        $listerBrokerId = PipelineTicket::query()
-            ->where('inventory_unit_id', $inventoryUnitId)
-            ->whereNotNull('brocker_id')
-            ->where('brocker_id', '!=', $data['brocker_id'])
-            ->orderBy('id')
-            ->value('brocker_id');
-
-        if ($listerBrokerId) {
-            $data['lister_broker_id'] = $listerBrokerId;
-        }
-
-        return $data;
-    }
-
-    private function attachInventory(array $data, ?Deal $deal = null): array
-    {
-        if (empty($data['inventory_unit_id']) && ! empty($data['uptown_id'])) {
-            $uptown = Uptown::query()->find($data['uptown_id']);
-            if ($uptown) {
-                $unit = app(InventoryService::class)->ensureForUptown($uptown);
-                $data['inventory_unit_id'] = $unit->id;
-            }
-        }
-
-        if (! empty($data['inventory_unit_id'])) {
-            $unit = InventoryUnit::query()->find($data['inventory_unit_id']);
-            if ($unit) {
-                if ($unit->status->blocksOtherSale() && $unit->active_deal_id !== $deal?->id) {
-                    throw \Illuminate\Validation\ValidationException::withMessages([
-                        'inventory_unit_id' => __('This unit is already held, reserved, or sold.'),
-                    ]);
-                }
-                $data['uptown_id'] = $data['uptown_id'] ?? $unit->uptown_id;
-                $data['compound_id'] = $data['compound_id'] ?? $unit->compound_id;
-                $data['developer_id'] = $data['developer_id'] ?? $unit->developer_id;
-                if (empty($data['value'])) {
-                    $data['value'] = $unit->price();
-                }
-            }
-        }
-
-        return $data;
     }
 
     private function inventoryOptions(?Deal $deal = null): array

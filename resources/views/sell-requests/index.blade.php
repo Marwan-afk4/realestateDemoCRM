@@ -6,7 +6,8 @@
 @section('content')
 <div class="container-fluid">
 	<h1 class="mb-3">{{__('Units Requests')}}</h1>
-	<div class="mb-3 d-flex justify-content-end align-items-center">
+	<div class="mb-3 d-flex justify-content-between align-items-center">
+		<a href="{{ route('sell-requests.create') }}" class="btn btn-primary btn-sm me-1">{{ __('Create Unit Request') }} <i class="fa fa-plus"></i></a>
 		<div class="search-wrapper">
 			<form action="{{ route(Route::currentRouteName(), [], false) }}" method="GET">
 				<div class="input-group">

@@ -1,20 +1,23 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api\Crm;
 
+use App\Enums\PipelineStage;
+use App\Http\Controllers\Api\Crm\Concerns\RespondsJson;
+use App\Http\Controllers\Controller;
 use App\Models\Lead;
 use App\Models\MarketingAgency;
 use App\Models\PipelineTicket;
 use App\Models\User;
-use App\Enums\PipelineStage;
 use App\Services\Crm\AgencyVisibility;
 use App\Services\Crm\UnitMatchingService;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
 
 class AgencyWorkspaceController extends Controller
 {
+    use RespondsJson;
+
     public function __construct(
         private AgencyVisibility $visibility,
         private UnitMatchingService $matching,
@@ -38,10 +41,25 @@ class AgencyWorkspaceController extends Controller
                 ->count(),
         ];
 
-        $recentLeads = (clone $leadQuery)->with(['brocker.user', 'ticket'])->latest()->limit(10)->get();
-        $agents = User::query()->where('marketing_agency_id', $agency->id)->where('role', 'agency')->orderBy('first_name')->get();
+        $recentLeads = (clone $leadQuery)->with(['brocker.user', 'ticket'])->latest()->limit(10)->get()
+            ->map(fn (Lead $lead) => [
+                'id' => $lead->id,
+                'name' => $lead->lead_name,
+                'phone' => $lead->lead_phone,
+                'status' => $lead->status?->value ?? $lead->status,
+                'broker' => $lead->brocker?->user?->full_name,
+                'ticket_id' => $lead->ticket?->id,
+            ]);
 
-        return view('agency.workspace', compact('agency', 'stats', 'recentLeads', 'agents'));
+        $agents = User::query()->where('marketing_agency_id', $agency->id)->where('role', 'agency')->orderBy('first_name')->get()
+            ->map(fn (User $user) => $this->userSummary($user));
+
+        return $this->ok([
+            'agency' => $agency->only(['id', 'name', 'email', 'phone']),
+            'stats' => $stats,
+            'recent_leads' => $recentLeads,
+            'agents' => $agents,
+        ]);
     }
 
     public function matching(Request $request)
@@ -56,18 +74,19 @@ class AgencyWorkspaceController extends Controller
             $matches = $this->matching->matchForContact($contact);
         }
 
-        $contacts = \App\Models\Contact::query()
-            ->when($request->user()->role === 'agency', function ($q) use ($request) {
-                $agencyId = $request->user()->marketing_agency_id;
-                if ($agencyId) {
-                    $q->whereHas('leads', fn ($leads) => $leads->where('marketing_agency_id', $agencyId));
-                }
-            })
-            ->orderBy('name')
-            ->limit(200)
-            ->pluck('name', 'id');
-
-        return view('agency.matching', compact('contact', 'matches', 'contacts'));
+        return $this->ok([
+            'contact' => $contact ? ['id' => $contact->id, 'name' => $contact->name, 'phone' => $contact->phone] : null,
+            'matches' => $matches->map(fn ($row) => [
+                'score' => $row['score'],
+                'price' => $row['price'],
+                'unit' => [
+                    'id' => $row['unit']->id,
+                    'code' => $row['unit']->code,
+                    'address' => $row['unit']->address(),
+                    'status' => $row['unit']->status?->value,
+                ],
+            ]),
+        ]);
     }
 
     public function storeAgent(Request $request, MarketingAgency $marketingAgency)
@@ -92,7 +111,7 @@ class AgencyWorkspaceController extends Controller
         $role = Role::findByName('agency-manager', 'web');
         $user->assignRole($role);
 
-        return back()->with('success', __('Agency agent :name created.', ['name' => $user->full_name]));
+        return $this->created($this->userSummary($user), __('Agency agent :name created.', ['name' => $user->full_name]));
     }
 
     private function resolveAgency(Request $request): ?MarketingAgency

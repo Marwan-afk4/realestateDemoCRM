@@ -11,64 +11,99 @@ use Illuminate\Support\Facades\Validator;
 
 class FavouritesController extends Controller
 {
+    public function getFavourites(Request $request)
+    {
+        $unitIds = Favourite::query()
+            ->where('user_id', $request->user()->id)
+            ->where('type', 'unit')
+            ->pluck('uptown_id');
 
-    public function getFavourites(){
-        $units = Uptown::where('favourite', 1)->get();
-
-        foreach ($units as $unit) {
-            foreach ($unit->unitImages as $image) {
-                $image->image = url('storage/' . $image->image);
-            }
-        }
-
-        foreach ($units as $unit) {
-            if($unit->master_plan_image){
-                $unit->master_plan_image = url('storage/' . $unit->master_plan_image);
-            }
-        }
+        $units = Uptown::with('unitimages')
+            ->whereIn('id', $unitIds)
+            ->get();
 
         foreach ($units as $unit) {
-            if($unit->floor_plan_image){
-                $unit->floor_plan_image = url('storage/' . $unit->floor_plan_image);
+            foreach ($unit->unitimages as $image) {
+                $image->image = url('storage/'.$image->image);
+            }
+
+            if ($unit->master_plan_image) {
+                $unit->master_plan_image = url('storage/'.$unit->master_plan_image);
+            }
+
+            if ($unit->floor_plan_image) {
+                $unit->floor_plan_image = url('storage/'.$unit->floor_plan_image);
             }
         }
-
 
         $compounds = Compound::where('favourite', 1)->get();
 
-        $data = [
+        return response()->json([
             'units' => $units,
-            'compounds' => $compounds
-        ];
-        return response()->json($data);
+            'compounds' => $compounds,
+        ]);
     }
 
-    public function unitFavourite(Request $request,$id){
+    public function unitFavourite(Request $request, $id)
+    {
         $uptown = Uptown::find($id);
+        if (! $uptown) {
+            return response()->json(['message' => 'Unit not found'], 404);
+        }
+
         $validation = Validator::make($request->all(), [
             'favourite' => 'required|between:0,1',
         ]);
         if ($validation->fails()) {
             return response()->json(['errors' => $validation->errors()], 422);
         }
-        $uptown->update([
-            'favourite' => $request->favourite
-        ]);
-        return response()->json(['message'=>'Unit Favourite Successfully']);
+
+        if (! $uptown->compound_id) {
+            return response()->json(['message' => 'Unit has no compound'], 422);
+        }
+
+        $this->syncUnitFavourite($request->user()->id, $uptown, (int) $request->favourite === 1);
+
+        return response()->json(['message' => 'Unit Favourite Successfully']);
     }
 
-    public function compoundFavourite(Request $request,$id){
+    public function compoundFavourite(Request $request, $id)
+    {
         $compound = Compound::find($id);
+        if (! $compound) {
+            return response()->json(['message' => 'Compound not found'], 404);
+        }
+
         $validation = Validator::make($request->all(), [
             'favourite' => 'required|between:0,1',
         ]);
         if ($validation->fails()) {
             return response()->json(['errors' => $validation->errors()], 422);
         }
+
         $compound->update([
-            'favourite' => $request->favourite
+            'favourite' => $request->favourite,
         ]);
-        return response()->json(['message'=>'Compound Favourite Successfully']);
+
+        return response()->json(['message' => 'Compound Favourite Successfully']);
     }
 
+    private function syncUnitFavourite(int $userId, Uptown $uptown, bool $favourite): void
+    {
+        $keys = [
+            'user_id' => $userId,
+            'uptown_id' => $uptown->id,
+            'type' => 'unit',
+        ];
+
+        if ($favourite) {
+            Favourite::updateOrCreate($keys, [
+                'compound_id' => $uptown->compound_id,
+            ]);
+
+            return;
+        }
+
+        Favourite::query()->where($keys)->delete();
+    }
 }

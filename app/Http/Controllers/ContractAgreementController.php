@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contract;
 use App\Models\ContractAgreement;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class ContractAgreementController extends Controller
 {
@@ -28,6 +31,37 @@ class ContractAgreementController extends Controller
         $agreements = $agreements->orderBy($sortField, $sortOrder)->paginate(30);
 
         return view('contract-agreements.index', compact('agreements', 'sortField', 'sortOrder'));
+    }
+
+    public function create()
+    {
+        return view('contract-agreements.create', [
+            'users' => User::query()->orderBy('first_name')->get()
+                ->mapWithKeys(fn (User $user) => [$user->id => trim($user->full_name).' ('.$user->phone.')'])
+                ->all(),
+            'contracts' => Contract::query()->orderBy('title')->pluck('title', 'id')->all(),
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'contract_id' => 'required|exists:contracts,id',
+            'user_id' => [
+                'required',
+                'exists:users,id',
+                Rule::unique('contract_agreements')->where(
+                    fn ($query) => $query->where('contract_id', $request->input('contract_id'))
+                ),
+            ],
+        ], [
+            'user_id.unique' => __('This user already agreed to that contract.'),
+        ]);
+
+        $agreement = ContractAgreement::create($data);
+
+        return redirect()->route('contract-agreements.show', $agreement)
+            ->with('success', __('Contract agreement recorded.'));
     }
 
     public function show($id)

@@ -6,7 +6,6 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -35,7 +34,7 @@ class AuthController extends Controller
             return back()->withErrors(['error' => 'You are not authorized to access this area'])->withInput();
         }
 
-        $this->ensureDefaultRole($user);
+        $user->ensureDefaultRole();
 
         if (! $this->hasPanelAccess($user)) {
             return back()->withErrors(['error' => __('Your account has no workspace permissions. Contact an administrator.')])->withInput();
@@ -70,25 +69,6 @@ class AuthController extends Controller
             'developer' => 'developer-portal.index',
             default => 'home',
         };
-    }
-
-    private function ensureDefaultRole(User $user): void
-    {
-        $roleName = match ($user->role) {
-            'brocker' => 'broker',
-            'agency' => 'agency-manager',
-            'developer' => 'developer-admin',
-            default => null,
-        };
-
-        if (! $roleName) {
-            return;
-        }
-
-        $role = Role::query()->where('name', $roleName)->where('guard_name', 'web')->first();
-        if ($role && ! $user->hasRole($role)) {
-            $user->assignRole($role);
-        }
     }
 
     private function hasPanelAccess(User $user): bool
