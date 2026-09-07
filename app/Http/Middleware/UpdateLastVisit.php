@@ -11,6 +11,10 @@ use Symfony\Component\HttpFoundation\Response;
 class UpdateLastVisit {
     public function handle(Request $request, Closure $next): Response
     {
+        if ($request->routeIs('session.heartbeat')) {
+            return $next($request);
+        }
+
         // Try multiple authentication methods
         $user = null;
 

@@ -1,8 +1,11 @@
 <?php
 
+use App\Support\ExpiredSession;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
 
 $defaultStoragePath = dirname(__DIR__) . '/storage';
 
@@ -37,23 +40,19 @@ return Application::configure(basePath: dirname(__DIR__))
         ['prefix' => 'api', 'middleware' => ['api', 'auth:sanctum']],
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->web([
-            //sanctum middleware enures authenticated first
-            \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Cookie\Middleware\EncryptCookies::class,
-            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        $middleware->web(
+            prepend: [
+                \App\Http\Middleware\ForgetRememberCookie::class,
+            ],
+            append: [
+                \App\Http\Middleware\UpdateLastVisit::class,
+                \App\Http\Middleware\SetLocale::class,
+            ],
+        );
 
-            // Custom middleware should come after authentication
-            //\App\Http\Middleware\RoleMiddleware::class,
-            \App\Http\Middleware\UpdateLastVisit::class,
-            \App\Http\Middleware\SetLocale::class,
-        ]);
+        $middleware->statefulApi();
 
-        $middleware->api([
+        $middleware->api(append: [
             \App\Http\Middleware\LogApiRequests::class,
             \App\Http\Middleware\SetLocale::class,
         ]);
@@ -66,5 +65,30 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        //
+        $exceptions->render(function (AuthenticationException $e, Request $request) {
+            ExpiredSession::forgetRememberCookie($request);
+
+            if ($request->expectsJson() || $request->is('api/*') || $request->header('X-Livewire')) {
+                return response()->json([
+                    'message' => $request->is('api/*') ? $e->getMessage() : ExpiredSession::MESSAGE,
+                    'redirect' => route('login'),
+                ], 401);
+            }
+
+            $redirect = redirect()->guest(route('login'));
+
+            if (ExpiredSession::hadBrowserSession($request)) {
+                $redirect->with('error', ExpiredSession::MESSAGE);
+            }
+
+            return $redirect;
+        });
+
+        $exceptions->respond(function ($response, $e, $request) {
+            if ($response->getStatusCode() !== 419) {
+                return $response;
+            }
+
+            return ExpiredSession::redirectToLogin($request);
+        });
     })->create();

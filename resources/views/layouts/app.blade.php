@@ -160,7 +160,7 @@
     @stack('styles')
 </head>
 
-<body>
+<body data-session-auth="{{ auth()->check() ? '1' : '0' }}">
     <!-- ===============================================-->
     <!--    Main Content-->
     <!-- ===============================================-->
@@ -984,6 +984,7 @@
         @livewireScripts
     @endif
     @stack('scripts')
+    @include('elements.session-keepalive')
     <script>
     document.addEventListener('DOMContentLoaded', function () {
         if (!navigator.onLine) {

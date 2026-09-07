@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Support\ExpiredSession;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    public function showLoginForm()
+    public function showLoginForm(Request $request)
     {
+        ExpiredSession::forgetRememberCookie($request);
+
         if (Auth::check()) {
-            return redirect()->route($this->homeRoute(Auth::user()))->with('success', 'You are already logged in');
+            return redirect()->intended(route($this->homeRoute(Auth::user())))->with('success', 'You are already logged in');
         }
 
         return view('auth.login');
@@ -40,8 +43,9 @@ class AuthController extends Controller
             return back()->withErrors(['error' => __('Your account has no workspace permissions. Contact an administrator.')])->withInput();
         }
 
-        Auth::login($user, true);
+        Auth::login($user);
         $request->session()->regenerate();
+        ExpiredSession::forgetRememberCookie($request);
 
         return redirect()->intended(route($this->homeRoute($user)))->with('success', 'Logged in successfully');
     }

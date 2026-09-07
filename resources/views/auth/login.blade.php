@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ __('Login') }}</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
         body {
@@ -35,13 +36,23 @@
         }
     </style>
 </head>
-<body class="d-flex justify-content-center align-items-center vh-100">
+<body class="d-flex justify-content-center align-items-center vh-100" data-session-auth="{{ auth()->check() ? '1' : '0' }}">
 
     <div class="login-card text-center">
         <img src="{{ asset('phoenix/assets/logo/softora.jpg') }}" alt="Logo" class="login-logo">
 
         <h3 class="mb-3">{{ __('Login') }}</h3>
 
+        @if (session('error') || request()->boolean('expired'))
+            <div class="alert alert-danger">
+                {{ session('error') ?: 'Your session expired. Please log in again.' }}
+            </div>
+        @endif
+        @if (session('message'))
+            <div class="alert alert-success">
+                {{ session('message') }}
+            </div>
+        @endif
         @error('error')
             <div class="alert alert-danger">
                 {{ $message }}
@@ -70,5 +81,6 @@
         </form>
     </div>
 
+    @include('elements.session-keepalive')
 </body>
 </html>
